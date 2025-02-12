@@ -6,9 +6,9 @@ export default function Home() {
 
     return (
       <main>
-        <div className='flex flex-col justify-center align-middle'>
-          <img src={imageURL} width='25%' height='25%' className='justify-center'></img>
-          <h1 className="text-3xl m-6 text-center font-(vanguardFont)">We'll be with you soon.</h1>
+        <div className='flex flex-col text-center'>
+          <img className='mx-auto drop-shadow-vanguard-shadow' src={imageURL} width='25%' height='25%'></img>
+          <h1 className="text-3xl m-6 font-(vanguardFont) drop-shadow-xl">We'll be with you soon.</h1>
         </div>
         
       </main>

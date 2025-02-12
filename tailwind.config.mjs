@@ -11,6 +11,9 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      dropShadow: {
+        'vanguard-shadow': '3px 0px 0px #000000',
+      }
     },
   },
   plugins: [],
