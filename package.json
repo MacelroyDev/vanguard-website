@@ -1,11 +1,11 @@
 {
   "name": "vanguard-website",
   "version": "0.1.0",
-  "homepage": "https://Macelroy.github.io/vanguard-website",
+  "homepage": "https://MacelroyDev.github.io/vanguard-website",
   "private": true,
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d .next",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
