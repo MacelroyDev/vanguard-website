@@ -1,7 +1,11 @@
 {
   "name": "vanguard-website",
   "version": "0.1.0",
+<<<<<<< Updated upstream
   "homepage": "https://vanguard-extraction-solutions.com",
+=======
+  "homepage": "https://vanguard-extraction-solutions.com/",
+>>>>>>> Stashed changes
   "private": true,
   "scripts": {
     "predeploy": "npm run build",
