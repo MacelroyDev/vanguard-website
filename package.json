@@ -1,7 +1,7 @@
 {
   "name": "vanguard-website",
   "version": "0.1.0",
-  "homepage": "https://MacelroyDev.github.io/vanguard-website",
+  "homepage": "https://vanguard-extraction-solutions.com/",
   "private": true,
   "scripts": {
     "predeploy": "npm run build",
