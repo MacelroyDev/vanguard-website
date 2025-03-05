@@ -1,11 +1,12 @@
 import Soon from './beta/soon'
+import Navbar from '../components/navbar'
 
 export default function Home() {
 
-  const imageURL = ''
 
     return (
       <main>
+        <Navbar/>
         <Soon/>
       </main>
     );
