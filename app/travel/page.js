@@ -1,4 +1,4 @@
-import Navbar from '../../components/navbar'
+import ClientNavbarNavbar from '../../components/clientNavbar'
 import Image from 'next/image'
 
 export default function Travel() {
@@ -6,7 +6,7 @@ export default function Travel() {
 
     return (
       <main>
-        <Navbar/>
+        <ClientNavbarNavbar/>
         <Image className='mr-20 -z-10 relative' alt={'Vanguard Space Port'} src={'/images/spaceport.png'} width='2500' height='2500' style={{ width: '100%', height: 'auto' }}/>
 
         <div style={{ width: '100%', height: '100%', position: 'relative'}} className='flex flex-col justify-start my-20 z-10'>

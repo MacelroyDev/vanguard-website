@@ -1,4 +1,4 @@
-import Navbar from '../../components/navbar'
+import ClientNavbarNavbar from '../../components/clientNavbar'
 import Image from 'next/image'
 
 export default function Travel() {
@@ -6,8 +6,8 @@ export default function Travel() {
 
     return (
       <main>
-        <Navbar/>
-        <Image className='mr-20 -z-10 relative' alt={"The Ruiner's Heaven"} src={'/images/ruiner-heaven.png'} width='2500' height='2500' style={{ width: '100%', height: 'auto' }}/>
+        <ClientNavbarNavbar/>
+        <Image className='mr-20 -z-10 relative' alt={"View of Progress from Vanguard"} src={'/images/map-page.png'} width='2500' height='2500' style={{ width: '100%', height: 'auto' }}/>
 
         <div style={{ width: '100%', height: '100%', position: 'relative'}} className='flex flex-col justify-start my-20 z-10'>
             <div style={{ width: '60%', height: '90%', position: 'relative'}} className='border-4 border-hidden border-vanguardOrange rounded-xl ml-10 mb-10'>
