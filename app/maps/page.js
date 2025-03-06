@@ -14,7 +14,7 @@ export default function Travel() {
                 <h1 className="text-3xl text-vanguardOrange font-(vanguardFont) drop-shadow-xl m-5">Map Links</h1>
                 <a className="text-md text-vanguardOrange font-(vanguardFont) drop-shadow-xl m-5 underline" href="http://23.17.34.171:3876/">Train Map</a>
                 <br></br>
-                <a className="text-md text-vanguardOrange font-(vanguardFont) drop-shadow-xl m-5 underline" href="http://23.17.34.171:3876/">Server Map</a>
+                <a className="text-md text-vanguardOrange font-(vanguardFont) drop-shadow-xl m-5 underline" href="http://23.17.34.171:8123/">Server Map</a>
             </div>
         </div>
 
