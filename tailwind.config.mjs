@@ -10,6 +10,7 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        vanguardRed: '#6e2925',
       },
       dropShadow: {
         'vanguard-shadow': '3px 0px 0px #000000',
