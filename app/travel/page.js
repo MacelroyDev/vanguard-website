@@ -34,7 +34,7 @@ export default function Travel() {
                 <p className="text-sm text-white font-(vanguardFont) drop-shadow-xl m-5">
                     Scattered around the Server are various landmarks, look out for a Lodestone and you just might find a souvenir in the form of a VANGUARD TRADING CARDS © ! 
                     See if you can collect and catalogue them all! (Catalogues available at Spawn Station free of charge!)
-                    That's not all for fun collectibles however! While you're exploring the deep underbelly of the Server make sure you keep your eye out for <span>Cume Chalices</span>!
+                    That's not all for fun collectibles however! While you're exploring the deep underbelly of the Server make sure you keep your eye out for <span className='font-(family-name:Darling)'>Cume Chalices</span>!
                     They're much more of a challenge to find!
                 </p>
             </div>
