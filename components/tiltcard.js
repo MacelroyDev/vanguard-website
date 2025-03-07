@@ -1,5 +1,6 @@
 "use client"
 import React, { useRef } from "react";
+import Image from 'next/image';
 import {
   motion,
   useMotionTemplate,
@@ -11,7 +12,7 @@ import {
 const ROTATION_RANGE = 32.5;
 const HALF_ROTATION_RANGE = 32.5 / 2;
 
-const TiltCard = () => {
+const TiltCard = ({ imageID }) => {
 
     const ref = useRef(null);
 
@@ -64,14 +65,7 @@ const TiltCard = () => {
                 }}
                 className="absolute inset-4 grid place-content-center rounded-xl bg-white shadow-lg"
             >
-                <p
-                style={{
-                    transform: "translateZ(50px)",
-                }}
-                className="text-center text-2xl font-bold"
-                >
-                HOVER ME
-                </p>
+                <Image className='mr-20 -z-10 relative drop-shadow-xl' alt={"Card Test Image"} src={imageID} width='2500' height='2500' style={{ width: '100%', height: 'auto' }}></Image>
             </div>
         </motion.div>
     );
