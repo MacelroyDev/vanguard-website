@@ -19,8 +19,23 @@
   src: url('./LEMONMILK-Regular.otf');
 }
 
+@font-face {
+  font-family: vanguardFont;
+  src: url('./LEMONMILK-Bold.otf');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: darlingFont;
+  src: url('./Darling.ttf');
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: vanguardFont, Helvetica, sans-serif;
+}
+
+.freaky-font {
+  font-family: darlingFont, sans-serif;
 }

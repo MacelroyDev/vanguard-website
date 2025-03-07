@@ -7,7 +7,7 @@ export default function Navbar({ pathname }) {
         '/': '#E2D3B4', // Home
         '/travel': '#030306', // Travel
         '/maps': '#617AA8', // Maps
-        '/cards': '#B0E0E6' // Cards
+        '/cards': '#B76D4B' // Cards
     };
 
     function getLinkStyle(href){
@@ -31,7 +31,7 @@ export default function Navbar({ pathname }) {
                         <li className={getLinkStyle("/")}><Link href={{pathname:'/'}}>Home</Link></li>
                         <li className={getLinkStyle("/travel")}><Link href={{pathname:'./travel'}}>Travel</Link></li>
                         <li className={getLinkStyle("/maps")}><Link href={{pathname:'./maps'}}>Maps</Link></li>
-                        <li className={getLinkStyle("/cards")}><Link href={{pathname:'/'}}>Cards</Link></li>
+                        <li className={getLinkStyle("/cards")}><Link href={{pathname:'./cards'}}>Cards</Link></li>
                     </ul>
                 </div>
                 <div className='drop-shadow-vanguard-shadow w-auto h-8 bg-[#fec633]'/>
