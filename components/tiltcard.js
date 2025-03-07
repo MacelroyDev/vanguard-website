@@ -12,7 +12,13 @@ import {
 const ROTATION_RANGE = 32.5;
 const HALF_ROTATION_RANGE = 32.5 / 2;
 
-const TiltCard = ({ imageID }) => {
+const TiltCard = ({ imageID, isHolo }) => {
+
+    //const blurStyle = isHolo ? 'blur(10px)' : 'none';
+    const blurStyle = 'none';
+    if (isHolo) {
+      imageID = "/images/card-back.png"
+    };
 
     const ref = useRef(null);
 
@@ -56,16 +62,24 @@ const TiltCard = ({ imageID }) => {
                 transformStyle: "preserve-3d",
                 transform,
             }}
-            className="relative h-96 w-72 rounded-xl bg-vanguardOrange"
+            className="relative h-96 w-72 rounded-xl bg-vanguardOrange mx-5 my-20"
             >
             <div
                 style={{
                 transform: "translateZ(25px)",
                 transformStyle: "preserve-3d",
                 }}
-                className="absolute inset-4 grid place-content-center rounded-xl bg-white shadow-lg"
+                className="absolute inset-4 grid place-content-center rounded-xl"
             >
-                <Image className='mr-20 -z-10 relative drop-shadow-xl' alt={"Card Test Image"} src={imageID} width='2500' height='2500' style={{ width: '100%', height: 'auto' }}></Image>
+                <Image
+                  className='flex-1 mr-20 -z-10 relative drop-shadow-lg'
+                  alt={"Card Test Image"}
+                  src={imageID}
+                  width='2500'
+                  height='2500'
+                  style={{ width: '100%', height: 'auto', filter: blurStyle }}>
+                </Image>
+
             </div>
         </motion.div>
     );

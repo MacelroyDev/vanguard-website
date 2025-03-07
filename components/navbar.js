@@ -7,7 +7,7 @@ export default function Navbar({ pathname }) {
         '/': '#E2D3B4', // Home
         '/travel': '#030306', // Travel
         '/maps': '#617AA8', // Maps
-        '/cards': '#B76D4B' // Cards
+        '/cards': '#84AFFF' // Cards
     };
 
     function getLinkStyle(href){

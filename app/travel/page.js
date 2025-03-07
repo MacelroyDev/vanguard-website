@@ -37,7 +37,7 @@ export default function Travel() {
                     </li>
                     <li className="text-sm font-bold text-white font-(vanguardFont) drop-shadow-xl mt-5 mx-5">- Magicannot</li>
                     <li className="text-sm text-white font-(vanguardFont) drop-shadow-xl mt-2 mx-5 mb-5">
-                        (Route closed due to the Vanguard Pulverizer pulverizing itself into a wall)
+                        (Route closed due to the Vanguard Pulverizer MK. II pulverizing itself into a wall)
                     </li>
                 </ul>
             </div>
@@ -45,7 +45,7 @@ export default function Travel() {
                 <div style={{ width: '60%', height: '90%', position: 'relative'}} className='border-4 border-solid border-vanguardOrange rounded-xl ml-10 mb-10'>
                     <h1 className="text-3xl text-vanguardOrange font-(vanguardFont) drop-shadow-xl m-5">Collectables</h1>
                     <p className="text-sm text-white font-(vanguardFont) drop-shadow-xl m-5">
-                        Scattered around the Server are various landmarks, look out for a Lodestone and you just might find a souvenir in the form of a VANGUARD TRADING CARDS © ! 
+                        Scattered around the Server are various landmarks, look out for a Lodestone and you just might find a souvenir in the form of a VANGUARD TRADING CARDS! © 
                         See if you can collect and catalogue them all! (Catalogues available at Spawn Station free of charge!)
                     </p>
                     <p className="text-sm text-white font-(vanguardFont) drop-shadow-xl m-5">
