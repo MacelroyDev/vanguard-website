@@ -31,7 +31,7 @@ function getImagePaths() {
 }
 
 function checkHolo(imagePath) {
-    const holoCards = ["013", "015"];
+    const holoCards = ["013", "015", "024"];
     const fileName = imagePath.split('/').pop(); // Extract filename
     const baseFileName = fileName.split('.')[0]; // Remove file extension
   
