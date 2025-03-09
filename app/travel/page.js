@@ -1,3 +1,4 @@
+import PopularDestinations from '@/components/popularDestinations';
 import ClientNavbarNavbar from '../../components/clientNavbar'
 import Image from 'next/image'
 
@@ -20,27 +21,7 @@ export default function Travel() {
                     as well as a <a className='text-vanguardOrange underline' href="http://23.17.34.171:8123/" target="_blank">3D map</a> of the Server as it's known!
                 </p>
             </div>
-            <div style={{ width: '60%', height: '90%', position: 'relative'}} className='border-4 border-solid border-vanguardOrange rounded-xl mr-10 mb-10 self-end'>
-                <h1 className="text-3xl text-vanguardOrange font-(vanguardFont) drop-shadow-xl m-5">Popular Destinations</h1>
-                <ul>
-                    <li className="text-sm font-bold text-white font-(vanguardFont) drop-shadow-xl mt-5 mx-5">- Progress</li>
-                    <li className="text-sm text-white font-(vanguardFont) drop-shadow-xl mt-2 mx-5">
-                        Likely the first stop you will make on your journey into the Server. Watch for open steam vents if you take any of the scenic hiking trails!
-                    </li>
-                    <li className="text-sm font-bold text-white font-(vanguardFont) drop-shadow-xl mt-5 mx-5">- Gentriville</li>
-                    <li className="text-sm text-white font-(vanguardFont) drop-shadow-xl mt-2 mx-5">
-                        Gentriville is the city of enterprise and improvement, if you choose to stop in make sure you swing by the Zeeble Dome, Vanguard's one and only casino experience!
-                    </li>
-                    <li className="text-sm font-bold text-white font-(vanguardFont) drop-shadow-xl mt-5 mx-5">- Vanguard City</li>
-                    <li className="text-sm text-white font-(vanguardFont) drop-shadow-xl mt-2 mx-5">
-                        Vanguard City is the epitome of everything the Server stands for. It's beauty, it's grace, and most importantly, it's fun! Hit up the Vanguard Macro-Mart for all your essential shopping needs, or dine in at the Dig In restaurant located on the bottom floor!
-                    </li>
-                    <li className="text-sm font-bold text-white font-(vanguardFont) drop-shadow-xl mt-5 mx-5">- Magicannot</li>
-                    <li className="text-sm text-white font-(vanguardFont) drop-shadow-xl mt-2 mx-5 mb-5">
-                        (Route closed due to the Vanguard Pulverizer MK. II pulverizing itself into a wall)
-                    </li>
-                </ul>
-            </div>
+            <PopularDestinations/>
             <div className='flex flex-row'>
                 <div style={{ width: '60%', height: '90%', position: 'relative'}} className='border-4 border-solid border-vanguardOrange rounded-xl ml-10 mb-10'>
                     <h1 className="text-3xl text-vanguardOrange font-(vanguardFont) drop-shadow-xl m-5">Collectables</h1>
