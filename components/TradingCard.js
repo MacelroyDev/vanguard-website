@@ -125,7 +125,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
     const retreatStyle = { // Style for the retreat cost number
         position: 'absolute',
         top: '285px',
-        left: '155px',
+        left: '225px',
         width: '400px',
         textAlign: 'left',
         fontSize: '22px',
@@ -137,7 +137,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
     const retreatIconStyle = { // Style for the retreat icon
         position: 'absolute',
         top: '287px', // Adjust this value
-        right: '118px', // Adjust this value
+        right: '50px', // Adjust this value
         width: '22px', // Set a fixed width for the image
         height: '22px', // Set a fixed height for the image
         zIndex: 3
@@ -158,7 +158,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
     const retreatLabelStyle = { // Style for the retreat label
         position: 'absolute',
         top: '282px',
-        left: '205px',
+        left: '150px',
         width: '400px',
         textAlign: 'left',
         fontSize: '12px',
