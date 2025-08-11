@@ -16,11 +16,11 @@ export default function TradingCard({ name, description, energy, cardImage, rari
     const energySrc = energyImageMap[energy];
 
     const keywordIconMap = {
-        '*splat*': '/images/tcg/energy/splat_energy.png',
-        '*rage*': '/images/tcg/energy/rage_energy.png',
-        '*whimsy*': '/images/tcg/energy/whimsy_energy.png',
-        '*mechanical*': '/images/tcg/energy/mechanical_energy.png',
-        '*terra*': '/images/tcg/energy/terra_energy.png',
+        '*splat*': '/images/tcg/energy/inverted/splat_energy_inverted.png',
+        '*rage*': '/images/tcg/energy/inverted/rage_energy_inverted.png',
+        '*whimsy*': '/images/tcg/energy/inverted/whimsy_energy_inverted.png',
+        '*mechanical*': '/images/tcg/energy/inverted/mechanical_energy_inverted.png',
+        '*terra*': '/images/tcg/energy/inverted/terra_energy_inverted.png',
     };
 
     const parseDescription = (text) => {
@@ -47,7 +47,6 @@ export default function TradingCard({ name, description, energy, cardImage, rari
                         width={16}
                         height={16}
                         className="inline-block align-middle"
-                        style={{ filter: 'invert(100%)' }}
                     />
                 );
             }
