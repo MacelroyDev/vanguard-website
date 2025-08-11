@@ -32,8 +32,18 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         'Mechanical': '/images/tcg/tcg_template_mechanical.png',
         'Terra': '/images/tcg/tcg_template_terra.png',
     };
-    // Get the image source based on the energy prop
+    // Get the card template based on the energy prop
     const templateSrc = templateMap[energy];
+
+    // Array of rarity card colours
+    const rarityMap = {
+        'Common': '/images/tcg/rarity/common_bar.png',
+        'Rare': '/images/tcg/rarity/rare_bar.png',
+        'Epic': '/images/tcg/rarity/epic_bar.png',
+        'Legendary': '/images/tcg/rarity/legendary_bar.png',
+    };
+    // Get the card template based on the energy prop
+    const raritySrc = rarityMap[rarity];
 
     const parseDescription = (text) => {
         if (!text) return null;
@@ -76,7 +86,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         fontSize: '20px',
         color: 'white',
         fontFamily: 'skobisFont',
-        zIndex: 3
+        zIndex: 4
     };
 
     const categoryStyle = { // Style for the category and rarity label
@@ -88,7 +98,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         fontSize: '20px',
         color: 'black',
         fontFamily: 'skobisFont',
-        zIndex: 3
+        zIndex: 4
     };
 
     const imageContainerStyle = { // Style for framed image
@@ -110,7 +120,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         overflowY: 'auto',
         fontSize: '16px',
         fontFamily: 'skobisFont',
-        zIndex: 3
+        zIndex: 4
     };
 
     const energyStyle = { // Style for the energy icon
@@ -119,7 +129,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         right: '23px', // Adjust this value
         width: '40px', // Set a fixed width for the image
         height: '40px', // Set a fixed height for the image
-        zIndex: 3
+        zIndex: 4
     };
 
     const hpStyle = { // Style for the hp number
@@ -131,7 +141,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         fontSize: '30px',
         color: 'black',
         fontFamily: 'skobisFont',
-        zIndex: 3
+        zIndex: 4
     };
 
     const retreatStyle = { // Style for the retreat cost number
@@ -143,7 +153,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         fontSize: '22px',
         color: 'black',
         fontFamily: 'skobisFont',
-        zIndex: 3
+        zIndex: 4
     };
 
     const retreatIconStyle = { // Style for the retreat icon
@@ -152,7 +162,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         right: '50px', // Adjust this value
         width: '22px', // Set a fixed width for the image
         height: '22px', // Set a fixed height for the image
-        zIndex: 3
+        zIndex: 4
     };
 
     const hpLabelStyle = { // Style for the hp label
@@ -164,7 +174,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         fontSize: '12px',
         color: 'black',
         fontFamily: 'skobisFont',
-        zIndex: 3
+        zIndex: 4
     };
 
     const retreatLabelStyle = { // Style for the retreat label
@@ -176,7 +186,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         fontSize: '12px',
         color: 'black',
         fontFamily: 'skobisFont',
-        zIndex: 3
+        zIndex: 4
     };
 
     return (
@@ -207,6 +217,21 @@ export default function TradingCard({ name, description, energy, cardImage, rari
                     height: '100%',
                     objectFit: 'cover',
                     zIndex: 2
+                }}
+            />
+
+            {/* Rarity Bar PNG template */}
+            <img
+                src={raritySrc}
+                alt="Trading Card Rarity Bar"
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    zIndex: 3
                 }}
             />
 
