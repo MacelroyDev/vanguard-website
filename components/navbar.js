@@ -22,7 +22,7 @@ export default function Navbar({ pathname }) {
     const backgroundColor = colorMap[pathname] || '#E2D3B4';
 
     return(
-        <div className='drop-shadow-xl' style={{ backgroundColor }}>
+        <div className='drop-shadow-xl overflow-x-hidden' style={{ backgroundColor }}>
             <Image className='fixed z-99' alt={'Vanguard 45 Logo'} src={'/images/vanguard-45-2.png'} width='150' height='150'></Image>
             <div className='z-98'>
                 <div className='w-96 h-8 bg-[#fec633] -rotate-45'/>

@@ -7,7 +7,7 @@ export default function Travel() {
     return (
       <main>
         <ClientNavbarNavbar/>
-        <Image className='mr-20 -z-10 relative' alt={"View of Progress from Vanguard"} src={'/images/map-page.png'} width='2500' height='2500' style={{ width: '100%', height: 'auto' }}/>
+        <Image className='-z-10 relative' alt={"View of Progress from Vanguard"} src={'/images/map-page.png'} width='2500' height='2500' style={{ width: '100%', height: 'auto' }}/>
 
         <div style={{ width: '100%', height: '100%', position: 'relative'}} className='flex flex-col justify-start my-20 z-10'>
 

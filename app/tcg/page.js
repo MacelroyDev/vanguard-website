@@ -64,7 +64,7 @@ export default function Tcg() {
     <main>
       <ClientNavbar />
       <div className="flex p-4 gap-8">
-        <div className="w-1/2">
+        <div className="w7/16"> {/* 7/16 fraction so slightly less than half*/}
           <h2 className="text-2xl text-vanguardOrange font-(vanguardFont) font-bold drop-shadow-xl my-5">Bodob Skobis TCG Card Editor</h2>
           <form className="flex flex-col gap-4">
             <div>
