@@ -3,10 +3,13 @@ import { useState, useRef } from 'react';
 import ClientNavbar from '../../components/clientNavbar';
 import TradingCard from '../../components/TradingCard';
 import html2canvas from 'html2canvas';
+import { Tooltip as ReactTooltip } from "react-tooltip";
+import { IoMdInformationCircleOutline } from "react-icons/io";
 
 export default function Tcg() {
   const [cardName, setCardName] = useState('Name');
-  const [description, setDescription] = useState('*splat* *splat* - Deal XX damage and discard  1 *splat* energy');
+  const [description, setDescription] = useState('[*splat* *splat* Example Attack / 20] - Discard 1 *splat* energy from your opponent\'s active critter.');
+  // The backslash is so the apostrophe doesnt close the string
   const [energyType, setEnergyType] = useState('Splat');
   const [rarity, setRarity] = useState('Common');
   const [category, setCategory] = useState('Skobian');
@@ -62,36 +65,36 @@ export default function Tcg() {
       <ClientNavbar />
       <div className="flex p-4 gap-8">
         <div className="w-1/2">
-          <h2 className="text-xl font-bold mb-4">Edit Your Card</h2>
+          <h2 className="text-2xl text-vanguardOrange font-(vanguardFont) font-bold drop-shadow-xl my-5">Bodob Skobis TCG Card Editor</h2>
           <form className="flex flex-col gap-4">
             <div>
-              <label htmlFor="cardName" className="block text-sm font-medium">Card Name</label>
+              <label htmlFor="cardName" className="block text-sm font-medium text-white">Card Name</label>
               <input
                 id="cardName"
                 type="text"
                 value={cardName}
                 onChange={(e) => setCardName(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 p-2 rounded-md"
+                className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
               />
             </div>
             <div>
-              <label htmlFor="category" className="block text-sm font-medium">Category</label>
+              <label htmlFor="category" className="block text-sm font-medium text-white">Category</label>
               <input
                 id="category"
                 type="text"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 p-2 rounded-md"
+                className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
               />
             </div>
 
             <div>
-              <label htmlFor="rarity" className="block text-sm font-medium">Rarity</label>
+              <label htmlFor="rarity" className="block text-sm font-medium text-white">Rarity</label>
               <select
                 id="rarity"
                 value={rarity}
                 onChange={(e) => setRarity(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 p-2 rounded-md"
+                className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
               >
                 <option value="Common">Common</option>
                 <option value="Rare">Rare</option>
@@ -101,12 +104,12 @@ export default function Tcg() {
             </div>
 
             <div>
-              <label htmlFor="energyType" className="block text-sm font-medium">Energy Type</label>
+              <label htmlFor="energyType" className="block text-sm font-medium text-white">Energy Type</label>
               <select
                 id="energyType"
                 value={energyType}
                 onChange={(e) => setEnergyType(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 p-2 rounded-md"
+                className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
               >
                 <option value="Splat">Splat</option>
                 <option value="Rage">Rage</option>
@@ -119,7 +122,7 @@ export default function Tcg() {
             {/* Div for HP and Retreat inputs */}
             <div className="flex gap-4">
                 <div className="flex-1">
-                    <label htmlFor="hp" className="block text-sm font-medium">HP</label>
+                    <label htmlFor="hp" className="block text-sm font-medium text-white">HP</label>
                     <input
                         id="hp"
                         type="number"
@@ -132,33 +135,37 @@ export default function Tcg() {
                         }}
                         step="10"
                         min="10"
-                        className="mt-1 block w-full border border-gray-300 p-2 rounded-md"
+                        className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
                     />
                 </div>
                 <div className="flex-1">
-                    <label htmlFor="retreat" className="block text-sm font-medium">Retreat Cost</label>
+                    <label htmlFor="retreat" className="block text-sm font-medium text-white">Retreat Cost</label>
                     <input
                         id="retreat"
                         type="number"
                         value={retreat}
                         onChange={(e) => setRetreat(parseInt(e.target.value, 10))}
                         min="0"
-                        className="mt-1 block w-full border border-gray-300 p-2 rounded-md"
+                        className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
                     />
                 </div>
             </div>
             <div>
-              <label htmlFor="description" className="block text-sm font-medium">Description</label>
+              <div className="flex gap-2">
+                <label htmlFor="description" className="block text-sm font-medium text-white">Description</label>
+                <IoMdInformationCircleOutline  data-tooltip-id="desc-tooltop" color='#fec633'/>
+              </div>
               <textarea
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 p-2 rounded-md"
+                className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
+                rows="5"
               />
             </div>
 
             <div>
-              <label htmlFor="cardImage" className="block text-sm font-medium">Card Image</label>
+              <label htmlFor="cardImage" className="block text-sm font-medium text-white">Card Image</label>
               <input
                 id="cardImage"
                 type="file"
@@ -172,7 +179,7 @@ export default function Tcg() {
             {/* Zoom and pan inputs */}
             <div className="mb-4">
                 <div className="flex items-center gap-2">
-                    <label className="block whitespace-nowrap min-w-[120px]">Zoom: {imageZoom.toFixed(2)}</label>
+                    <label className="block whitespace-nowrap min-w-[120px] text-white">Zoom: {imageZoom.toFixed(2)}</label>
                     <input
                         type="range"
                         min="0.5"
@@ -193,7 +200,7 @@ export default function Tcg() {
             </div>
             <div className="mb-4">
                 <div className="flex items-center gap-2">
-                    <label className="block whitespace-nowrap min-w-[120px]">Pan X: {imageX}px</label>
+                    <label className="block whitespace-nowrap min-w-[120px] text-white">Pan X: {imageX}px</label>
                     <input
                         type="range"
                         min="-100"
@@ -214,7 +221,7 @@ export default function Tcg() {
             </div>
             <div className="mb-4">
                 <div className="flex items-center gap-2">
-                    <label className="block whitespace-nowrap min-w-[120px]">Pan Y: {imageY}px</label>
+                    <label className="block whitespace-nowrap min-w-[120px] text-white">Pan Y: {imageY}px</label>
                     <input
                         type="range"
                         min="-100"
@@ -261,6 +268,21 @@ export default function Tcg() {
           </div>
         </div>
       </div>
+      <ReactTooltip id="desc-tooltop" place="right">
+        <p className='max-w-sm'>
+          By surrounding the name of an energy type with * * you can add icons to the description box.
+        </p>
+        <p className='max-w-sm'>
+          Examples:
+        </p>
+        <ul className='max-w-sm list-disc'>
+          <li className='ml-8'>*splat*</li>
+          <li className='ml-8'>*rage*</li>
+          <li className='ml-8'>*whimsy*</li>
+          <li className='ml-8'>*mechanical*</li>
+          <li className='ml-8'>*terra*</li>
+        </ul>
+      </ReactTooltip>
     </main>
   );
 }
