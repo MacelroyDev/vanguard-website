@@ -17,11 +17,11 @@ export default function TradingCard({ name, description, energy, cardImage, rari
 
     // Array of energy text icons
     const keywordIconMap = {
-        '*splat*': '/images/tcg/energy/inverted/splat_energy_inverted.png',
-        '*rage*': '/images/tcg/energy/inverted/rage_energy_inverted.png',
-        '*whimsy*': '/images/tcg/energy/inverted/whimsy_energy_inverted.png',
-        '*mechanical*': '/images/tcg/energy/inverted/mechanical_energy_inverted.png',
-        '*terra*': '/images/tcg/energy/inverted/terra_energy_inverted.png',
+        '*splat*': '/images/tcg/energy/border/splat_energy_border.png',
+        '*rage*': '/images/tcg/energy/border/rage_energy_border.png',
+        '*whimsy*': '/images/tcg/energy/border/whimsy_energy_border.png',
+        '*mechanical*': '/images/tcg/energy/border/mechanical_energy_border.png',
+        '*terra*': '/images/tcg/energy/border/terra_energy_border.png',
     };
 
     // Array of coloured card templates
@@ -158,10 +158,10 @@ export default function TradingCard({ name, description, energy, cardImage, rari
 
     const retreatIconStyle = { // Style for the retreat icon
         position: 'absolute',
-        top: '287px', // Adjust this value
+        top: '290px', // Adjust this value
         right: '50px', // Adjust this value
-        width: '22px', // Set a fixed width for the image
-        height: '22px', // Set a fixed height for the image
+        width: '20px', // Set a fixed width for the image
+        height: '20px', // Set a fixed height for the image
         zIndex: 4
     };
 
@@ -260,7 +260,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
             <div style={retreatStyle}>{retreat}x</div>
             <div style={retreatIconStyle}>
                 <Image
-                    src={'/images/tcg/retreat_splat.png'}
+                    src={'/images/tcg/energy/border/splat_energy_border.png'}
                     alt={name}
                     layout="fill"
                     objectFit="cover"
