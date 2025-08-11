@@ -1,7 +1,8 @@
+"use client"
 import React from 'react';
 import Image from 'next/image';
 
-export default function TradingCard({ name, description, energy, cardImage, category, hp, retreat }) {
+export default function TradingCard({ name, description, energy, cardImage, rarity, category, hp, retreat, imageX, imageY, imageZoom }) {
 
     // Array of energy icon pngs
     const energyImageMap = {
@@ -15,34 +16,38 @@ export default function TradingCard({ name, description, energy, cardImage, cate
     const energySrc = energyImageMap[energy];
 
     const keywordIconMap = {
-        '\\*splat\\*': '/images/tcg/energy/splat_energy.png',
-        '\\*rage\\*': '/images/tcg/energy/rage_energy.png',
-        '\\*whimsy\\*': '/images/tcg/energy/whimsy_energy.png',
-        '\\*mechanical\\*': '/images/tcg/energy/mechanical_energy.png',
-        '\\*terra\\*': '/images/tcg/energy/terra_energy.png',
+        '*splat*': '/images/tcg/energy/splat_energy.png',
+        '*rage*': '/images/tcg/energy/rage_energy.png',
+        '*whimsy*': '/images/tcg/energy/whimsy_energy.png',
+        '*mechanical*': '/images/tcg/energy/mechanical_energy.png',
+        '*terra*': '/images/tcg/energy/terra_energy.png',
     };
 
-        const parseDescription = (text) => {
+    const parseDescription = (text) => {
         if (!text) return null;
 
-        // Create a regex to find all keywords
-        const keywords = Object.keys(keywordIconMap).join('|');
-        const regex = new RegExp(`(${keywords})`, 'g');
+        // FIX: Escape special characters (like *) from the keys before creating the regex
+        const escapedKeywords = Object.keys(keywordIconMap)
+            .map(key => key.replace(/\*/g, '\\*')) // Correctly escape the asterisk
+            .join('|');
 
+        const regex = new RegExp(`(${escapedKeywords})`, 'g');
         const parts = text.split(regex);
 
         return parts.map((part, index) => {
-            const unescapedPart = part.replace(/\\\*/g, '*');
+            // Check the original, unescaped key
             const iconSrc = keywordIconMap[part];
+            
             if (iconSrc) {
                 return (
                     <Image
                         key={index}
                         src={iconSrc}
                         alt={part.replace(/\*/g, '')}
-                        width={20}
-                        height={20}
-                        className="inline-block mx-1 align-middle"
+                        width={16}
+                        height={16}
+                        className="inline-block align-middle"
+                        style={{ filter: 'invert(100%)' }}
                     />
                 );
             }
@@ -59,7 +64,8 @@ export default function TradingCard({ name, description, energy, cardImage, cate
         textAlign: 'left',
         fontSize: '20px',
         color: 'white',
-        fontFamily: 'skobisFont'
+        fontFamily: 'skobisFont',
+        zIndex: 3
     };
 
     const categoryStyle = { // Style for the category and rarity label
@@ -70,27 +76,30 @@ export default function TradingCard({ name, description, energy, cardImage, cate
         textAlign: 'left',
         fontSize: '20px',
         color: 'black',
-        fontFamily: 'skobisFont'
+        fontFamily: 'skobisFont',
+        zIndex: 3
     };
 
-    const imageContainerStyle = {
+    const imageContainerStyle = { // Style for framed image
         position: 'absolute',
-        top: '70px', // Adjust this value
-        left: '40px', // Adjust this value
-        width: '240px', // Adjust this value
-        height: '160px', // Adjust this value
+        top: '65px',
+        left: '32px',
+        width: '260px',
+        height: '180px',
         overflow: 'hidden',
+        zIndex: 1
     };
 
-    const descriptionStyle = {
+    const descriptionStyle = { // Style for description/attacks
         position: 'absolute',
-        bottom: '90px', // Adjust this value
-        left: '30px', // Adjust this value
-        width: '240px', // Adjust this value
-        height: '60px', // Adjust this value
+        top: '330px',
+        left: '25px',
+        width: '270px',
+        height: '140px',
         overflowY: 'auto',
         fontSize: '16px',
-        fontFamily: 'skobisFont'
+        fontFamily: 'skobisFont',
+        zIndex: 3
     };
 
     const energyStyle = { // Style for the energy icon
@@ -99,6 +108,7 @@ export default function TradingCard({ name, description, energy, cardImage, cate
         right: '23px', // Adjust this value
         width: '40px', // Set a fixed width for the image
         height: '40px', // Set a fixed height for the image
+        zIndex: 3
     };
 
     const hpStyle = { // Style for the hp number
@@ -109,7 +119,8 @@ export default function TradingCard({ name, description, energy, cardImage, cate
         textAlign: 'left',
         fontSize: '22px',
         color: 'black',
-        fontFamily: 'skobisFont'
+        fontFamily: 'skobisFont',
+        zIndex: 3
     };
 
     const retreatStyle = { // Style for the retreat cost number
@@ -120,7 +131,8 @@ export default function TradingCard({ name, description, energy, cardImage, cate
         textAlign: 'left',
         fontSize: '22px',
         color: 'black',
-        fontFamily: 'skobisFont'
+        fontFamily: 'skobisFont',
+        zIndex: 3
     };
 
     const retreatIconStyle = { // Style for the retreat icon
@@ -129,6 +141,7 @@ export default function TradingCard({ name, description, energy, cardImage, cate
         right: '118px', // Adjust this value
         width: '22px', // Set a fixed width for the image
         height: '22px', // Set a fixed height for the image
+        zIndex: 3
     };
 
     const hpLabelStyle = { // Style for the hp label
@@ -139,7 +152,8 @@ export default function TradingCard({ name, description, energy, cardImage, cate
         textAlign: 'left',
         fontSize: '12px',
         color: 'black',
-        fontFamily: 'skobisFont'
+        fontFamily: 'skobisFont',
+        zIndex: 3
     };
 
     const retreatLabelStyle = { // Style for the retreat label
@@ -150,18 +164,39 @@ export default function TradingCard({ name, description, energy, cardImage, cate
         textAlign: 'left',
         fontSize: '12px',
         color: 'black',
-        fontFamily: 'skobisFont'
+        fontFamily: 'skobisFont',
+        zIndex: 3
     };
 
     return (
         <div className="relative w-[320px] h-[480px]"> {/* 2:3 Ratio for cards */}
+
+            {cardImage && (
+                    <img
+                        src={cardImage}
+                        alt={name}
+                        style={{
+                            imageContainerStyle,
+                            transform: `scale(${imageZoom}) translate(${imageX}px, ${imageY}px)`,
+                            transformOrigin: '50% 50%',
+                        }}
+                    />
+            )}
+
+
             {/* Background PNG template */}
-            <Image
+            <img
                 src="/images/tcg/tcg_template_1.png"
                 alt="Trading Card Template"
-                layout="fill"
-                objectFit="cover"
-                priority // Add if the image is above the fold
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    zIndex: 2
+                }}
             />
 
             {/* --- Absolutely positioned card elements --- */}
@@ -179,19 +214,8 @@ export default function TradingCard({ name, description, energy, cardImage, cate
                     />
                 </div>
             )}
-            
-            <div style={imageContainerStyle}>
-                {cardImage && (
-                <Image
-                    src={cardImage}
-                    alt={name}
-                    layout="fill"
-                    objectFit="cover"
-                />
-                )}
-            </div>
 
-            <div style={categoryStyle}>{category}</div>
+            <div style={categoryStyle}>{rarity} {category}</div>
 
             <div style={hpLabelStyle}>HP</div>
             <div style={hpStyle}>{hp}</div>

@@ -6,12 +6,18 @@ import html2canvas from 'html2canvas';
 
 export default function Tcg() {
   const [cardName, setCardName] = useState('Name');
-  const [description, setDescription] = useState('This card is super cool!');
+  const [description, setDescription] = useState('*splat* *splat* - Deal XX damage and discard  1 *splat* energy');
   const [energyType, setEnergyType] = useState('Splat');
-  const [category, setCategory] = useState('Common Skobian');
+  const [rarity, setRarity] = useState('Common');
+  const [category, setCategory] = useState('Skobian');
   const [hp, setHP] = useState(100);
   const [retreat, setRetreat] = useState(2);
   const [cardImage, setCardImage] = useState(null);
+
+  // State for image sliders
+  const [imageZoom, setImageZoom] = useState(1);
+  const [imageX, setImageX] = useState(0);
+  const [imageY, setImageY] = useState(0);
 
   const cardRef = useRef(null);
 
@@ -28,8 +34,13 @@ export default function Tcg() {
 
   const handleDownload = () => {
     if (cardRef.current) {
-      html2canvas(cardRef.current, {
-        scale: 2
+      const cardElement = cardRef.current;
+
+      html2canvas(cardElement, {
+        width: cardElement.offsetWidth,
+        height: cardElement.offsetHeight,
+        scale: 2, // Use a high scale for better quality
+        useCORS: true, // This is crucial for images loaded from different origins (e.g., user uploads)
       }).then(canvas => {
         const link = document.createElement('a');
         link.href = canvas.toDataURL('image/png');
@@ -40,6 +51,11 @@ export default function Tcg() {
       });
     }
   };
+
+  // Reset functions for each slider
+  const resetZoom = () => setImageZoom(1);
+  const resetX = () => setImageX(0);
+  const resetY = () => setImageY(0);
 
   return (
     <main>
@@ -67,6 +83,21 @@ export default function Tcg() {
                 onChange={(e) => setCategory(e.target.value)}
                 className="mt-1 block w-full border border-gray-300 p-2 rounded-md"
               />
+            </div>
+
+            <div>
+              <label htmlFor="rarity" className="block text-sm font-medium">Rarity</label>
+              <select
+                id="rarity"
+                value={rarity}
+                onChange={(e) => setRarity(e.target.value)}
+                className="mt-1 block w-full border border-gray-300 p-2 rounded-md"
+              >
+                <option value="Common">Common</option>
+                <option value="Rare">Rare</option>
+                <option value="Epic">Epic</option>
+                <option value="Legendary">Legendary</option>
+              </select>
             </div>
 
             <div>
@@ -136,6 +167,72 @@ export default function Tcg() {
                 className="mt-1 block w-full"
               />
             </div>
+
+
+            {/* Zoom and pan inputs */}
+            <div className="mb-4">
+                <div className="flex items-center gap-2">
+                    <label className="block whitespace-nowrap min-w-[120px]">Zoom: {imageZoom.toFixed(2)}</label>
+                    <input
+                        type="range"
+                        min="0.5"
+                        max="5"
+                        step="0.1"
+                        value={imageZoom}
+                        onChange={(e) => setImageZoom(parseFloat(e.target.value))}
+                        className="w-64"
+                    />
+                    <button
+                        type="button"
+                        onClick={resetZoom}
+                        className="px-2 py-1 text-sm bg-gray-200 hover:bg-gray-300 rounded"
+                    >
+                        Reset
+                    </button>
+                </div>
+            </div>
+            <div className="mb-4">
+                <div className="flex items-center gap-2">
+                    <label className="block whitespace-nowrap min-w-[120px]">Pan X: {imageX}px</label>
+                    <input
+                        type="range"
+                        min="-100"
+                        max="100"
+                        step="1"
+                        value={imageX}
+                        onChange={(e) => setImageX(parseInt(e.target.value))}
+                        className="w-64"
+                    />
+                    <button
+                        type="button"
+                        onClick={resetX}
+                        className="px-2 py-1 text-sm bg-gray-200 hover:bg-gray-300 rounded"
+                    >
+                        Reset
+                    </button>
+                </div>
+            </div>
+            <div className="mb-4">
+                <div className="flex items-center gap-2">
+                    <label className="block whitespace-nowrap min-w-[120px]">Pan Y: {imageY}px</label>
+                    <input
+                        type="range"
+                        min="-100"
+                        max="100"
+                        step="1"
+                        value={imageY}
+                        onChange={(e) => setImageY(parseInt(e.target.value))}
+                        className="w-64"
+                    />
+                    <button
+                        type="button"
+                        onClick={resetY}
+                        className="px-2 py-1 text-sm bg-gray-200 hover:bg-gray-300 rounded"
+                    >
+                        Reset
+                    </button>
+                </div>
+            </div>
           </form>
           <button
             type="button"
@@ -145,16 +242,21 @@ export default function Tcg() {
             Download Card
           </button>
         </div>
+
         <div className="w-1/2 flex justify-center items-center">
-          <div ref={cardRef}>
+          <div ref={cardRef} className="w-[320px] h-[480px]">
             <TradingCard
               name={cardName}
               description={description}
               energy={energyType}
               cardImage={cardImage}
+              rarity={rarity}
               category={category}
               hp={hp}
               retreat={retreat}
+              imageZoom={imageZoom}
+              imageX={imageX}
+              imageY={imageY}
             />
           </div>
         </div>
