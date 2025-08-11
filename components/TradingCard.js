@@ -15,6 +15,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
     // Get the image source based on the energy prop
     const energySrc = energyImageMap[energy];
 
+    // Array of energy text icons
     const keywordIconMap = {
         '*splat*': '/images/tcg/energy/inverted/splat_energy_inverted.png',
         '*rage*': '/images/tcg/energy/inverted/rage_energy_inverted.png',
@@ -22,6 +23,17 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         '*mechanical*': '/images/tcg/energy/inverted/mechanical_energy_inverted.png',
         '*terra*': '/images/tcg/energy/inverted/terra_energy_inverted.png',
     };
+
+    // Array of coloured card templates
+    const templateMap = {
+        'Splat': '/images/tcg/tcg_template_1.png',
+        'Rage': '/images/tcg/tcg_template_rage.png',
+        'Whimsy': '/images/tcg/tcg_template_whimsy.png',
+        'Mechanical': '/images/tcg/tcg_template_mechanical.png',
+        'Terra': '/images/tcg/tcg_template_terra.png',
+    };
+    // Get the image source based on the energy prop
+    const templateSrc = templateMap[energy];
 
     const parseDescription = (text) => {
         if (!text) return null;
@@ -185,7 +197,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
 
             {/* Background PNG template */}
             <img
-                src="/images/tcg/tcg_template_1.png"
+                src={templateSrc}
                 alt="Trading Card Template"
                 style={{
                     position: 'absolute',
