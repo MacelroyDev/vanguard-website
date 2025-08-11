@@ -45,6 +45,15 @@ export default function TradingCard({ name, description, energy, cardImage, rari
     // Get the card template based on the energy prop
     const raritySrc = rarityMap[rarity];
 
+    // Array of rarity critter strings
+    const rarityStringMap = {
+        'Common': 'Common Critter',
+        'Rare': 'Rare Critter',
+        'Epic': 'Epic Critter',
+        'Legendary': 'Legendary Critter',
+    };
+    const rarityString = rarityStringMap[rarity];
+
     const parseDescription = (text) => {
         if (!text) return null;
 
@@ -251,7 +260,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
                 </div>
             )}
 
-            <div style={categoryStyle}>{rarity} {category}</div>
+            <div style={categoryStyle}>{rarityString} - {category}</div>
 
             <div style={hpLabelStyle}>HP</div>
             <div style={hpStyle}>{hp}</div>
