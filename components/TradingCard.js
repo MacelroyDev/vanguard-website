@@ -71,13 +71,11 @@ export default function TradingCard({ name, description, energy, cardImage, rari
             
             if (iconSrc) {
                 return (
-                    <Image
+                    <img
                         key={index}
                         src={iconSrc}
                         alt={part.replace(/\*/g, '')}
-                        width={16}
-                        height={16}
-                        className="inline-block align-middle"
+                        style={{ width: '16px', height: '16px', display: 'inline-block', verticalAlign: 'middle' }}
                     />
                 );
             }
@@ -167,7 +165,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
 
     const retreatIconStyle = { // Style for the retreat icon
         position: 'absolute',
-        top: '290px', // Adjust this value
+        top: '288px', // Adjust this value
         right: '50px', // Adjust this value
         width: '20px', // Set a fixed width for the image
         height: '20px', // Set a fixed height for the image
@@ -251,16 +249,17 @@ export default function TradingCard({ name, description, energy, cardImage, rari
             {/* 2. Conditionally render the energy image */}
             {energySrc && (
                 <div style={energyStyle}>
-                    <Image
+                    <img
                         src={energySrc}
                         alt={`${energy} Energy`}
-                        layout="fill"
-                        objectFit="contain" // Use contain to fit image within the div
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                     />
                 </div>
             )}
 
-            <div style={categoryStyle}>{rarityString} - {category}</div>
+            <div style={categoryStyle}>
+                {rarityString} {category && '-'} {category}
+            </div>
 
             <div style={hpLabelStyle}>HP</div>
             <div style={hpStyle}>{hp}</div>
@@ -268,11 +267,10 @@ export default function TradingCard({ name, description, energy, cardImage, rari
             <div style={retreatLabelStyle}>Retreat Cost</div>
             <div style={retreatStyle}>{retreat}x</div>
             <div style={retreatIconStyle}>
-                <Image
+                <img
                     src={'/images/tcg/energy/border/splat_energy_border.png'}
                     alt={name}
-                    layout="fill"
-                    objectFit="cover"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
             </div>
 
