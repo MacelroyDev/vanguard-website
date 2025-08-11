@@ -57,28 +57,35 @@ export default function TradingCard({ name, description, energy, cardImage, rari
     const parseDescription = (text) => {
         if (!text) return null;
 
-        // FIX: Escape special characters (like *) from the keys before creating the regex
+        // Split the text by both the energy keywords and newlines
         const escapedKeywords = Object.keys(keywordIconMap)
-            .map(key => key.replace(/\*/g, '\\*')) // Correctly escape the asterisk
+            .map(key => key.replace(/\*/g, '\\*'))
             .join('|');
-
-        const regex = new RegExp(`(${escapedKeywords})`, 'g');
+        
+        // Use a regex that captures both keywords and newline characters
+        const regex = new RegExp(`(${escapedKeywords}|\\n)`, 'g');
         const parts = text.split(regex);
 
         return parts.map((part, index) => {
-            // Check the original, unescaped key
-            const iconSrc = keywordIconMap[part];
-            
-            if (iconSrc) {
-                return (
-                    <img
-                        key={index}
-                        src={iconSrc}
-                        alt={part.replace(/\*/g, '')}
-                        style={{ width: '16px', height: '16px', display: 'inline-block', verticalAlign: 'middle' }}
-                    />
-                );
+            // Check if the part is a newline character
+            if (part === '\n') {
+            return <br key={index} />;
             }
+
+            // Check if the part is an energy icon keyword
+            const iconSrc = keywordIconMap[part];
+            if (iconSrc) {
+            return (
+                <img
+                key={index}
+                src={iconSrc}
+                alt={part.replace(/\*/g, '')}
+                style={{ width: '16px', height: '16px', display: 'inline-block', verticalAlign: 'middle' }}
+                />
+            );
+            }
+            
+            // Otherwise, return the text part as a span
             return <span key={index}>{part}</span>;
         });
     };
