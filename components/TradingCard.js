@@ -113,11 +113,11 @@ export default function TradingCard({ name, description, energy, cardImage, rari
 
     const hpStyle = { // Style for the hp number
         position: 'absolute',
-        top: '285px',
-        left: '45px',
+        top: '278px',
+        left: '60px',
         width: '400px',
         textAlign: 'left',
-        fontSize: '22px',
+        fontSize: '30px',
         color: 'black',
         fontFamily: 'skobisFont',
         zIndex: 3
