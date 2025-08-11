@@ -6,11 +6,11 @@ export default function TradingCard({ name, description, energy, cardImage, rari
 
     // Array of energy icon pngs
     const energyImageMap = {
-        'Splat': '/images/tcg/energy/splat_energy.png',
-        'Rage': '/images/tcg/energy/rage_energy.png',
-        'Whimsy': '/images/tcg/energy/whimsy_energy.png',
-        'Mechanical': '/images/tcg/energy/mechanical_energy.png',
-        'Terra': '/images/tcg/energy/terra_energy.png',
+        'Splat': '/images/tcg/energy/border/splat_energy_border.png',
+        'Rage': '/images/tcg/energy/border/rage_energy_border.png',
+        'Whimsy': '/images/tcg/energy/border/whimsy_energy_border.png',
+        'Mechanical': '/images/tcg/energy/border/mechanical_energy_border.png',
+        'Terra': '/images/tcg/energy/border/terra_energy_border.png',
     };
     // Get the image source based on the energy prop
     const energySrc = energyImageMap[energy];
@@ -134,10 +134,10 @@ export default function TradingCard({ name, description, energy, cardImage, rari
 
     const energyStyle = { // Style for the energy icon
         position: 'absolute',
-        top: '31px', // Adjust this value
-        right: '23px', // Adjust this value
-        width: '40px', // Set a fixed width for the image
-        height: '40px', // Set a fixed height for the image
+        top: '22.5px', // Adjust this value
+        right: '13.5px', // Adjust this value
+        width: '60px', // Set a fixed width for the image
+        height: '60px', // Set a fixed height for the image
         zIndex: 4
     };
 
