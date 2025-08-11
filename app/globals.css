@@ -30,6 +30,11 @@
   src: url('./Darling.ttf');
 }
 
+@font-face {
+  font-family: skobisFont;
+  src: url('./Crillee_Italic_Std_Regular.otf');
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
@@ -38,4 +43,8 @@ body {
 
 .freaky-font {
   font-family: darlingFont, sans-serif;
+}
+
+.skobis-font {
+  font-family: skobisFont, sans-serif;
 }

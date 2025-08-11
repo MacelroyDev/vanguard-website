@@ -8,7 +8,7 @@ export default function Tcg() {
   const [cardName, setCardName] = useState('Name');
   const [description, setDescription] = useState('This card is super cool!');
   const [energyType, setEnergyType] = useState('Splat');
-  const [category, setCategory] = useState('Skobian');
+  const [category, setCategory] = useState('Common Skobian');
   const [hp, setHP] = useState(100);
   const [retreat, setRetreat] = useState(2);
   const [cardImage, setCardImage] = useState(null);
@@ -152,6 +152,9 @@ export default function Tcg() {
               description={description}
               energy={energyType}
               cardImage={cardImage}
+              category={category}
+              hp={hp}
+              retreat={retreat}
             />
           </div>
         </div>
