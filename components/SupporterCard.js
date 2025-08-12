@@ -4,7 +4,15 @@ import React from 'react';
 
 export default function SupporterCard({ name, description, energy, cardImage, rarity, category, hp, retreat, imageX, imageY, imageZoom, skobian }) {
 
-    const energySrc = '/images/tcg/energy/border/splat_energy_border.png';
+    // Array of tool icons
+    const toolIconMap = {
+        'Supporter': '/images/tcg/supporter_icon.png',
+        'Gizmo': '/images/tcg/gizmo_icon.png',
+        'Thingamajig': '/images/tcg/thing_icon.png',
+        'Erection': '/images/tcg/erection_icon.png',
+    };
+
+    const energySrc = toolIconMap[category];
 
     // Array of energy text icons
     const keywordIconMap = {
@@ -31,7 +39,7 @@ export default function SupporterCard({ name, description, energy, cardImage, ra
     const ruleArray = {
         'Supporter': 'You can only play 1 Supporter card per turn.',
         'Gizmo': 'You can play multiple Gizmo cards per turn.',
-        'Thingamajig': 'You can only attach 1 Thingamajig card per attacker unless otherwise stated.',
+        'Thingamajig': 'You can only attach 1 Thingamajig card per Critter unless otherwise stated.',
         'Erection': 'You can only play 1 Erection card per turn.',
     }
     const ruleSrc = ruleArray[category];
