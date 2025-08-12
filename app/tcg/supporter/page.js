@@ -1,7 +1,7 @@
 "use client"
 import { useState, useRef } from 'react';
 import ClientNavbar from '../../../components/clientNavbar';
-import TradingCard from '../../../components/TradingCard';
+import SupporterCard from '../../../components/SupporterCard';
 import html2canvas from 'html2canvas';
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { IoMdInformationCircleOutline } from "react-icons/io";
@@ -9,13 +9,9 @@ import Link from 'next/link'
 
 export default function Tcg() {
   const [cardName, setCardName] = useState('Name');
-  const [description, setDescription] = useState('[*splat* *splat* Example Attack / 20] - Discard 1 *splat* energy from your opponent\'s active critter.');
-  // The backslash is so the apostrophe doesnt close the string
-  const [energyType, setEnergyType] = useState('Splat');
+  const [description, setDescription] = useState('Explain what the card does here.\nIcons *splat* can still be used too!');
   const [rarity, setRarity] = useState('Common');
-  const [category, setCategory] = useState('Skobian');
-  const [hp, setHP] = useState(100);
-  const [retreat, setRetreat] = useState(2);
+  const [category, setCategory] = useState('Supporter');
   const [cardImage, setCardImage] = useState(null);
 
   // State for image sliders
@@ -85,15 +81,21 @@ export default function Tcg() {
                 className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
               />
             </div>
+
+
             <div>
               <label htmlFor="category" className="block text-sm font-medium text-white">Category</label>
-              <input
+              <select
                 id="category"
-                type="text"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
-              />
+              >
+                <option value="Supporter">Supporter</option>
+                <option value="Gizmo">Gizmo</option>
+                <option value="Thingamajig">Thingamajig</option>
+                <option value="Erection">Erection</option>
+              </select>
             </div>
 
             <div>
@@ -111,53 +113,6 @@ export default function Tcg() {
               </select>
             </div>
 
-            <div>
-              <label htmlFor="energyType" className="block text-sm font-medium text-white">Energy Type</label>
-              <select
-                id="energyType"
-                value={energyType}
-                onChange={(e) => setEnergyType(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
-              >
-                <option value="Splat">Splat</option>
-                <option value="Rage">Rage</option>
-                <option value="Whimsy">Whimsy</option>
-                <option value="Mechanical">Mechanical</option>
-                <option value="Terra">Terra</option>
-              </select>
-            </div>
-
-            {/* Div for HP and Retreat inputs */}
-            <div className="flex gap-4">
-                <div className="flex-1">
-                    <label htmlFor="hp" className="block text-sm font-medium text-white">HP</label>
-                    <input
-                        id="hp"
-                        type="number"
-                        value={hp}
-                        onChange={(e) => {
-                            const value = parseInt(e.target.value, 10);
-                            if (!isNaN(value) && value % 10 === 0) {
-                                setHP(value);
-                            }
-                        }}
-                        step="10"
-                        min="10"
-                        className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
-                    />
-                </div>
-                <div className="flex-1">
-                    <label htmlFor="retreat" className="block text-sm font-medium text-white">Retreat Cost</label>
-                    <input
-                        id="retreat"
-                        type="number"
-                        value={retreat}
-                        onChange={(e) => setRetreat(parseInt(e.target.value, 10))}
-                        min="0"
-                        className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
-                    />
-                </div>
-            </div>
             <div>
               <div className="flex gap-2">
                 <label htmlFor="description" className="block text-sm font-medium text-white">Description</label>
@@ -260,15 +215,12 @@ export default function Tcg() {
 
         <div className="w-1/2 flex justify-center items-center">
           <div ref={cardRef} className="w-[320px] h-[480px]">
-            <TradingCard
+            <SupporterCard
               name={cardName}
               description={description}
-              energy={energyType}
               cardImage={cardImage}
               rarity={rarity}
               category={category}
-              hp={hp}
-              retreat={retreat}
               imageZoom={imageZoom}
               imageX={imageX}
               imageY={imageY}
