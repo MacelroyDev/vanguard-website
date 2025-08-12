@@ -1,7 +1,7 @@
 "use client"
 import { useState, useRef } from 'react';
-import ClientNavbar from '../../components/clientNavbar';
-import TradingCard from '../../components/TradingCard';
+import ClientNavbar from '../../../components/clientNavbar';
+import TradingCard from '../../../components/TradingCard';
 import html2canvas from 'html2canvas';
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { IoMdInformationCircleOutline } from "react-icons/io";
@@ -66,13 +66,13 @@ export default function Tcg() {
       <ClientNavbar />
       <div className="flex p-4 gap-8">
         <div className="w7/16"> {/* 7/16 fraction so slightly less than half*/}
-          <h2 className="text-2xl text-vanguardOrange font-(vanguardFont) font-bold drop-shadow-xl mt-5">Bodob Skobis TCG Card Editor</h2>
+          <h2 className="text-2xl text-vanguardOrange font-(vanguardFont) font-bold drop-shadow-xl my-5">Bodob Skobis TCG Card Editor</h2>
           <Link 
             type="button" 
             className='block border-4 border-vanguardOrange p-2 rounded-md text-sm text-vanguardOrange font-(vanguardFont) drop-shadow-xl mt-5 mb-10'
-            href={{pathname:'./tcg/supporter'}}
+            href={{pathname:'/tcg'}}
           >
-            Switch to supporter card
+            Switch to attacker card
           </Link>
           <form className="flex flex-col gap-4">
             <div>

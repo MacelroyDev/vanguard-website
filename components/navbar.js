@@ -8,7 +8,8 @@ export default function Navbar({ pathname }) {
         '/travel': '#030306', // Travel
         '/maps': '#617AA8', // Maps
         '/cards': '#84AFFF', // Cards
-        '/tcg': '#6e2925' // TCG
+        '/tcg': '#6e2925', // TCG
+        '/tcg/supporter': '#6e2925' // TCG
     };
 
     function getLinkStyle(href){
