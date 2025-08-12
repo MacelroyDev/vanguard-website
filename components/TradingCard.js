@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 
-export default function TradingCard({ name, description, energy, cardImage, rarity, category, hp, retreat, imageX, imageY, imageZoom }) {
+export default function TradingCard({ name, description, energy, cardImage, rarity, category, hp, retreat, imageX, imageY, imageZoom, skobian }) {
 
     // Array of energy icon pngs
     const energyImageMap = {
@@ -249,7 +249,23 @@ export default function TradingCard({ name, description, energy, cardImage, rari
                 }}
             />
 
+
+
             {/* --- Absolutely positioned card elements --- */}
+
+            {skobian && (
+            <img
+                src={"images/tcg/skobian.png"}
+                alt="Skobian Tag"
+                style={{
+                position: 'absolute',
+                top: '190px',
+                left: '194px',
+                width: '100px',
+                zIndex: 3
+                }}
+            />
+            )}
 
             <div style={nameStyle}>{name}</div>
 

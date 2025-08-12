@@ -13,10 +13,11 @@ export default function Tcg() {
   // The backslash is so the apostrophe doesnt close the string
   const [energyType, setEnergyType] = useState('Splat');
   const [rarity, setRarity] = useState('Common');
-  const [category, setCategory] = useState('Skobian');
+  const [category, setCategory] = useState('Denizen');
   const [hp, setHP] = useState(100);
   const [retreat, setRetreat] = useState(2);
   const [cardImage, setCardImage] = useState(null);
+  const [skobian, setSkobian] = useState(false);
 
   // State for image sliders
   const [imageZoom, setImageZoom] = useState(1);
@@ -172,6 +173,19 @@ export default function Tcg() {
               />
             </div>
 
+            <div className="flex items-center gap-2 mb-4">
+              <input
+                id="skobian-checkbox"
+                type="checkbox"
+                checked={skobian}
+                onChange={(e) => setSkobian(e.target.checked)}
+                className="h-4 w-4 text-vanguardOrange border-gray-300 rounded focus:ring-vanguardOrange"
+              />
+              <label htmlFor="skobian-checkbox" className="block text-sm font-medium text-white">
+                Is Skobian?
+              </label>
+            </div>
+
             <div>
               <label htmlFor="cardImage" className="block text-sm font-medium text-white">Card Image</label>
               <input
@@ -272,6 +286,7 @@ export default function Tcg() {
               imageZoom={imageZoom}
               imageX={imageX}
               imageY={imageY}
+              skobian={skobian}
             />
           </div>
         </div>
