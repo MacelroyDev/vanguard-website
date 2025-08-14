@@ -22,6 +22,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         '*whimsy*': '/images/tcg/energy/border/whimsy_energy_border.png',
         '*mechanical*': '/images/tcg/energy/border/mechanical_energy_border.png',
         '*terra*': '/images/tcg/energy/border/terra_energy_border.png',
+        '*none*': '/images/tcg/energy/border/no_energy_border.png',
     };
 
     // Array of coloured card templates

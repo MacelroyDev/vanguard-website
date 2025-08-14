@@ -9,7 +9,7 @@ import Link from 'next/link'
 
 export default function Tcg() {
   const [cardName, setCardName] = useState('Name');
-  const [description, setDescription] = useState('[*splat* *splat* Example Attack / 20] - Discard 1 *splat* energy from your opponent\'s active critter.');
+  const [description, setDescription] = useState('[*splat**splat* Example Attack / 20] Discard 1 *splat* energy from your opponent\'s active critter.');
   // The backslash is so the apostrophe doesnt close the string
   const [energyType, setEnergyType] = useState('Splat');
   const [rarity, setRarity] = useState('Common');
