@@ -21,6 +21,8 @@ export default function SupporterCard({ name, description, energy, cardImage, ra
         '*whimsy*': '/images/tcg/energy/border/whimsy_energy_border.png',
         '*mechanical*': '/images/tcg/energy/border/mechanical_energy_border.png',
         '*terra*': '/images/tcg/energy/border/terra_energy_border.png',
+        '*none*': '/images/tcg/energy/border/no_energy_border.png',
+        '*v*': '/images/tcg/vanguard-badge.png',
     };
 
     // Get the card template based on the energy prop
@@ -64,13 +66,18 @@ export default function SupporterCard({ name, description, energy, cardImage, ra
 
             // Check if the part is an energy icon keyword
             const iconSrc = keywordIconMap[part];
+            let iconSize = '16px';
+
+            if (iconSrc == '/images/tcg/vanguard-badge.png'){
+                iconSize = '24px';
+            }
             if (iconSrc) {
             return (
                 <img
                 key={index}
                 src={iconSrc}
                 alt={part.replace(/\*/g, '')}
-                style={{ width: '16px', height: '16px', display: 'inline-block', verticalAlign: 'middle' }}
+                style={{ width: iconSize, height: iconSize, display: 'inline-block', verticalAlign: 'middle' }}
                 />
             );
             }
@@ -199,7 +206,7 @@ export default function SupporterCard({ name, description, energy, cardImage, ra
             {/* --- Absolutely positioned card elements --- */}
 
 
-            <div style={nameStyle}>{name}</div>
+            <div style={nameStyle}>{parseDescription(name)}</div>
 
             {/* 2. Conditionally render the energy image */}
             {energySrc && (

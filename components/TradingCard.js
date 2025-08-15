@@ -23,6 +23,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         '*mechanical*': '/images/tcg/energy/border/mechanical_energy_border.png',
         '*terra*': '/images/tcg/energy/border/terra_energy_border.png',
         '*none*': '/images/tcg/energy/border/no_energy_border.png',
+        '*v*': '/images/tcg/vanguard-badge.png',
     };
 
     // Array of coloured card templates
@@ -75,13 +76,18 @@ export default function TradingCard({ name, description, energy, cardImage, rari
 
             // Check if the part is an energy icon keyword
             const iconSrc = keywordIconMap[part];
+            let iconSize = '16px';
+
+            if (iconSrc == '/images/tcg/vanguard-badge.png'){
+                iconSize = '24px';
+            }
             if (iconSrc) {
             return (
                 <img
                 key={index}
                 src={iconSrc}
                 alt={part.replace(/\*/g, '')}
-                style={{ width: '16px', height: '16px', display: 'inline-block', verticalAlign: 'middle' }}
+                style={{ width: iconSize, height: iconSize, display: 'inline-block', verticalAlign: 'middle' }}
                 />
             );
             }
@@ -268,7 +274,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
             />
             )}
 
-            <div style={nameStyle}>{name}</div>
+            <div style={nameStyle}>{parseDescription(name)}</div>
 
             {/* 2. Conditionally render the energy image */}
             {energySrc && (
