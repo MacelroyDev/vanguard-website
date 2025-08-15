@@ -18,6 +18,7 @@ export default function Tcg() {
   const [retreat, setRetreat] = useState(2);
   const [cardImage, setCardImage] = useState(null);
   const [skobian, setSkobian] = useState(false);
+  const [littleguy, setLittleguy] = useState(false);
 
   // State for image sliders
   const [imageZoom, setImageZoom] = useState(1);
@@ -184,6 +185,16 @@ export default function Tcg() {
               <label htmlFor="skobian-checkbox" className="block text-sm font-medium text-white">
                 Is Skobian?
               </label>
+              <input
+                id="littleguy-checkbox"
+                type="checkbox"
+                checked={littleguy}
+                onChange={(e) => setLittleguy(e.target.checked)}
+                className="h-4 w-4 text-vanguardOrange border-gray-300 rounded focus:ring-vanguardOrange"
+              />
+              <label htmlFor="skobian-checkbox" className="block text-sm font-medium text-white">
+                Is Little Guy?
+              </label>
             </div>
 
             <div>
@@ -287,6 +298,7 @@ export default function Tcg() {
               imageX={imageX}
               imageY={imageY}
               skobian={skobian}
+              littleguy={littleguy}
             />
           </div>
         </div>
