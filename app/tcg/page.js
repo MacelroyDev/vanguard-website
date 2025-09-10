@@ -110,6 +110,7 @@ export default function Tcg() {
                 <option value="Rare">Rare</option>
                 <option value="Epic">Epic</option>
                 <option value="Legendary">Legendary</option>
+                <option value="Exquisite">Exquisite</option>
               </select>
             </div>
 

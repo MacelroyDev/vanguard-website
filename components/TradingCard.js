@@ -43,6 +43,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         'Rare': '/images/tcg/rarity/rare_bar.png',
         'Epic': '/images/tcg/rarity/epic_bar.png',
         'Legendary': '/images/tcg/rarity/legendary_bar.png',
+        'Exquisite': '/images/tcg/rarity/ex_bar.png',
     };
     // Get the card template based on the energy prop
     const raritySrc = rarityMap[rarity];
@@ -53,6 +54,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         'Rare': 'Rare Critter',
         'Epic': 'Epic Critter',
         'Legendary': 'Legendary Critter',
+        'Exquisite': 'Exquisite Critter',
     };
     const rarityString = rarityStringMap[rarity];
 

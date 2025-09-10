@@ -34,6 +34,7 @@ export default function SupporterCard({ name, description, energy, cardImage, ra
         'Rare': '/images/tcg/rarity/rare_bar.png',
         'Epic': '/images/tcg/rarity/epic_bar.png',
         'Legendary': '/images/tcg/rarity/legendary_bar.png',
+        'Exquisite': '/images/tcg/rarity/ex_bar.png',
     };
     // Get the card template based on the energy prop
     const raritySrc = rarityMap[rarity];
