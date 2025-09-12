@@ -2,7 +2,7 @@
 import React from 'react';
 //import Image from 'next/image';
 
-export default function TradingCard({ name, description, energy, cardImage, rarity, category, hp, retreat, imageX, imageY, imageZoom, skobian, littleguy }) {
+export default function TradingCard({ name, description, energy, cardImage, rarity, category, hp, retreat, imageX, imageY, imageZoom, skobian, littleguy, level }) {
 
     // Array of energy icon pngs
     const energyImageMap = {
@@ -78,7 +78,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
 
             // Check if the part is an energy icon keyword
             const iconSrc = keywordIconMap[part];
-            let iconSize = '16px';
+            let iconSize = '14px';
 
             if (iconSrc == '/images/tcg/vanguard-badge.png'){
                 iconSize = '24px';
@@ -107,6 +107,18 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         width: '200px',
         textAlign: 'left',
         fontSize: '20px',
+        color: 'white',
+        fontFamily: 'skobisFont',
+        zIndex: 4
+    };
+
+    const levelStyle = { // Style for the level label
+        position: 'absolute',
+        top: '20px',
+        left: '30px',
+        width: '200px',
+        textAlign: 'left',
+        fontSize: '14px',
         color: 'white',
         fontFamily: 'skobisFont',
         zIndex: 4
@@ -141,7 +153,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         width: '270px',
         height: '140px',
         overflowY: 'auto',
-        fontSize: '16px',
+        fontSize: '12px',
         fontFamily: 'skobisFont',
         zIndex: 4
     };
@@ -291,6 +303,8 @@ export default function TradingCard({ name, description, energy, cardImage, rari
             )}
 
             <div style={nameStyle}>{parseDescription(name)}</div>
+
+            <div style={levelStyle}>{`Level ${level}`}</div>
 
             {/* 2. Conditionally render the energy image */}
             {energySrc && (

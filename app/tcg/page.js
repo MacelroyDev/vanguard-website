@@ -8,9 +8,16 @@ import { IoMdInformationCircleOutline } from "react-icons/io";
 import Link from 'next/link'
 
 export default function Tcg() {
-  const [cardName, setCardName] = useState('Name');
-  const [description, setDescription] = useState('[*splat**splat* Example Attack / 20] Discard 1 *splat* energy from your opponent\'s active critter.');
+  const defualtDesc = `[ABILITY / Example Ability] Do something when something. Line break is 31 line characters.
+  ───────────────────────────────
+  [*splat**splat* Example Attack / 20] Discard 1 *splat* aura from your opponent\'s active critter.
+  `;
   // The backslash is so the apostrophe doesnt close the string
+
+  const linebreak = "───────────────────────────────";
+
+  const [cardName, setCardName] = useState('Name');
+  const [description, setDescription] = useState(defualtDesc);
   const [energyType, setEnergyType] = useState('Splat');
   const [rarity, setRarity] = useState('Common');
   const [category, setCategory] = useState('Denizen');
@@ -19,6 +26,7 @@ export default function Tcg() {
   const [cardImage, setCardImage] = useState(null);
   const [skobian, setSkobian] = useState(false);
   const [littleguy, setLittleguy] = useState(false);
+  const [level,setLevel] = useState(1);
 
   // State for image sliders
   const [imageZoom, setImageZoom] = useState(1);
@@ -161,6 +169,47 @@ export default function Tcg() {
                     />
                 </div>
             </div>
+
+            {/* Div for Level and Linebreak inputs */}
+            <div className="flex gap-4">
+                <div className="flex-1">
+                    <label htmlFor="level" className="block text-sm font-medium text-white">Level</label>
+                    <input
+                        id="level"
+                        type="number"
+                        value={level}
+                        onChange={(e) => {
+                            const value = parseInt(e.target.value, 10);
+                            if (!isNaN(value) && value >= 0 && value <= 3) {
+                                setLevel(value);
+                            }
+                        }}
+                        step="1"
+                        min="0"
+                        max="3"
+                        className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
+                    />
+                </div>
+                <div className="flex-1">
+                    <label htmlFor="Linebreak" className="block text-sm font-medium text-white">Copy Linebreak</label>
+                    <button
+                        type="button"
+                        className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont] bg-white"
+                        onClick={() => {
+                          navigator.clipboard.writeText(linebreak)
+                          .then(() => {
+                              console.log('Linebreak copied to clipboard!');
+                              // Optionally, you can add a user notification here
+                          })
+                          .catch(err => {
+                              console.error('Failed to copy text: ', err);
+                          });
+                        }}
+                    >
+                      Copy
+                    </button>
+                </div>
+            </div>
             <div>
               <div className="flex gap-2">
                 <label htmlFor="description" className="block text-sm font-medium text-white">Description</label>
@@ -300,6 +349,7 @@ export default function Tcg() {
               imageY={imageY}
               skobian={skobian}
               littleguy={littleguy}
+              level={level.toString()}
             />
           </div>
         </div>

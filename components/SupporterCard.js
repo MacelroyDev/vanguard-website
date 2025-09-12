@@ -67,7 +67,7 @@ export default function SupporterCard({ name, description, energy, cardImage, ra
 
             // Check if the part is an energy icon keyword
             const iconSrc = keywordIconMap[part];
-            let iconSize = '16px';
+            let iconSize = '14px';
 
             if (iconSrc == '/images/tcg/vanguard-badge.png'){
                 iconSize = '24px';
@@ -130,7 +130,7 @@ export default function SupporterCard({ name, description, energy, cardImage, ra
         width: '270px',
         height: '140px',
         overflowY: 'auto',
-        fontSize: '16px',
+        fontSize: '12px',
         fontFamily: 'skobisFont',
         zIndex: 4
     };
