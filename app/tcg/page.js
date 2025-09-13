@@ -8,7 +8,7 @@ import { IoMdInformationCircleOutline } from "react-icons/io";
 import Link from 'next/link'
 
 export default function Tcg() {
-  const defualtDesc = `[ABILITY / Example Ability] Do something when something. Line break is 31 line characters.
+  const defualtDesc = `*ability*Example Ability / Do something when something. Line break is 31 line characters.
   ───────────────────────────────
   [*splat**splat* Example Attack / 20] Discard 1 *splat* aura from your opponent\'s active critter.
   `;

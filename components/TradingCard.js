@@ -24,6 +24,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         '*terra*': '/images/tcg/energy/border/terra_energy_border.png',
         '*none*': '/images/tcg/energy/border/no_energy_border.png',
         '*v*': '/images/tcg/vanguard-badge.png',
+        '*ability*': '/images/tcg/ability.png',
     };
 
     // Array of coloured card templates
@@ -83,7 +84,19 @@ export default function TradingCard({ name, description, energy, cardImage, rari
             if (iconSrc == '/images/tcg/vanguard-badge.png'){
                 iconSize = '24px';
             }
-            if (iconSrc) {
+
+            if (iconSrc == '/images/tcg/ability.png'){
+                //iconSize = '24px';
+                let iconWidth = iconSize*4;
+                return (
+                <img
+                key={index}
+                src={iconSrc}
+                alt={part.replace(/\*/g, '')}
+                style={{ width: iconWidth, height: iconSize, display: 'inline-block', verticalAlign: 'middle' }}
+                />
+            );
+            }else if (iconSrc) {
             return (
                 <img
                 key={index}
