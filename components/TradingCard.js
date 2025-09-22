@@ -29,22 +29,22 @@ export default function TradingCard({ name, description, energy, cardImage, rari
 
     // Array of coloured card templates
     const templateMap = {
-        'Splat': '/images/tcg/tcg_template_1.png',
-        'Rage': '/images/tcg/tcg_template_rage.png',
-        'Whimsy': '/images/tcg/tcg_template_whimsy.png',
-        'Mechanical': '/images/tcg/tcg_template_mechanical.png',
-        'Terra': '/images/tcg/tcg_template_terra.png',
+        'Splat': '/images/tcg/new-templates/splat_template.png',
+        'Rage': '/images/tcg/new-templates/rage_template.png',
+        'Whimsy': '/images/tcg/new-templates/whimsy_template.png',
+        'Mechanical': '/images/tcg/new-templates/mech_template.png',
+        'Terra': '/images/tcg/new-templates/terra_template.png',
     };
     // Get the card template based on the energy prop
     const templateSrc = templateMap[energy];
 
     // Array of rarity card colours
     const rarityMap = {
-        'Common': '/images/tcg/rarity/common_bar.png',
-        'Rare': '/images/tcg/rarity/rare_bar.png',
-        'Epic': '/images/tcg/rarity/epic_bar.png',
-        'Legendary': '/images/tcg/rarity/legendary_bar.png',
-        'Exquisite': '/images/tcg/rarity/ex_bar.png',
+        'Common': '/images/tcg/rarity/CardC.png',
+        'Rare': '/images/tcg/rarity/CardR.png',
+        'Epic': '/images/tcg/rarity/CardE.png',
+        'Legendary': '/images/tcg/rarity/CardL.png',
+        'Exquisite': '/images/tcg/rarity/CardEx.png',
     };
     // Get the card template based on the energy prop
     const raritySrc = rarityMap[rarity];
@@ -139,7 +139,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
 
     const categoryStyle = { // Style for the category and rarity label
         position: 'absolute',
-        top: '246px',
+        top: '248px',
         left: '30px',
         width: '260px',
         textAlign: 'left',
@@ -195,7 +195,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
     const retreatStyle = { // Style for the retreat cost number
         position: 'absolute',
         top: '285px',
-        left: '225px',
+        left: '215px',
         width: '400px',
         textAlign: 'left',
         fontSize: '22px',
@@ -207,7 +207,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
     const retreatIconStyle = { // Style for the retreat icon
         position: 'absolute',
         top: '288px', // Adjust this value
-        right: '50px', // Adjust this value
+        right: '60px', // Adjust this value
         width: '20px', // Set a fixed width for the image
         height: '20px', // Set a fixed height for the image
         zIndex: 4
@@ -231,7 +231,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         left: '150px',
         width: '400px',
         textAlign: 'left',
-        fontSize: '12px',
+        fontSize: '11.5px',
         color: 'black',
         fontFamily: 'skobisFont',
         zIndex: 4
