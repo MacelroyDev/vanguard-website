@@ -14,6 +14,14 @@ export default function SupporterCard({ name, description, energy, cardImage, ra
 
     const energySrc = toolIconMap[category];
 
+    // Array of coloured card templates
+    const templateMap = {
+        'Supporter': '/images/tcg/new-templates/new-supporter-templates/supporter_template.png',
+        'Gizmo': '/images/tcg/new-templates/new-supporter-templates/gizmo_template.png',
+        'Thingamajig': '/images/tcg/new-templates/new-supporter-templates/thing_template.png',
+        'Erection': '/images/tcg/new-templates/new-supporter-templates/erect_template.png',
+    };
+
     // Array of energy text icons
     const keywordIconMap = {
         '*splat*': '/images/tcg/energy/border/splat_energy_border.png',
@@ -26,15 +34,15 @@ export default function SupporterCard({ name, description, energy, cardImage, ra
     };
 
     // Get the card template based on the energy prop
-    const templateSrc = '/images/tcg/tcg_supporter_template.png'
+    const templateSrc = templateMap[category]
 
     // Array of rarity card colours
     const rarityMap = {
-        'Common': '/images/tcg/rarity/common_bar.png',
-        'Rare': '/images/tcg/rarity/rare_bar.png',
-        'Epic': '/images/tcg/rarity/epic_bar.png',
-        'Legendary': '/images/tcg/rarity/legendary_bar.png',
-        'Exquisite': '/images/tcg/rarity/ex_bar.png',
+        'Common': '/images/tcg/rarity/CardC.png',
+        'Rare': '/images/tcg/rarity/CardR.png',
+        'Epic': '/images/tcg/rarity/CardE.png',
+        'Legendary': '/images/tcg/rarity/CardL.png',
+        'Exquisite': '/images/tcg/rarity/CardEx.png',
     };
     // Get the card template based on the energy prop
     const raritySrc = rarityMap[rarity];
@@ -103,7 +111,7 @@ export default function SupporterCard({ name, description, energy, cardImage, ra
 
     const categoryStyle = { // Style for the category and rarity label
         position: 'absolute',
-        top: '246px',
+        top: '248px',
         left: '30px',
         width: '260px',
         textAlign: 'left',
