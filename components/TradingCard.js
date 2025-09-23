@@ -317,7 +317,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
 
             {darkner && (
             <img
-                src={"images/tcg/little-guy.png"}
+                src={"images/tcg/darkner.png"}
                 alt="Little Guy Tag"
                 style={{
                 position: 'absolute',
