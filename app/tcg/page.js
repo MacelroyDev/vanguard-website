@@ -26,6 +26,7 @@ export default function Tcg() {
   const [cardImage, setCardImage] = useState(null);
   const [skobian, setSkobian] = useState(false);
   const [littleguy, setLittleguy] = useState(false);
+  const [darkner, setDarkner] = useState(false);
   const [level,setLevel] = useState(1);
 
   // State for image sliders
@@ -245,6 +246,16 @@ export default function Tcg() {
               <label htmlFor="skobian-checkbox" className="block text-sm font-medium text-white">
                 Is Little Guy?
               </label>
+              <input
+                id="darkner-checkbox"
+                type="checkbox"
+                checked={darkner}
+                onChange={(e) => setDarkner(e.target.checked)}
+                className="h-4 w-4 text-vanguardOrange border-gray-300 rounded focus:ring-vanguardOrange"
+              />
+              <label htmlFor="skobian-checkbox" className="block text-sm font-medium text-white">
+                Is Darkner?
+              </label>
             </div>
 
             <div>
@@ -349,6 +360,7 @@ export default function Tcg() {
               imageY={imageY}
               skobian={skobian}
               littleguy={littleguy}
+              darkner={darkner}
               level={level.toString()}
             />
           </div>

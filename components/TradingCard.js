@@ -2,7 +2,7 @@
 import React from 'react';
 //import Image from 'next/image';
 
-export default function TradingCard({ name, description, energy, cardImage, rarity, category, hp, retreat, imageX, imageY, imageZoom, skobian, littleguy, level }) {
+export default function TradingCard({ name, description, energy, cardImage, rarity, category, hp, retreat, imageX, imageY, imageZoom, skobian, littleguy, darkner, level }) {
 
     // Array of energy icon pngs
     const energyImageMap = {
@@ -302,6 +302,20 @@ export default function TradingCard({ name, description, energy, cardImage, rari
             )}
 
             {littleguy && (
+            <img
+                src={"images/tcg/little-guy.png"}
+                alt="Little Guy Tag"
+                style={{
+                position: 'absolute',
+                top: '190px',
+                left: '194px',
+                width: '100px',
+                zIndex: 3
+                }}
+            />
+            )}
+
+            {darkner && (
             <img
                 src={"images/tcg/little-guy.png"}
                 alt="Little Guy Tag"
