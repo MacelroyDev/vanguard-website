@@ -18,6 +18,3 @@ export default function Home() {
       </main>
     );
   }
-
-
- // bg-gradient-to-b from-transparent via-transparent to-pink-500
