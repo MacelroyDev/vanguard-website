@@ -1,6 +1,7 @@
 'use client'
 
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
+
+import { SignedIn, SignedOut, SignInButton, UserButton, SignOutButton } from '@clerk/nextjs'
 import { useState, useCallback, useEffect } from 'react'
 import { FaUpload, FaCopy, FaCheck, FaTrash, FaExclamationTriangle, FaSpinner, FaTimes, FaLock } from 'react-icons/fa'
 import { getClearanceInfo, canAccessUploader, CLEARANCE_LEVELS, ClearanceLevel } from '@/lib/clearance'
