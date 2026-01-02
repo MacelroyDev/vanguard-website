@@ -15,6 +15,7 @@
   "dependencies": {
     "@ant-design/icons-svg": "^4.4.2",
     "@clerk/nextjs": "^6.36.5",
+    "@clerk/themes": "^2.4.46",
     "@svgr/webpack": "^8.1.0",
     "framer-motion": "^12.4.10",
     "gh-pages": "^6.3.0",

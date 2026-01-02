@@ -82,8 +82,11 @@ export default function EmployeePortal() {
                     <h1 className="text-amber-500 text-4xl md:text-5xl font-bold uppercase tracking-tight mb-4">
                         Employee Portal
                     </h1>
+                    <h1 className="text-white text-4xl md:text-5xl font-bold uppercase tracking-tight mb-4">
+                        Your identity. Our property.
+                    </h1>
                     <p className="text-gray-400 text-lg max-w-2xl">
-                        Your identity. Our property. Access your Vanguard-assigned resources and manage your corporate likeness assets.
+                        Access your Vanguard-assigned resources and manage your corporate likeness assets.
                     </p>
                 </div>
             </section>
@@ -150,7 +153,7 @@ export default function EmployeePortal() {
                                 <h4 className="text-amber-500 text-sm font-semibold uppercase mb-2">Notice</h4>
                                 <p className="text-gray-400 text-sm">
                                     All uploaded assets become property of Vanguard Extraction Solutions. 
-                                    Do not upload classified materials or images of Incident 7.
+                                    Do not upload classified materials or images of The Pulverizer Incident.
                                 </p>
                             </div>
                         </div>

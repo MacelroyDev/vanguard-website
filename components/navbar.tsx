@@ -14,7 +14,7 @@ export default function Navbar({ pathname }: NavbarProps) {
         { href: '/services', label: 'Services' },
         { href: '/projects', label: 'Projects' },
         { href: '/investors', label: 'Investors' },
-        { href: '/safety', label: 'Safety' },
+        { href: '/employee-portal', label: 'Employee Portal' },
         { href: '/contact', label: 'Contact' },
     ];
 

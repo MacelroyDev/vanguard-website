@@ -1,4 +1,3 @@
-import ClientNavbarNavbar from '../components/clientNavbar'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FaHardHat, FaCogs, FaChartLine, FaShieldAlt, FaArrowRight, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa'
@@ -6,7 +5,6 @@ import { FaHardHat, FaCogs, FaChartLine, FaShieldAlt, FaArrowRight, FaPhone, FaE
 export default function HomePage() {
     return (
         <main className="bg-zinc-900 min-h-screen">
-            <ClientNavbarNavbar />
             
             {/* Hero Banner Section */}
             <section className="relative h-[600px] w-full overflow-hidden">
