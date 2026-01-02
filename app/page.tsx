@@ -10,7 +10,7 @@ export default function HomePage() {
             <section className="relative h-[600px] w-full overflow-hidden">
                 {/* Background Image */}
                 <Image
-                    src="/images/pb-vanguard-city.png"
+                    src="/images/vanguard-hero-banner.png"
                     alt="Mining operations"
                     fill
                     className="object-cover"
@@ -120,7 +120,7 @@ export default function HomePage() {
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
                         <div className="relative h-[400px] overflow-hidden">
                             <Image
-                                src="/images/pb-progress.png" 
+                                src="/images/pb-vanguard-city.png" 
                                 alt="Featured Project"
                                 fill
                                 className="object-cover"
@@ -130,7 +130,7 @@ export default function HomePage() {
                         
                         <div>
                             <h2 className="text-amber-500 text-sm uppercase tracking-widest mb-3">Featured Project</h2>
-                            <h3 className="text-white text-4xl font-bold uppercase mb-6">Project Apotheosis</h3>
+                            <h3 className="text-white text-4xl font-bold uppercase mb-6">Project Lorem Ipsum</h3>
                             <p className="text-gray-300 mb-6 leading-relaxed">
                                 Our flagship deep crust penetration project, utilizing cutting-edge technology to access 
                                 previously unreachable mineral deposits. This groundbreaking initiative represents the 

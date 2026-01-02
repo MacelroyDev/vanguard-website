@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FaSearch } from 'react-icons/fa'
 import Logo from '../public/images/vanguard-logo.svg'
+import { SignedIn, SignedOut, SignInButton, SignOutButton, UserButton } from '@clerk/nextjs'
 
 interface NavbarProps {
     pathname: string;
@@ -54,6 +55,34 @@ export default function Navbar({ pathname }: NavbarProps) {
                                 {link.label}
                             </Link>
                         ))}
+                    </div>
+
+                    {/* Right Side - Auth */}
+                    <div className="flex items-center space-x-4">
+                        <SignedOut>
+                            <SignInButton mode="modal">
+                                <button className="px-4 py-2 text-sm font-medium text-amber-500 hover:text-amber-400 uppercase tracking-wider transition-colors duration-200">
+                                    Sign In
+                                </button>
+                            </SignInButton>
+                        </SignedOut>
+                        
+                        <SignedIn>
+                            <div className="flex items-center space-x-3">
+                                <UserButton 
+                                    appearance={{
+                                        elements: {
+                                            avatarBox: "w-8 h-8"
+                                        }
+                                    }}
+                                />
+                                <SignOutButton>
+                                    <button className="px-4 py-2 text-sm font-medium text-gray-400 hover:text-red-500 uppercase tracking-wider transition-colors duration-200">
+                                        Sign Out
+                                    </button>
+                                </SignOutButton>
+                            </div>
+                        </SignedIn>
                     </div>
 
                     {/* Search Icon */}
