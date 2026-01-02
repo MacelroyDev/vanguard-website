@@ -1,7 +1,7 @@
-'use client'; // This marks the component as a client component.
+'use client';
 
 import { usePathname } from 'next/navigation';
-import Navbar from './navbar'; // Adjust the import path as needed.
+import Navbar from './navbar';
 
 export default function ClientNavbar() {
   const pathname = usePathname();
