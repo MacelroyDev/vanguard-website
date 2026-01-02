@@ -120,7 +120,7 @@ export default function HomePage() {
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
                         <div className="relative h-[400px] overflow-hidden">
                             <Image
-                                src="/images/featured-project.jpg"  // Replace with your project image
+                                src="/images/pb-progress.png" 
                                 alt="Featured Project"
                                 fill
                                 className="object-cover"
