@@ -98,7 +98,7 @@ export default function HomePage() {
                             { 
                                 icon: FaShieldAlt, 
                                 title: 'Safety', 
-                                description: 'Industry-leading safety protocols and training programs.'
+                                description: 'Industry-leading optional safety protocols and budget training programs.'
                             },
                         ].map((service, index) => (
                             <div 
