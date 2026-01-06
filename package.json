@@ -27,6 +27,7 @@
     "react-icons": "^5.5.0",
     "react-responsive-carousel": "^3.2.23",
     "react-tooltip": "^5.29.1",
+    "skinview3d": "^3.4.1",
     "svix": "^1.84.1"
   },
   "devDependencies": {

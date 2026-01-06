@@ -2,9 +2,10 @@
 
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 import { useState, useEffect } from 'react'
-import { FaExclamationTriangle, FaSpinner, FaLock, FaImages, FaMap, FaFileAlt, FaCog, FaChartBar, FaUsers, FaSearch } from 'react-icons/fa'
+import { FaExclamationTriangle, FaSpinner, FaLock, FaImages, FaMap, FaFileAlt, FaCog, FaChartBar, FaUsers, FaSearch, FaTrophy } from 'react-icons/fa'
 import { getClearanceInfo, canAccessUploader, canAccessClientFeatures, CLEARANCE_LEVELS } from '@/lib/clearance'
 import Link from 'next/link'
+import MinecraftSkinViewer from '@/components/MinecraftSkinViewer'
 
 interface Tool {
     name: string;
@@ -13,6 +14,11 @@ interface Tool {
     icon: React.ComponentType<{ className?: string }>;
     minClearance: number;
     status: 'available' | 'coming-soon' | 'restricted';
+}
+
+interface EmployeeOfMonth {
+    name: string;
+    url: string;
 }
 
 const tools: Tool[] = [
@@ -74,12 +80,27 @@ const tools: Tool[] = [
     },
 ];
 
+// Seeded random number generator
+function seededRandom(seed: number): number {
+    const x = Math.sin(seed) * 10000;
+    return x - Math.floor(x);
+}
+
+// Get seed from current month/year
+function getMonthSeed(): number {
+    const now = new Date();
+    return now.getFullYear() * 12 + now.getMonth();
+}
+
 export default function EmployeePortal() {
     const [clearance, setClearance] = useState<number>(1);
     const [clearanceLoading, setClearanceLoading] = useState(true);
+    const [employeeOfMonth, setEmployeeOfMonth] = useState<EmployeeOfMonth | null>(null);
+    const [eotmLoading, setEotmLoading] = useState(true);
 
     useEffect(() => {
         fetchClearance();
+        fetchEmployeeOfMonth();
     }, []);
 
     const fetchClearance = async () => {
@@ -95,6 +116,34 @@ export default function EmployeePortal() {
             setClearance(1);
         } finally {
             setClearanceLoading(false);
+        }
+    };
+
+    const fetchEmployeeOfMonth = async () => {
+        try {
+            const response = await fetch('/api/assets/all');
+            const data = await response.json();
+
+            if (response.ok && data.assets) {
+                // Filter for human skins only
+                const humanSkins = data.assets.filter((asset: any) => asset.mobType === 'human');
+                
+                if (humanSkins.length > 0) {
+                    // Use month seed for consistent selection
+                    const seed = getMonthSeed();
+                    const randomIndex = Math.floor(seededRandom(seed) * humanSkins.length);
+                    const selected = humanSkins[randomIndex];
+                    
+                    setEmployeeOfMonth({
+                        name: selected.name,
+                        url: selected.url,
+                    });
+                }
+            }
+        } catch (err) {
+            console.error('Failed to fetch employee of month:', err);
+        } finally {
+            setEotmLoading(false);
         }
     };
 
@@ -183,14 +232,55 @@ export default function EmployeePortal() {
                                         </div>
                                     </div>
                                 </div>
-
+                                
                                 {/* Corporate Notice */}
-                                <div className="bg-amber-500/10 border border-amber-500/30 p-4">
+                                <div className="bg-amber-500/10 border border-amber-500/30 p-4 mb-6">
                                     <h4 className="text-amber-500 text-sm font-semibold uppercase mb-2">Notice</h4>
                                     <p className="text-gray-400 text-sm">
                                         Tool access is determined by your clearance level. 
                                         Contact HR for clearance upgrade requests.
                                     </p>
+                                </div>
+
+                                {/* Employee of the Month */}
+                                <div className="bg-gradient-to-b from-amber-500/20 to-zinc-800 border border-amber-500/30 p-6">
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <FaTrophy className="text-amber-500" />
+                                        <h4 className="text-amber-500 text-sm font-semibold uppercase">Employee of the Month</h4>
+                                    </div>
+                                    
+                                    {eotmLoading ? (
+                                        <div className="text-center py-8">
+                                            <FaSpinner className="text-amber-500 text-2xl animate-spin mx-auto" />
+                                        </div>
+                                    ) : employeeOfMonth ? (
+                                        <div className="text-center">
+                                            {/* Spinning Character Display */}
+                                            <div className="relative h-48 mb-4 perspective-500">
+                                                <MinecraftSkinViewer
+                                                    skinUrl={`/api/skin?url=${encodeURIComponent(employeeOfMonth.url)}`}
+                                                />
+                                                {/* Platform */}
+                                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-20 h-2 bg-amber-500/30 rounded-full blur-sm" />
+                                            </div>
+                                            
+                                            {/* Name Plate */}
+                                            <div className="bg-zinc-900 border border-amber-500/50 px-4 py-2 inline-block">
+                                                <p className="text-white font-bold uppercase text-sm capitalize">{employeeOfMonth.name}</p>
+                                                <p className="text-amber-500 text-xs">
+                                                    {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                                                </p>
+                                            </div>
+                                            
+                                            <p className="text-gray-500 text-xs mt-3 italic">
+                                                &quot;Outstanding contribution to extraction operations&quot;
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div className="text-center py-4">
+                                            <p className="text-gray-500 text-sm">No employees found</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
