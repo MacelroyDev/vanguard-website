@@ -2,7 +2,7 @@
 
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 import { useState, useEffect } from 'react'
-import { FaExclamationTriangle, FaSpinner, FaLock, FaImages, FaMap, FaFileAlt, FaCog, FaChartBar, FaUsers } from 'react-icons/fa'
+import { FaExclamationTriangle, FaSpinner, FaLock, FaImages, FaMap, FaFileAlt, FaCog, FaChartBar, FaUsers, FaSearch } from 'react-icons/fa'
 import { getClearanceInfo, canAccessUploader, canAccessClientFeatures, CLEARANCE_LEVELS } from '@/lib/clearance'
 import Link from 'next/link'
 
@@ -22,6 +22,14 @@ const tools: Tool[] = [
         href: '/employee-portal/asset-management',
         icon: FaImages,
         minClearance: 3,
+        status: 'available',
+    },
+    {
+        name: 'Asset Browser',
+        description: 'Browse all personnel visualization assets uploaded by Vanguard employees.',
+        href: '/employee-portal/asset-browser',
+        icon: FaSearch,
+        minClearance: 1,
         status: 'available',
     },
     {
