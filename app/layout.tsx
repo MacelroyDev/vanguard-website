@@ -18,6 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
     title: "Vanguard",
     description: "Sustainable Energy Begins Below.",
+    icons: {
+        icon: '/favicon.svg',
+    },
 }
 
 export default function RootLayout({
