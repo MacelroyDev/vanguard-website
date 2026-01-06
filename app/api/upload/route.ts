@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
         const formData = await request.formData()
         const file = formData.get('file') as File
         const customName = formData.get('customName') as string || file.name
+        const mobType = formData.get('mobType') as string || 'human'
 
         if (!file) {
             return NextResponse.json({ error: 'No file provided' }, { status: 400 })
@@ -38,18 +39,19 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'File too large' }, { status: 400 })
         }
 
-        // Sanitize custom name (remove special characters, keep alphanumeric, spaces, hyphens, underscores)
+        // Sanitize custom name
         const sanitizedName = customName
             .replace(/[^a-zA-Z0-9\s\-_]/g, '')
             .replace(/\s+/g, '-')
             .toLowerCase()
-            .substring(0, 50) // Limit length
+            .substring(0, 50)
 
         // Get file extension
         const extension = file.name.split('.').pop()
         
-        // Generate filename with custom name
-        const filename = `skins/${userId}/${sanitizedName}-${Date.now()}.${extension}`
+        // Generate filename with custom name and mob type
+        // Format: skins/{userId}/{mobType}_{sanitizedName}-{timestamp}.{ext}
+        const filename = `skins/${userId}/${mobType}_${sanitizedName}-${Date.now()}.${extension}`
 
         const buffer = Buffer.from(await file.arrayBuffer())
 
@@ -58,6 +60,10 @@ export async function POST(request: NextRequest) {
             Key: filename,
             Body: buffer,
             ContentType: file.type,
+            Metadata: {
+                'custom-name': customName,
+                'mob-type': mobType,
+            },
         }))
 
         const url = `${process.env.R2_PUBLIC_URL}/${filename}`
@@ -65,7 +71,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
             success: true,
             url,
-            filename: customName || file.name,
+            filename: customName,
+            mobType,
         })
 
     } catch (error) {

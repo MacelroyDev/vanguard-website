@@ -2,23 +2,35 @@
 
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import { useState, useCallback, useEffect } from 'react'
-import { FaUpload, FaCopy, FaCheck, FaTrash, FaSpinner, FaTimes, FaLock, FaArrowLeft } from 'react-icons/fa'
+import { FaUpload, FaCopy, FaCheck, FaTrash, FaSpinner, FaTimes, FaLock, FaArrowLeft, FaEdit, FaSave } from 'react-icons/fa'
 import { getClearanceInfo, canAccessUploader } from '@/lib/clearance'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 
 interface UploadedAsset {
     id: string;
     url: string;
     name: string;
+    mobType: string;
     created_at: string;
 }
 
 interface PendingFile {
     file: File;
     customName: string;
+    mobType: string;
     preview: string;
 }
+
+const MOB_TYPES = [
+    { value: 'human', label: 'Human' },
+    { value: 'villager', label: 'Villager' },
+    { value: 'zombie-villager', label: 'Zombie Villager' },
+    { value: 'skeleton', label: 'Skeleton' },
+    { value: 'allay', label: 'Allay' },
+    { value: 'cat', label: 'Cat' },
+    { value: 'chicken', label: 'Chicken' },
+    { value: 'iron-golem', label: 'Iron Golem' },
+];
 
 export default function AssetManagement() {
     const [uploadedAssets, setUploadedAssets] = useState<UploadedAsset[]>([]);
@@ -30,6 +42,10 @@ export default function AssetManagement() {
     const [error, setError] = useState<string | null>(null);
     const [clearance, setClearance] = useState<number>(1);
     const [clearanceLoading, setClearanceLoading] = useState(true);
+    const [editingAsset, setEditingAsset] = useState<string | null>(null);
+    const [editName, setEditName] = useState('');
+    const [editMobType, setEditMobType] = useState('');
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         fetchClearance();
@@ -103,6 +119,7 @@ export default function AssetManagement() {
         const newPending: PendingFile[] = files.map(file => ({
             file,
             customName: file.name.replace(/\.[^/.]+$/, ''),
+            mobType: 'human',
             preview: URL.createObjectURL(file),
         }));
         setPendingFiles(prev => [...prev, ...newPending]);
@@ -111,6 +128,12 @@ export default function AssetManagement() {
     const updatePendingName = (index: number, newName: string) => {
         setPendingFiles(prev => prev.map((item, i) => 
             i === index ? { ...item, customName: newName } : item
+        ));
+    };
+
+    const updatePendingMobType = (index: number, mobType: string) => {
+        setPendingFiles(prev => prev.map((item, i) => 
+            i === index ? { ...item, mobType } : item
         ));
     };
 
@@ -132,6 +155,7 @@ export default function AssetManagement() {
                 const formData = new FormData();
                 formData.append('file', pending.file);
                 formData.append('customName', pending.customName);
+                formData.append('mobType', pending.mobType);
 
                 const response = await fetch('/api/upload', {
                     method: 'POST',
@@ -176,6 +200,54 @@ export default function AssetManagement() {
         } catch (err) {
             setError('Failed to delete asset');
         }
+    };
+
+    const startEditing = (asset: UploadedAsset) => {
+        setEditingAsset(asset.id);
+        setEditName(asset.name);
+        setEditMobType(asset.mobType || 'human');
+    };
+
+    const cancelEditing = () => {
+        setEditingAsset(null);
+        setEditName('');
+        setEditMobType('');
+    };
+
+    const saveAssetEdit = async (assetId: string) => {
+        setIsSaving(true);
+        try {
+            const response = await fetch('/api/assets', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    key: assetId,
+                    name: editName,
+                    mobType: editMobType,
+                }),
+            });
+
+            if (response.ok) {
+                setUploadedAssets(prev => prev.map(asset => 
+                    asset.id === assetId 
+                        ? { ...asset, name: editName, mobType: editMobType }
+                        : asset
+                ));
+                setEditingAsset(null);
+            } else {
+                setError('Failed to update asset');
+            }
+        } catch (err) {
+            setError('Failed to update asset');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const getMobTypeLabel = (value: string) => {
+        return MOB_TYPES.find(m => m.value === value)?.label || value;
     };
 
     const clearanceInfo = getClearanceInfo(clearance);
@@ -284,6 +356,19 @@ export default function AssetManagement() {
                                     </div>
                                 </div>
 
+                                {/* Supported Mob Types */}
+                                <div className="bg-zinc-800 border border-zinc-700 p-6 mb-6">
+                                    <h4 className="text-amber-500 text-sm font-semibold uppercase mb-3">Supported Mob Types</h4>
+                                    <ul className="text-gray-400 text-sm space-y-2">
+                                        {MOB_TYPES.map(mob => (
+                                            <li key={mob.value} className="flex items-center gap-2">
+                                                <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                                                {mob.label}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+
                                 {/* Corporate Notice */}
                                 <div className="bg-amber-500/10 border border-amber-500/30 p-4">
                                     <h4 className="text-amber-500 text-sm font-semibold uppercase mb-2">Notice</h4>
@@ -358,36 +443,59 @@ export default function AssetManagement() {
                                             {pendingFiles.map((pending, index) => (
                                                 <div 
                                                     key={index}
-                                                    className="flex items-center gap-4 bg-zinc-900 border border-zinc-700 p-4 rounded"
+                                                    className="bg-zinc-900 border border-zinc-700 p-4 rounded"
                                                 >
-                                                    <div className="w-16 h-16 bg-zinc-700 rounded flex-shrink-0 overflow-hidden">
-                                                        <img 
-                                                            src={pending.preview} 
-                                                            alt="Preview"
-                                                            className="w-full h-full object-cover"
-                                                        />
-                                                    </div>
-                                                    
-                                                    <div className="flex-grow">
-                                                        <label className="text-gray-500 text-xs uppercase block mb-1">
-                                                            Asset Name
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            value={pending.customName}
-                                                            onChange={(e) => updatePendingName(index, e.target.value)}
-                                                            className="w-full bg-zinc-800 border border-zinc-600 rounded px-3 py-2 text-white focus:border-amber-500 focus:outline-none"
-                                                            placeholder="Enter a name for this asset"
-                                                        />
-                                                    </div>
+                                                    <div className="flex items-start gap-4">
+                                                        <div className="w-20 h-20 bg-zinc-700 rounded flex-shrink-0 overflow-hidden">
+                                                            <img 
+                                                                src={pending.preview} 
+                                                                alt="Preview"
+                                                                className="w-full h-full object-cover"
+                                                            />
+                                                        </div>
+                                                        
+                                                        <div className="flex-grow space-y-3">
+                                                            {/* Asset Name Input */}
+                                                            <div>
+                                                                <label className="text-gray-500 text-xs uppercase block mb-1">
+                                                                    Asset Name
+                                                                </label>
+                                                                <input
+                                                                    type="text"
+                                                                    value={pending.customName}
+                                                                    onChange={(e) => updatePendingName(index, e.target.value)}
+                                                                    className="w-full bg-zinc-800 border border-zinc-600 rounded px-3 py-2 text-white focus:border-amber-500 focus:outline-none"
+                                                                    placeholder="Enter a name for this asset"
+                                                                />
+                                                            </div>
 
-                                                    <button
-                                                        onClick={() => removePendingFile(index)}
-                                                        className="p-2 text-gray-400 hover:text-red-500 transition-colors flex-shrink-0"
-                                                        title="Remove"
-                                                    >
-                                                        <FaTimes />
-                                                    </button>
+                                                            {/* Mob Type Dropdown */}
+                                                            <div>
+                                                                <label className="text-gray-500 text-xs uppercase block mb-1">
+                                                                    Mob Type
+                                                                </label>
+                                                                <select
+                                                                    value={pending.mobType}
+                                                                    onChange={(e) => updatePendingMobType(index, e.target.value)}
+                                                                    className="w-full bg-zinc-800 border border-zinc-600 rounded px-3 py-2 text-white focus:border-amber-500 focus:outline-none appearance-none cursor-pointer"
+                                                                >
+                                                                    {MOB_TYPES.map(mob => (
+                                                                        <option key={mob.value} value={mob.value}>
+                                                                            {mob.label}
+                                                                        </option>
+                                                                    ))}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <button
+                                                            onClick={() => removePendingFile(index)}
+                                                            className="p-2 text-gray-400 hover:text-red-500 transition-colors flex-shrink-0"
+                                                            title="Remove"
+                                                        >
+                                                            <FaTimes />
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>
@@ -431,41 +539,122 @@ export default function AssetManagement() {
                                             {uploadedAssets.map((asset) => (
                                                 <div 
                                                     key={asset.id}
-                                                    className="flex items-center justify-between bg-zinc-900 border border-zinc-700 p-4 rounded"
+                                                    className="bg-zinc-900 border border-zinc-700 p-4 rounded"
                                                 >
-                                                    <div className="flex items-center space-x-4 min-w-0">
-                                                        <div className="w-12 h-12 bg-zinc-700 rounded flex-shrink-0 overflow-hidden">
-                                                            <img 
-                                                                src={asset.url} 
-                                                                alt={asset.name}
-                                                                className="w-full h-full object-cover"
-                                                            />
+                                                    {editingAsset === asset.id ? (
+                                                        /* Editing Mode */
+                                                        <div className="space-y-4">
+                                                            <div className="flex items-start gap-4">
+                                                                <div className="w-16 h-16 bg-zinc-700 rounded flex-shrink-0 overflow-hidden">
+                                                                    <img 
+                                                                        src={asset.url} 
+                                                                        alt={asset.name}
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                </div>
+                                                                <div className="flex-grow space-y-3">
+                                                                    <div>
+                                                                        <label className="text-gray-500 text-xs uppercase block mb-1">
+                                                                            Asset Name
+                                                                        </label>
+                                                                        <input
+                                                                            type="text"
+                                                                            value={editName}
+                                                                            onChange={(e) => setEditName(e.target.value)}
+                                                                            className="w-full bg-zinc-800 border border-zinc-600 rounded px-3 py-2 text-white focus:border-amber-500 focus:outline-none"
+                                                                        />
+                                                                    </div>
+                                                                    <div>
+                                                                        <label className="text-gray-500 text-xs uppercase block mb-1">
+                                                                            Mob Type
+                                                                        </label>
+                                                                        <select
+                                                                            value={editMobType}
+                                                                            onChange={(e) => setEditMobType(e.target.value)}
+                                                                            className="w-full bg-zinc-800 border border-zinc-600 rounded px-3 py-2 text-white focus:border-amber-500 focus:outline-none appearance-none cursor-pointer"
+                                                                        >
+                                                                            {MOB_TYPES.map(mob => (
+                                                                                <option key={mob.value} value={mob.value}>
+                                                                                    {mob.label}
+                                                                                </option>
+                                                                            ))}
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="flex justify-end gap-2">
+                                                                <button
+                                                                    onClick={cancelEditing}
+                                                                    disabled={isSaving}
+                                                                    className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
+                                                                >
+                                                                    Cancel
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => saveAssetEdit(asset.id)}
+                                                                    disabled={isSaving}
+                                                                    className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-zinc-900 font-semibold uppercase text-sm tracking-wider transition-colors flex items-center gap-2"
+                                                                >
+                                                                    {isSaving ? (
+                                                                        <FaSpinner className="animate-spin" />
+                                                                    ) : (
+                                                                        <FaSave />
+                                                                    )}
+                                                                    Save
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                        <div className="min-w-0">
-                                                            <p className="text-white font-medium truncate">{asset.name}</p>
-                                                            <p className="text-gray-500 text-sm truncate">{asset.url}</p>
+                                                    ) : (
+                                                        /* View Mode */
+                                                        <div className="flex items-center justify-between">
+                                                            <div className="flex items-center space-x-4 min-w-0">
+                                                                <div className="w-12 h-12 bg-zinc-700 rounded flex-shrink-0 overflow-hidden">
+                                                                    <img 
+                                                                        src={asset.url} 
+                                                                        alt={asset.name}
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                </div>
+                                                                <div className="min-w-0">
+                                                                    <p className="text-white font-medium truncate">{asset.name}</p>
+                                                                    <div className="flex items-center gap-2">
+                                                                        <span className="text-amber-500 text-xs uppercase font-semibold">
+                                                                            {getMobTypeLabel(asset.mobType || 'human')}
+                                                                        </span>
+                                                                        <span className="text-gray-600">•</span>
+                                                                        <p className="text-gray-500 text-sm truncate">{asset.url}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="flex items-center space-x-1 flex-shrink-0">
+                                                                <button
+                                                                    onClick={() => startEditing(asset)}
+                                                                    className="p-2 text-gray-400 hover:text-amber-500 transition-colors"
+                                                                    title="Edit asset"
+                                                                >
+                                                                    <FaEdit />
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => copyToClipboard(asset)}
+                                                                    className={`p-2 transition-colors ${
+                                                                        copiedId === asset.id 
+                                                                            ? 'text-green-500' 
+                                                                            : 'text-gray-400 hover:text-amber-500'
+                                                                    }`}
+                                                                    title="Copy URL"
+                                                                >
+                                                                    {copiedId === asset.id ? <FaCheck /> : <FaCopy />}
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => deleteAsset(asset.id)}
+                                                                    className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                                                                    title="Delete asset"
+                                                                >
+                                                                    <FaTrash />
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="flex items-center space-x-2 flex-shrink-0">
-                                                        <button
-                                                            onClick={() => copyToClipboard(asset)}
-                                                            className={`p-2 transition-colors ${
-                                                                copiedId === asset.id 
-                                                                    ? 'text-green-500' 
-                                                                    : 'text-gray-400 hover:text-amber-500'
-                                                            }`}
-                                                            title="Copy URL"
-                                                        >
-                                                            {copiedId === asset.id ? <FaCheck /> : <FaCopy />}
-                                                        </button>
-                                                        <button
-                                                            onClick={() => deleteAsset(asset.id)}
-                                                            className="p-2 text-gray-400 hover:text-red-500 transition-colors"
-                                                            title="Delete asset"
-                                                        >
-                                                            <FaTrash />
-                                                        </button>
-                                                    </div>
+                                                    )}
                                                 </div>
                                             ))}
                                         </div>
