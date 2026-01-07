@@ -230,7 +230,7 @@ export default function HomePage() {
                     {/* Bottom Bar */}
                     <div className="border-t border-zinc-800 pt-8 flex flex-col md:flex-row justify-between items-center">
                         <p className="text-gray-500 text-sm">
-                            © 2025 Vanguard Extraction Solutions. All rights reserved.
+                            © {new Date().getFullYear()} Vanguard Extraction Solutions. All rights reserved.
                         </p>
                         <div className="flex space-x-6 mt-4 md:mt-0">
                             <Link href="#" className="text-gray-500 hover:text-amber-500 text-sm transition-colors">Privacy Policy</Link>

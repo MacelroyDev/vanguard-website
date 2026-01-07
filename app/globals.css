@@ -53,3 +53,16 @@ body {
 .skobis-font {
   font-family: skobisFont, sans-serif;
 }
+
+@keyframes ticker-scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-33.333%);
+    }
+}
+
+.animate-ticker {
+    animation: ticker-scroll 30s linear infinite;
+}
