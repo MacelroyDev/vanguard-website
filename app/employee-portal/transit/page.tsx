@@ -94,9 +94,9 @@ export default function TransitNetwork() {
                             </p>
                         </div>
 
-                        {/* External Link */}
+                        {/* External Link (Wow, who wouldve guessed that a random ip wouldn't have worked)*/}
                         <a 
-                            href="http://23.17.34.171:3876/" 
+                            href="http://vanguard.hopto.org:3876/" 
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center justify-center gap-2 w-full py-3 bg-amber-500 hover:bg-amber-600 text-zinc-900 font-semibold uppercase tracking-wider transition-colors duration-200"
