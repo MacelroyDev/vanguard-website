@@ -1,19 +1,15 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { FaMap, FaExternalLinkAlt, FaExclamationTriangle, FaTrain, FaRoute, FaClock } from 'react-icons/fa'
+import TransitMap from '@/components/transitMap'
+import TransitMapTest from '@/components/TransitMapTest'
+import { transitMapConfig } from '@/config/transitMapConfig'
 
 export default function TransitNetwork() {
     return (
         <main className="bg-zinc-900 min-h-screen">
             {/* Header Banner */}
             <section className="relative bg-zinc-800 border-b border-zinc-700 py-16 overflow-hidden">
-                {/* Optional: Background image */}
-                {/* <Image
-                    src="/images/map-page.png"
-                    alt="Transit Network Background"
-                    fill
-                    className="object-cover opacity-20"
-                /> */}
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center gap-4 mb-4">
                         <FaTrain className="text-amber-500 text-4xl" />
@@ -94,7 +90,7 @@ export default function TransitNetwork() {
                             </p>
                         </div>
 
-                        {/* External Link (Wow, who wouldve guessed that a random ip wouldn't have worked)*/}
+                        {/* External Link */}
                         <a 
                             href="http://vanguard.hopto.org:3876/" 
                             target="_blank"
@@ -102,7 +98,7 @@ export default function TransitNetwork() {
                             className="flex items-center justify-center gap-2 w-full py-3 bg-amber-500 hover:bg-amber-600 text-zinc-900 font-semibold uppercase tracking-wider transition-colors duration-200"
                         >
                             <FaExternalLinkAlt />
-                            Open Full Map
+                            Open Original Map
                         </a>
                     </div>
 
@@ -113,27 +109,16 @@ export default function TransitNetwork() {
                                 <div>
                                     <h2 className="text-white text-xl font-bold uppercase mb-1">Interactive Rail Map</h2>
                                     <p className="text-gray-400 text-sm">
-                                        Click and drag to navigate. Scroll to zoom.
+                                        Click and drag to navigate. Scroll to zoom. Hover for details.
                                     </p>
                                 </div>
-                                <a 
-                                    href="http://23.17.34.171:3876/" 
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hidden md:flex items-center gap-2 text-amber-500 hover:text-amber-400 text-sm font-semibold uppercase tracking-wider transition-colors"
-                                >
-                                    <FaExternalLinkAlt />
-                                    Fullscreen
-                                </a>
                             </div>
 
-                            {/* Map Container */}
+                            {/* Transit Map Component */}
                             <div className="relative bg-zinc-900 rounded-lg overflow-hidden border border-zinc-700">
-                                <iframe 
-                                    src="http://23.17.34.171:3876/" 
-                                    allowFullScreen={true} 
+                                <TransitMap 
+                                    config={transitMapConfig}
                                     className="w-full h-[600px]"
-                                    title="Vanguard Transit Network Map"
                                 />
                             </div>
 
@@ -143,15 +128,15 @@ export default function TransitNetwork() {
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                     <div className="flex items-center gap-2">
                                         <div className="w-8 h-1 bg-green-500 rounded"></div>
-                                        <span className="text-gray-400 text-sm">Progress Line</span>
+                                        <span className="text-gray-400 text-sm">Hankyu Line</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <div className="w-8 h-1 bg-blue-500 rounded"></div>
-                                        <span className="text-gray-400 text-sm">Gentriville Line</span>
+                                        <span className="text-gray-400 text-sm">Shinkansen Line</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <div className="w-8 h-1 bg-amber-500 rounded"></div>
-                                        <span className="text-gray-400 text-sm">Central Line</span>
+                                        <span className="text-gray-400 text-sm">Progress Line</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <div className="w-8 h-1 bg-red-500 rounded-full opacity-50"></div>
@@ -159,7 +144,11 @@ export default function TransitNetwork() {
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <div className="w-8 h-1 bg-teal-500 rounded-full"></div>
-                                        <span className="text-gray-400 text-sm">New Wasserstadt</span>
+                                        <span className="text-gray-400 text-sm">Wasserbahn Line</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-8 h-1 bg-pink-300 rounded-full"></div>
+                                        <span className="text-gray-400 text-sm">PLR Water Shuttle</span>
                                     </div>
                                 </div>
                             </div>
