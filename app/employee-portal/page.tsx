@@ -98,9 +98,20 @@ export default function EmployeePortal() {
     const [employeeOfMonth, setEmployeeOfMonth] = useState<EmployeeOfMonth | null>(null);
     const [eotmLoading, setEotmLoading] = useState(true);
 
+    const [serverStatus, setServerStatus] = useState<{
+        minecraft: {
+            online: boolean;
+            players: { online: number; max: number } | null;
+            version: string | null;
+        };
+        transit: boolean;
+    } | null>(null);
+    const [statusLoading, setStatusLoading] = useState(true);
+
     useEffect(() => {
         fetchClearance();
         fetchEmployeeOfMonth();
+        fetchServerStatus();
     }, []);
 
     const fetchClearance = async () => {
@@ -144,6 +155,24 @@ export default function EmployeePortal() {
             console.error('Failed to fetch employee of month:', err);
         } finally {
             setEotmLoading(false);
+        }
+    };
+
+    const fetchServerStatus = async () => {
+        try {
+            const response = await fetch('/api/status');
+            const data = await response.json();
+            if (response.ok) {
+                setServerStatus({
+                    minecraft: data.minecraft,
+                    transit: data.transit,
+                });
+            }
+        } catch (err) {
+            console.error('Failed to fetch server status:', err);
+            setServerStatus(null);
+        } finally {
+            setStatusLoading(false);
         }
     };
 
@@ -231,6 +260,43 @@ export default function EmployeePortal() {
                                             <p className="text-white font-semibold">Field Operations</p>
                                         </div>
                                     </div>
+                                </div>
+
+                                {/* Server Status */}
+                                <div className="bg-zinc-800 border border-zinc-700 p-6 mb-6">
+                                    <h3 className="text-amber-500 text-sm uppercase tracking-widest mb-4">Server Status</h3>
+                                    {statusLoading ? (
+                                        <div className="flex items-center gap-2 text-gray-400">
+                                            <FaSpinner className="animate-spin" />
+                                            <span className="text-sm">Checking servers...</span>
+                                        </div>
+                                    ) : serverStatus ? (
+                                        <div className="space-y-3">
+                                            <div>
+                                                <div className="flex items-center justify-between mb-1">
+                                                    <span className="text-gray-400 text-sm">Minecraft Server</span>
+                                                    <span className={`text-sm font-semibold flex items-center gap-2 ${serverStatus.minecraft.online ? 'text-green-500' : 'text-red-500'}`}>
+                                                        <span className={`w-2 h-2 rounded-full ${serverStatus.minecraft.online ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                                                        {serverStatus.minecraft.online ? 'Online' : 'Offline'}
+                                                    </span>
+                                                </div>
+                                                {serverStatus.minecraft.online && serverStatus.minecraft.players && (
+                                                    <div className="text-xs text-gray-500 ml-0">
+                                                        {serverStatus.minecraft.players.online}/{serverStatus.minecraft.players.max} players
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-gray-400 text-sm">Transit Network</span>
+                                                <span className={`text-sm font-semibold flex items-center gap-2 ${serverStatus.transit ? 'text-green-500' : 'text-red-500'}`}>
+                                                    <span className={`w-2 h-2 rounded-full ${serverStatus.transit ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                                                    {serverStatus.transit ? 'Online' : 'Offline'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <p className="text-gray-500 text-sm">Unable to check status</p>
+                                    )}
                                 </div>
                                 
                                 {/* Corporate Notice */}

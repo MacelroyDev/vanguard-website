@@ -620,7 +620,7 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
     trainConfigs: TrainConfig[] | undefined,
     lines: TrainLine[]
   ): string {
-    const defaultColor = '#71717a'; // zinc-500 gray
+    const defaultColor = '#71717a'; // zinc-500 gray hex
     
     if (!trainConfigs) return defaultColor;
     

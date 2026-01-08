@@ -7,8 +7,8 @@ export const transitMapConfig: TransitMapConfig = {
     { name: 'Hankyu', lineId: 'hankyu-line' },
     { name: 'Flaggleton', lineId: 'progress-line' },
     { name: 'Wasserbahn', lineId: 'wasserstadt-line' },
-    { name: 'Gondola A', lineId: 'snowy-line' },
-    { name: 'Gondola B', lineId: 'snowy-line' },
+    { name: 'Gondola 1', lineId: 'snowy-line' },
+    { name: 'Gondola 2', lineId: 'snowy-line' },
     { name: 'William Whale', lineId: 'plr-line' },
   ],
   lines: [
