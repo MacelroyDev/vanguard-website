@@ -505,7 +505,7 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
 
     // Draw rails (amber)
     ctx.strokeStyle = '#d97706';
-    ctx.lineWidth = Math.max(2, 5 * zoom);
+    ctx.lineWidth = Math.max(1, 2 * zoom);
 
     tracks
       .filter(track => track.dimension === dimension)
@@ -660,26 +660,31 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
       const leading = worldToScreen(car.leading.location.x, car.leading.location.z, pan, zoom, width, height);
       const trailing = worldToScreen(car.trailing.location.x, car.trailing.location.z, pan, zoom, width, height);
 
+      const BASE_CAR_WIDTH = 10;
+      const BASE_CAR_LENGTH = 20;
+      const BASE_CAR_SPACING = 10;
+
       const dx = leading.x - trailing.x;
       const dy = leading.y - trailing.y;
       const angle = Math.atan2(dy, dx);
       const length = Math.sqrt(dx * dx + dy * dy);
       
-      const carWidth = Math.max(8, 14 * zoom);
-      const carLength = Math.max(length, 16);
+      const carWidth = BASE_CAR_WIDTH * zoom;
+      const carLength = (BASE_CAR_LENGTH * zoom)
 
       ctx.save();
       ctx.translate(trailing.x, trailing.y);
       ctx.rotate(angle);
 
-      if (index === 0) {
-        // Changed so no cars are pointed
-        ctx.fillStyle = index === 0 ? carColor : carColor + 'cc';
-        ctx.fillRect(0, -carWidth / 2, carLength, carWidth);
-        ctx.strokeStyle = index === 0 ? '#ffffff' : '#ffffff80';
-        ctx.lineWidth = index === 0 ? 2 : 1;
-        ctx.strokeRect(0, -carWidth / 2, carLength, carWidth);
-      }
+      // Removed if so all cars are drawn instead of just the lead
+      // Changed so no cars are pointed
+      // TODO: Remove first car logic or improve it
+      ctx.fillStyle = index === 0 ? carColor : carColor;
+      ctx.fillRect(0, -carWidth / 2, carLength, carWidth);
+      ctx.strokeStyle = index === 0 ? '#ffffff' : '#ffffff';
+      ctx.lineWidth = index === 0 ? 2 : 2;
+      ctx.strokeRect(0, -carWidth / 2, carLength, carWidth);
+
 
       ctx.restore();
     });
