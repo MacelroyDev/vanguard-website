@@ -50,6 +50,14 @@ export const transitMapConfig: TransitMapConfig = {
     },
   ],
   stations: [], // Can be empty now, or use for additional matching
-  waypoints: [],
+  waypoints: [
+    { id: 'vanguard-city', name: 'Vanguard City', x: -148, z: -430, icon: 'city', color: '#f59e0b' },
+    { id: 'magicannot', name: 'Magicannot', x: 6145, z: 4155, icon: 'city', color: '#ef4444' },
+    { id: 'new-wasserstadt', name: 'New Wasserstadt', x: 4217, z: -1571, icon: 'city', color: '#14b8a6' },
+    { id: 'progress', name: 'Progress', x: 3085, z: -1323, icon: 'city', color: '#22c55e' },
+    { id: 'gentriville', name: 'Gentriville', x: 3555, z: -3100, icon: 'city', color: '#3b82f6' },
+    { id: 'spawn', name: 'Spawn', x: -30, z: -30, icon: 'poi', color: '#71717a' },
+    { id: 'vanguard-drill', name: 'Vanguard Drill Site', x: 1267, z: -194, icon: 'landmark', color: '#f59e0b' },
+  ],
   rivers: [],
 };

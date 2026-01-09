@@ -172,12 +172,16 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
   const [mouseWorldPos, setMouseWorldPos] = useState({ x: 0, z: 0 });
   const [hoveredItem, setHoveredItem] = useState<{ type: string; name: string; details?: string; x: number; y: number } | null>(null);
   const [showDebug, setShowDebug] = useState(false);
-  const [showUnnamedStations, setShowUnnamedStations] = useState(true);
+  const [showAllStations, setShowAllStations] = useState(false);
   const [showWaypoints, setShowWaypoints] = useState(true);
   const [showRivers, setShowRivers] = useState(true);
+  const [showMapOverlay, setShowMapOverlay] = useState(false);
+  const [mapImage, setMapImage] = useState<HTMLImageElement | null>(null);
   
   const dimension = config.dimension || 'minecraft:overworld';
   const refreshInterval = config.refreshInterval || 3000;
+
+
 
   // ============================================================================
   // MERGE API STATIONS WITH CONFIG FOR COLORS
@@ -345,6 +349,11 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
     // Draw grid
     drawGrid(ctx, width, height, pan, zoom);
 
+    // Draw map overlay
+    if (showMapOverlay && mapImage) {
+      drawMapOverlay(ctx, mapImage, pan, zoom, width, height);
+    }
+
     // Draw rivers
     if (showRivers && config.rivers) {
       config.rivers.forEach(river => drawRiver(ctx, river, pan, zoom, width, height));
@@ -353,17 +362,10 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
     // Draw tracks
     drawTracks(ctx, tracks, dimension, pan, zoom, width, height);
 
-    // Draw waypoints
-    if (showWaypoints) {
-      config.waypoints.forEach(waypoint => {
-        drawWaypoint(ctx, waypoint, pan, zoom, width, height);
-      });
-    }
-
     // Draw stations
     mergedStations.forEach(station => {
-      // Skip "Track Station" generic names if toggle is off
-      if (!showUnnamedStations && station.name === 'Track Station') return;
+      // Skip blacklisted/unnamed stations unless "show all" is enabled
+      if (!showAllStations && station.name === 'Track Station') return;
       drawStation(ctx, station, pan, zoom, width, height);
     });
 
@@ -372,9 +374,16 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
       .filter(train => train.cars.some(car => car.leading.dimension === dimension))
       .forEach(train => {
         drawTrain(ctx, train, config.trains, config.lines, pan, zoom, width, height);
-      });
+    });
 
-  }, [pan, zoom, trains, tracks, mergedStations, config, dimension, showUnnamedStations, showWaypoints, showRivers]);
+    // Draw waypoints
+    if (showWaypoints) {
+      config.waypoints.forEach(waypoint => {
+        drawWaypoint(ctx, waypoint, pan, zoom, width, height);
+      });
+    }
+
+  }, [pan, zoom, trains, tracks, mergedStations, config, dimension, showAllStations, showWaypoints, showRivers, showMapOverlay, mapImage]);
 
   // ============================================================================
   // DRAWING FUNCTIONS
@@ -432,6 +441,33 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
     }
   }
 
+  function drawMapOverlay(
+    ctx: CanvasRenderingContext2D,
+    image: HTMLImageElement,
+    pan: { x: number; y: number },
+    zoom: number,
+    width: number,
+    height: number
+  ) {
+    // Map bounds in world coordinates
+    const mapMinX = -2560;
+    const mapMaxX = 10752;
+    const mapMinZ = -6656;
+    const mapMaxZ = 6656;
+    
+    // Calculate screen positions for the map corners
+    const topLeft = worldToScreen(mapMinX, mapMinZ, pan, zoom, width, height);
+    const bottomRight = worldToScreen(mapMaxX, mapMaxZ, pan, zoom, width, height);
+    
+    const drawWidth = bottomRight.x - topLeft.x;
+    const drawHeight = bottomRight.y - topLeft.y;
+    
+    // Set transparency
+    ctx.globalAlpha = 0.5;
+    ctx.drawImage(image, topLeft.x, topLeft.y, drawWidth, drawHeight);
+    ctx.globalAlpha = 1.0;
+  }
+
   function drawRiver(
     ctx: CanvasRenderingContext2D,
     river: River,
@@ -487,6 +523,8 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
+    let trackOther = false;
+
     tracks
       .filter(track => track.dimension === dimension)
       .forEach(track => {
@@ -520,6 +558,9 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
           const point = worldToScreen(track.path[i].x, track.path[i].z, pan, zoom, width, height);
           ctx.lineTo(point.x, point.y);
         }
+        // These 2 lines alternate rail colors for testing how the api works
+        //ctx.strokeStyle = trackOther ? '#d97706' : '#ffffff';
+        //trackOther = !trackOther;
         ctx.stroke();
       });
   }
@@ -575,7 +616,7 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
     height: number
   ) {
     const pos = worldToScreen(waypoint.x, waypoint.z, pan, zoom, width, height);
-    const size = Math.max(12, 20 * zoom);
+    const size = 12 + (zoom * 30);
     const color = waypoint.color || '#f59e0b';
 
     ctx.fillStyle = color;
@@ -607,11 +648,11 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
 
     // Label
     if (zoom > 0.03) {
-      ctx.font = `bold ${Math.max(11, 14 * zoom)}px system-ui, -apple-system, sans-serif`;
+      ctx.font = `bold ${(Math.max(11, 14 * zoom))}px system-ui, -apple-system, sans-serif`;
       ctx.fillStyle = color;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
-      ctx.fillText(waypoint.name, pos.x, pos.y + size + 6);
+      ctx.fillText(waypoint.name, pos.x, pos.y + size + (zoom*6));
     }
   }
 
@@ -849,6 +890,16 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
     return () => canvas.removeEventListener('wheel', handleWheelEvent);
   }, [pan, zoom]);
 
+
+  // Load map image from Cloudflare R2 Database
+  useEffect(() => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = `/api/assets/map?name=server-map.png`
+    img.onload = () => setMapImage(img);
+    img.onerror = (e) => console.error('Failed to load map image:', e);
+  }, []);
+
   // ============================================================================
   // RENDER
   // ============================================================================
@@ -924,11 +975,20 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
             <label className="flex items-center gap-2.5 text-xs cursor-pointer group">
               <input
                 type="checkbox"
-                checked={showUnnamedStations}
-                onChange={(e) => setShowUnnamedStations(e.target.checked)}
+                checked={showMapOverlay}
+                onChange={(e) => setShowMapOverlay(e.target.checked)}
                 className="accent-amber-500 w-3.5 h-3.5"
               />
-              <span className="text-zinc-400 group-hover:text-zinc-200">Show unnamed stations</span>
+              <span className="text-zinc-400 group-hover:text-zinc-200">Show map overlay (Laggy)</span>
+            </label>
+            <label className="flex items-center gap-2.5 text-xs cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={showAllStations}
+                onChange={(e) => setShowAllStations(e.target.checked)}
+                className="accent-amber-500 w-3.5 h-3.5"
+              />
+              <span className="text-zinc-400 group-hover:text-zinc-200">Show all stations</span>
             </label>
             <label className="flex items-center gap-2.5 text-xs cursor-pointer group">
               <input
