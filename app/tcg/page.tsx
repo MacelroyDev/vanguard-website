@@ -1,14 +1,16 @@
 "use client"
-import { useState, useRef } from 'react';
-import ClientNavbar from '../../components/clientNavbar';
+import { useState, useRef, ChangeEvent } from 'react';
 import TradingCard from '../../components/TradingCard';
 import html2canvas from 'html2canvas';
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import Link from 'next/link'
 
+type EnergyType = 'Splat' | 'Rage' | 'Whimsy' | 'Mechanical' | 'Terra';
+type RarityType = 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Exquisite';
+
 export default function Tcg() {
-  const defualtDesc = `*ability*Example Ability / Do something when something. Line break is 31 line characters.
+  const defaultDesc = `*ability*Example Ability / Do something when something. Line break is 31 line characters.
   ───────────────────────────────
   [*splat**splat* Example Attack / 20] Discard 1 *splat* aura from your opponent\'s active critter.
   `;
@@ -17,13 +19,13 @@ export default function Tcg() {
   const linebreak = "───────────────────────────────";
 
   const [cardName, setCardName] = useState('Name');
-  const [description, setDescription] = useState(defualtDesc);
-  const [energyType, setEnergyType] = useState('Splat');
-  const [rarity, setRarity] = useState('Common');
+  const [description, setDescription] = useState(defaultDesc);
+  const [energyType, setEnergyType] = useState<EnergyType>('Splat');
+  const [rarity, setRarity] = useState<RarityType>('Common');
   const [category, setCategory] = useState('Denizen');
   const [hp, setHP] = useState(100);
   const [retreat, setRetreat] = useState(2);
-  const [cardImage, setCardImage] = useState(null);
+  const [cardImage, setCardImage] = useState<string>("");
   const [skobian, setSkobian] = useState(false);
   const [littleguy, setLittleguy] = useState(false);
   const [darkner, setDarkner] = useState(false);
@@ -34,14 +36,14 @@ export default function Tcg() {
   const [imageX, setImageX] = useState(0);
   const [imageY, setImageY] = useState(0);
 
-  const cardRef = useRef(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleImageUpload = (event) => {
+  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
-        setCardImage(reader.result);
+        setCardImage(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -73,47 +75,46 @@ export default function Tcg() {
   const resetY = () => setImageY(0);
 
   return (
-    <main>
-      <ClientNavbar />
-      <div className="flex p-4 gap-8">
-        <div className="w7/16"> {/* 7/16 fraction so slightly less than half*/}
-          <h2 className="text-2xl text-vanguardOrange font-(vanguardFont) font-bold drop-shadow-xl mt-5">Bodob Skobis TCG Card Editor</h2>
+    <main className="bg-zinc-900 min-h-screen">
+      <div className="flex p-8 gap-8 max-w-7xl mx-auto">
+        <div className="w-7/16">
+          <h2 className="text-amber-500 text-3xl font-bold uppercase tracking-tight mt-5">Bodob Skobis TCG Card Editor</h2>
           <Link 
             type="button" 
-            className='block border-4 border-vanguardOrange p-2 rounded-md text-sm text-vanguardOrange font-(vanguardFont) drop-shadow-xl mt-5 mb-10'
+            className='inline-flex items-center px-4 py-2 border-2 border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-zinc-900 font-semibold uppercase tracking-wider transition-colors duration-200 mt-5 mb-10'
             href={{pathname:'./tcg/supporter'}}
           >
             Switch to supporter card
           </Link>
           <form className="flex flex-col gap-4">
             <div>
-              <label htmlFor="cardName" className="block text-sm font-medium text-white">Card Name</label>
+              <label htmlFor="cardName" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Card Name</label>
               <input
                 id="cardName"
                 type="text"
                 value={cardName}
                 onChange={(e) => setCardName(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
+                className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
               />
             </div>
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-white">Category</label>
+              <label htmlFor="category" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Category</label>
               <input
                 id="category"
                 type="text"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
+                className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
               />
             </div>
 
             <div>
-              <label htmlFor="rarity" className="block text-sm font-medium text-white">Rarity</label>
+              <label htmlFor="rarity" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Rarity</label>
               <select
                 id="rarity"
                 value={rarity}
-                onChange={(e) => setRarity(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
+                onChange={(e) => setRarity(e.target.value as RarityType)}
+                className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
               >
                 <option value="Common">Common</option>
                 <option value="Rare">Rare</option>
@@ -124,12 +125,12 @@ export default function Tcg() {
             </div>
 
             <div>
-              <label htmlFor="energyType" className="block text-sm font-medium text-white">Energy Type</label>
+              <label htmlFor="energyType" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Energy Type</label>
               <select
                 id="energyType"
                 value={energyType}
-                onChange={(e) => setEnergyType(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
+                onChange={(e) => setEnergyType(e.target.value as EnergyType)}
+                className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
               >
                 <option value="Splat">Splat</option>
                 <option value="Rage">Rage</option>
@@ -142,7 +143,7 @@ export default function Tcg() {
             {/* Div for HP and Retreat inputs */}
             <div className="flex gap-4">
                 <div className="flex-1">
-                    <label htmlFor="hp" className="block text-sm font-medium text-white">HP</label>
+                    <label htmlFor="hp" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">HP</label>
                     <input
                         id="hp"
                         type="number"
@@ -155,18 +156,18 @@ export default function Tcg() {
                         }}
                         step="10"
                         min="10"
-                        className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
+                        className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
                     />
                 </div>
                 <div className="flex-1">
-                    <label htmlFor="retreat" className="block text-sm font-medium text-white">Retreat Cost</label>
+                    <label htmlFor="retreat" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Retreat Cost</label>
                     <input
                         id="retreat"
                         type="number"
                         value={retreat}
                         onChange={(e) => setRetreat(parseInt(e.target.value, 10))}
                         min="0"
-                        className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
+                        className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
                     />
                 </div>
             </div>
@@ -174,7 +175,7 @@ export default function Tcg() {
             {/* Div for Level and Linebreak inputs */}
             <div className="flex gap-4">
                 <div className="flex-1">
-                    <label htmlFor="level" className="block text-sm font-medium text-white">Level</label>
+                    <label htmlFor="level" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Level</label>
                     <input
                         id="level"
                         type="number"
@@ -188,14 +189,14 @@ export default function Tcg() {
                         step="1"
                         min="0"
                         max="3"
-                        className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
+                        className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
                     />
                 </div>
                 <div className="flex-1">
-                    <label htmlFor="Linebreak" className="block text-sm font-medium text-white">Copy Linebreak</label>
+                    <label htmlFor="Linebreak" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Copy Linebreak</label>
                     <button
                         type="button"
-                        className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont] bg-white"
+                        className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-amber-500 p-2 rounded-md font-[skobisFont] hover:bg-zinc-700 hover:border-amber-500 transition-colors"
                         onClick={() => {
                           navigator.clipboard.writeText(linebreak)
                           .then(() => {
@@ -212,60 +213,65 @@ export default function Tcg() {
                 </div>
             </div>
             <div>
-              <div className="flex gap-2">
-                <label htmlFor="description" className="block text-sm font-medium text-white">Description</label>
-                <IoMdInformationCircleOutline  data-tooltip-id="desc-tooltop" color='#fec633'/>
+              <div className="flex gap-2 items-center">
+                <label htmlFor="description" className="block text-sm font-medium text-gray-300 uppercase tracking-wider">Description</label>
+                <IoMdInformationCircleOutline data-tooltip-id="desc-tooltop" className="text-amber-500 cursor-help"/>
               </div>
               <textarea
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 p-2 rounded-md font-[skobisFont]"
-                rows="5"
+                className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors min-h-[120px]"
               />
             </div>
 
-            <div className="flex items-center gap-2 mb-4">
-              <input
-                id="skobian-checkbox"
-                type="checkbox"
-                checked={skobian}
-                onChange={(e) => setSkobian(e.target.checked)}
-                className="h-4 w-4 text-vanguardOrange border-gray-300 rounded focus:ring-vanguardOrange"
-              />
-              <label htmlFor="skobian-checkbox" className="block text-sm font-medium text-white">
-                Is Skobian?
-              </label>
-              <input
-                id="littleguy-checkbox"
-                type="checkbox"
-                checked={littleguy}
-                onChange={(e) => setLittleguy(e.target.checked)}
-                className="h-4 w-4 text-vanguardOrange border-gray-300 rounded focus:ring-vanguardOrange"
-              />
-              <label htmlFor="skobian-checkbox" className="block text-sm font-medium text-white">
-                Is Little Guy?
-              </label>
-              <input
-                id="darkner-checkbox"
-                type="checkbox"
-                checked={darkner}
-                onChange={(e) => setDarkner(e.target.checked)}
-                className="h-4 w-4 text-vanguardOrange border-gray-300 rounded focus:ring-vanguardOrange"
-              />
-              <label htmlFor="skobian-checkbox" className="block text-sm font-medium text-white">
-                Is Darkner?
-              </label>
+            <div className="flex items-center gap-4 mb-4 flex-wrap">
+              <div className="flex items-center gap-2">
+                <input
+                  id="skobian-checkbox"
+                  type="checkbox"
+                  checked={skobian}
+                  onChange={(e) => setSkobian(e.target.checked)}
+                  className="h-4 w-4 accent-amber-500 bg-zinc-800 border-zinc-700 rounded"
+                />
+                <label htmlFor="skobian-checkbox" className="text-sm font-medium text-gray-300">
+                  Is Skobian?
+                </label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  id="littleguy-checkbox"
+                  type="checkbox"
+                  checked={littleguy}
+                  onChange={(e) => setLittleguy(e.target.checked)}
+                  className="h-4 w-4 accent-amber-500 bg-zinc-800 border-zinc-700 rounded"
+                />
+                <label htmlFor="littleguy-checkbox" className="text-sm font-medium text-gray-300">
+                  Is Little Guy?
+                </label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  id="darkner-checkbox"
+                  type="checkbox"
+                  checked={darkner}
+                  onChange={(e) => setDarkner(e.target.checked)}
+                  className="h-4 w-4 accent-amber-500 bg-zinc-800 border-zinc-700 rounded"
+                />
+                <label htmlFor="darkner-checkbox" className="text-sm font-medium text-gray-300">
+                  Is Darkner?
+                </label>
+              </div>
             </div>
 
             <div>
-              <label htmlFor="cardImage" className="block text-sm font-medium text-white">Card Image</label>
+              <label htmlFor="cardImage" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Card Image</label>
               <input
                 id="cardImage"
                 type="file"
                 accept="image/*"
                 onChange={handleImageUpload}
-                className="mt-1 block w-full"
+                className="mt-1 block w-full text-gray-300 file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-amber-500 file:text-zinc-900 file:font-semibold file:uppercase file:tracking-wider hover:file:bg-amber-400 file:cursor-pointer file:transition-colors"
               />
             </div>
 
@@ -273,7 +279,7 @@ export default function Tcg() {
             {/* Zoom and pan inputs */}
             <div className="mb-4">
                 <div className="flex items-center gap-2">
-                    <label className="block whitespace-nowrap min-w-[120px] text-white">Zoom: {imageZoom.toFixed(2)}</label>
+                    <label className="block whitespace-nowrap min-w-[120px] text-gray-300 text-sm">Zoom: {imageZoom.toFixed(2)}</label>
                     <input
                         type="range"
                         min="0.5"
@@ -281,12 +287,12 @@ export default function Tcg() {
                         step="0.1"
                         value={imageZoom}
                         onChange={(e) => setImageZoom(parseFloat(e.target.value))}
-                        className="w-64"
+                        className="w-64 accent-amber-500"
                     />
                     <button
                         type="button"
                         onClick={resetZoom}
-                        className="px-2 py-1 text-sm bg-gray-200 hover:bg-gray-300 rounded"
+                        className="px-3 py-1 text-sm bg-zinc-700 hover:bg-zinc-600 text-gray-300 rounded transition-colors"
                     >
                         Reset
                     </button>
@@ -294,7 +300,7 @@ export default function Tcg() {
             </div>
             <div className="mb-4">
                 <div className="flex items-center gap-2">
-                    <label className="block whitespace-nowrap min-w-[120px] text-white">Pan X: {imageX}px</label>
+                    <label className="block whitespace-nowrap min-w-[120px] text-gray-300 text-sm">Pan X: {imageX}px</label>
                     <input
                         type="range"
                         min="-100"
@@ -302,12 +308,12 @@ export default function Tcg() {
                         step="1"
                         value={imageX}
                         onChange={(e) => setImageX(parseInt(e.target.value))}
-                        className="w-64"
+                        className="w-64 accent-amber-500"
                     />
                     <button
                         type="button"
                         onClick={resetX}
-                        className="px-2 py-1 text-sm bg-gray-200 hover:bg-gray-300 rounded"
+                        className="px-3 py-1 text-sm bg-zinc-700 hover:bg-zinc-600 text-gray-300 rounded transition-colors"
                     >
                         Reset
                     </button>
@@ -315,7 +321,7 @@ export default function Tcg() {
             </div>
             <div className="mb-4">
                 <div className="flex items-center gap-2">
-                    <label className="block whitespace-nowrap min-w-[120px] text-white">Pan Y: {imageY}px</label>
+                    <label className="block whitespace-nowrap min-w-[120px] text-gray-300 text-sm">Pan Y: {imageY}px</label>
                     <input
                         type="range"
                         min="-100"
@@ -323,12 +329,12 @@ export default function Tcg() {
                         step="1"
                         value={imageY}
                         onChange={(e) => setImageY(parseInt(e.target.value))}
-                        className="w-64"
+                        className="w-64 accent-amber-500"
                     />
                     <button
                         type="button"
                         onClick={resetY}
-                        className="px-2 py-1 text-sm bg-gray-200 hover:bg-gray-300 rounded"
+                        className="px-3 py-1 text-sm bg-zinc-700 hover:bg-zinc-600 text-gray-300 rounded transition-colors"
                     >
                         Reset
                     </button>
@@ -338,7 +344,7 @@ export default function Tcg() {
           <button
             type="button"
             onClick={handleDownload}
-            className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="mt-6 inline-flex items-center px-6 py-3 bg-amber-500 hover:bg-amber-600 text-zinc-900 font-semibold uppercase tracking-wider transition-colors duration-200"
           >
             Download Card
           </button>
@@ -361,16 +367,16 @@ export default function Tcg() {
               skobian={skobian}
               littleguy={littleguy}
               darkner={darkner}
-              level={level.toString()}
+              level={level}
             />
           </div>
         </div>
       </div>
-      <ReactTooltip id="desc-tooltop" place="right">
+      <ReactTooltip id="desc-tooltop" place="right" className="!bg-zinc-800 !text-gray-300">
         <p className='max-w-sm'>
           By surrounding the name of an energy type with * * you can add icons to the description box.
         </p>
-        <p className='max-w-sm'>
+        <p className='max-w-sm mt-2'>
           Examples:
         </p>
         <ul className='max-w-sm list-disc'>

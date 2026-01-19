@@ -1,11 +1,49 @@
 "use client"
-import React from 'react';
+import React, { CSSProperties, ReactNode } from 'react';
 //import Image from 'next/image';
 
-export default function TradingCard({ name, description, energy, cardImage, rarity, category, hp, retreat, imageX, imageY, imageZoom, skobian, littleguy, darkner, level }) {
+export interface TradingCardProps {
+    name: string;
+    description: string;
+    energy: 'Splat' | 'Rage' | 'Whimsy' | 'Mechanical' | 'Terra';
+    cardImage: string;
+    rarity: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Exquisite';
+    category?: string;
+    hp: number;
+    retreat: number;
+    imageX: number;
+    imageY: number;
+    imageZoom: number;
+    skobian?: boolean;
+    littleguy?: boolean;
+    darkner?: boolean;
+    level: number;
+}
+
+
+export default function TradingCard({
+    name,
+    description,
+    energy,
+    cardImage,
+    rarity,
+    category,
+    hp,
+    retreat,
+    imageX,
+    imageY,
+    imageZoom,
+    skobian,
+    littleguy,
+    darkner,
+    level,
+}: TradingCardProps) {
+
+    type EnergyType = TradingCardProps['energy'];
+    type RarityType = TradingCardProps['rarity'];
 
     // Array of energy icon pngs
-    const energyImageMap = {
+    const energyImageMap: Record<EnergyType, string> = {
         'Splat': '/images/tcg/energy/border/splat_energy_border.png',
         'Rage': '/images/tcg/energy/border/rage_energy_border.png',
         'Whimsy': '/images/tcg/energy/border/whimsy_energy_border.png',
@@ -16,7 +54,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
     const energySrc = energyImageMap[energy];
 
     // Array of energy text icons
-    const keywordIconMap = {
+    const keywordIconMap: Record<string, string> = {
         '*splat*': '/images/tcg/energy/border/splat_energy_border.png',
         '*rage*': '/images/tcg/energy/border/rage_energy_border.png',
         '*whimsy*': '/images/tcg/energy/border/whimsy_energy_border.png',
@@ -28,18 +66,18 @@ export default function TradingCard({ name, description, energy, cardImage, rari
     };
 
     // Array of coloured card templates
-    const templateMap = {
-        'Splat': '/images/tcg/new-templates/splat_template.png',
-        'Rage': '/images/tcg/new-templates/rage_template.png',
-        'Whimsy': '/images/tcg/new-templates/whimsy_template.png',
-        'Mechanical': '/images/tcg/new-templates/mech_template.png',
-        'Terra': '/images/tcg/new-templates/terra_template.png',
+    const templateMap: Record<EnergyType, string> = {
+        'Splat': '/images/tcg/v2-templates/template_splat.png',
+        'Rage': '/images/tcg/v2-templates/template_rage.png',
+        'Whimsy': '/images/tcg/v2-templates/template_whimsy.png',
+        'Mechanical': '/images/tcg/v2-templates/template_mechanical.png',
+        'Terra': '/images/tcg/v2-templates/template_terra.png',
     };
     // Get the card template based on the energy prop
     const templateSrc = templateMap[energy];
 
     // Array of rarity card colours
-    const rarityMap = {
+    const rarityMap: Record<RarityType, string> = {
         'Common': '/images/tcg/rarity/CardC.png',
         'Rare': '/images/tcg/rarity/CardR.png',
         'Epic': '/images/tcg/rarity/CardE.png',
@@ -50,7 +88,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
     const raritySrc = rarityMap[rarity];
 
     // Array of rarity critter strings
-    const rarityStringMap = {
+    const rarityStringMap: Record<RarityType, string> = {
         'Common': 'Common Critter',
         'Rare': 'Rare Critter',
         'Epic': 'Epic Critter',
@@ -59,7 +97,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
     };
     const rarityString = rarityStringMap[rarity];
 
-    const parseDescription = (text) => {
+    const parseDescription = (text: string): ReactNode[] | null => {
         if (!text) return null;
 
         // Split the text by both the energy keywords and newlines
@@ -81,13 +119,13 @@ export default function TradingCard({ name, description, energy, cardImage, rari
             const iconSrc = keywordIconMap[part];
             let iconSize = '14px';
 
-            if (iconSrc == '/images/tcg/vanguard-badge.png'){
+            if (iconSrc === '/images/tcg/vanguard-badge.png'){
                 iconSize = '24px';
             }
 
-            if (iconSrc == '/images/tcg/ability.png'){
+            if (iconSrc === '/images/tcg/ability.png'){
                 //iconSize = '24px';
-                let iconWidth = iconSize*4;
+                const iconWidth = `${parseInt(iconSize) * 4}px`;
                 return (
                 <img
                 key={index}
@@ -113,7 +151,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
     };
 
 
-    const nameStyle = { // Style for the name label
+    const nameStyle: CSSProperties = { // Style for the name label
         position: 'absolute',
         top: '39px',
         left: '40px',
@@ -125,7 +163,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         zIndex: 4
     };
 
-    const levelStyle = { // Style for the level label
+    const levelStyle: CSSProperties = { // Style for the level label
         position: 'absolute',
         top: '20px',
         left: '30px',
@@ -137,7 +175,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         zIndex: 4
     };
 
-    const categoryStyle = { // Style for the category and rarity label
+    const categoryStyle: CSSProperties = { // Style for the category and rarity label
         position: 'absolute',
         top: '248px',
         left: '30px',
@@ -149,7 +187,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         zIndex: 4
     };
 
-    const imageContainerStyle = { // Style for framed image
+    const imageContainerStyle: CSSProperties = { // Style for framed image
         position: 'absolute',
         top: '65px',
         left: '32px',
@@ -159,7 +197,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         zIndex: 1
     };
 
-    const descriptionStyle = { // Style for description/attacks
+    const descriptionStyle: CSSProperties = { // Style for description/attacks
         position: 'absolute',
         top: '330px',
         left: '25px',
@@ -167,11 +205,12 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         height: '140px',
         overflowY: 'auto',
         fontSize: '12px',
+        color: 'black',
         fontFamily: 'skobisFont',
         zIndex: 4
     };
 
-    const energyStyle = { // Style for the energy icon
+    const energyStyle: CSSProperties = { // Style for the energy icon
         position: 'absolute',
         top: '22.5px', // Adjust this value
         right: '13.5px', // Adjust this value
@@ -180,7 +219,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         zIndex: 4
     };
 
-    const hpStyle = { // Style for the hp number
+    const hpStyle: CSSProperties = { // Style for the hp number
         position: 'absolute',
         top: '278px',
         left: '60px',
@@ -192,7 +231,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         zIndex: 4
     };
 
-    const retreatStyle = { // Style for the retreat cost number
+    const retreatStyle: CSSProperties = { // Style for the retreat cost number
         position: 'absolute',
         top: '285px',
         left: '215px',
@@ -204,7 +243,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         zIndex: 4
     };
 
-    const retreatIconStyle = { // Style for the retreat icon
+    const retreatIconStyle: CSSProperties = { // Style for the retreat icon
         position: 'absolute',
         top: '288px', // Adjust this value
         right: '60px', // Adjust this value
@@ -213,7 +252,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         zIndex: 4
     };
 
-    const hpLabelStyle = { // Style for the hp label
+    const hpLabelStyle: CSSProperties = { // Style for the hp label
         position: 'absolute',
         top: '282px',
         left: '25px',
@@ -225,7 +264,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
         zIndex: 4
     };
 
-    const retreatLabelStyle = { // Style for the retreat label
+    const retreatLabelStyle: CSSProperties = { // Style for the retreat label
         position: 'absolute',
         top: '282px',
         left: '150px',
@@ -245,7 +284,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
                         src={cardImage}
                         alt={name}
                         style={{
-                            imageContainerStyle,
+                            ...imageContainerStyle,
                             transform: `scale(${imageZoom}) translate(${imageX}px, ${imageY}px)`,
                             transformOrigin: '50% 50%',
                         }}
@@ -289,7 +328,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
 
             {skobian && (
             <img
-                src={"images/tcg/skobian.png"}
+                src={"/images/tcg/skobian.png"}
                 alt="Skobian Tag"
                 style={{
                 position: 'absolute',
@@ -303,7 +342,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
 
             {littleguy && (
             <img
-                src={"images/tcg/little-guy.png"}
+                src={"/images/tcg/little-guy.png"}
                 alt="Little Guy Tag"
                 style={{
                 position: 'absolute',
@@ -317,7 +356,7 @@ export default function TradingCard({ name, description, energy, cardImage, rari
 
             {darkner && (
             <img
-                src={"images/tcg/darkner.png"}
+                src={"/images/tcg/darkner.png"}
                 alt="Little Guy Tag"
                 style={{
                 position: 'absolute',
