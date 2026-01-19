@@ -9,8 +9,8 @@ export interface TradingCardProps {
     cardImage: string;
     rarity: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Exquisite';
     category?: string;
-    hp: number;
-    retreat: number;
+    attack: number;
+    defence: number;
     imageX: number;
     imageY: number;
     imageZoom: number;
@@ -28,8 +28,8 @@ export default function TradingCard({
     cardImage,
     rarity,
     category,
-    hp,
-    retreat,
+    attack,
+    defence,
     imageX,
     imageY,
     imageZoom,
@@ -177,11 +177,11 @@ export default function TradingCard({
 
     const categoryStyle: CSSProperties = { // Style for the category and rarity label
         position: 'absolute',
-        top: '248px',
-        left: '30px',
-        width: '260px',
+        top: '255px',
+        left: '115px',
+        width: '200px',
         textAlign: 'left',
-        fontSize: '20px',
+        fontSize: '16px',
         color: 'black',
         fontFamily: 'skobisFont',
         zIndex: 4
@@ -212,17 +212,29 @@ export default function TradingCard({
 
     const energyStyle: CSSProperties = { // Style for the energy icon
         position: 'absolute',
-        top: '22.5px', // Adjust this value
-        right: '13.5px', // Adjust this value
-        width: '60px', // Set a fixed width for the image
-        height: '60px', // Set a fixed height for the image
+        top: '10px', // Adjust this value
+        right: '11px', // Adjust this value
+        width: '68px', // Set a fixed width for the image
+        height: '68px', // Set a fixed height for the image
         zIndex: 4
     };
 
-    const hpStyle: CSSProperties = { // Style for the hp number
+    const attackStyle: CSSProperties = { // Style for the attack number
         position: 'absolute',
-        top: '278px',
-        left: '60px',
+        top: '222px',
+        left: '28px',
+        width: '400px',
+        textAlign: 'left',
+        fontSize: '30px',
+        color: 'black',
+        fontFamily: 'skobisFont',
+        zIndex: 4
+    };
+
+    const defenceStyle: CSSProperties = { // Style for the defence number
+        position: 'absolute',
+        top: '232px',
+        left: '78px',
         width: '400px',
         textAlign: 'left',
         fontSize: '30px',
@@ -243,38 +255,6 @@ export default function TradingCard({
         zIndex: 4
     };
 
-    const retreatIconStyle: CSSProperties = { // Style for the retreat icon
-        position: 'absolute',
-        top: '288px', // Adjust this value
-        right: '60px', // Adjust this value
-        width: '20px', // Set a fixed width for the image
-        height: '20px', // Set a fixed height for the image
-        zIndex: 4
-    };
-
-    const hpLabelStyle: CSSProperties = { // Style for the hp label
-        position: 'absolute',
-        top: '282px',
-        left: '25px',
-        width: '400px',
-        textAlign: 'left',
-        fontSize: '12px',
-        color: 'black',
-        fontFamily: 'skobisFont',
-        zIndex: 4
-    };
-
-    const retreatLabelStyle: CSSProperties = { // Style for the retreat label
-        position: 'absolute',
-        top: '282px',
-        left: '150px',
-        width: '400px',
-        textAlign: 'left',
-        fontSize: '11.5px',
-        color: 'black',
-        fontFamily: 'skobisFont',
-        zIndex: 4
-    };
 
     return (
         <div className="relative w-[320px] h-[480px]"> {/* 2:3 Ratio for cards */}
@@ -304,21 +284,6 @@ export default function TradingCard({
                     height: '100%',
                     objectFit: 'cover',
                     zIndex: 2
-                }}
-            />
-
-            {/* Rarity Bar PNG template */}
-            <img
-                src={raritySrc}
-                alt="Trading Card Rarity Bar"
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    zIndex: 3
                 }}
             />
 
@@ -387,18 +352,9 @@ export default function TradingCard({
                 {rarityString} {category && '-'} {category}
             </div>
 
-            <div style={hpLabelStyle}>HP</div>
-            <div style={hpStyle}>{hp}</div>
+            <div style={attackStyle}>{attack}</div>
 
-            <div style={retreatLabelStyle}>Retreat Cost</div>
-            <div style={retreatStyle}>{retreat}x</div>
-            <div style={retreatIconStyle}>
-                <img
-                    src={'/images/tcg/energy/border/splat_energy_border.png'}
-                    alt={name}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-            </div>
+            <div style={defenceStyle}>{defence}</div>
 
 
             <div style={descriptionStyle}>{parseDescription(description)}</div>

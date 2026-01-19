@@ -23,8 +23,8 @@ export default function Tcg() {
   const [energyType, setEnergyType] = useState<EnergyType>('Splat');
   const [rarity, setRarity] = useState<RarityType>('Common');
   const [category, setCategory] = useState('Denizen');
-  const [hp, setHP] = useState(100);
-  const [retreat, setRetreat] = useState(2);
+  const [attack, setAttack] = useState(1);
+  const [defence, setDefence] = useState(2);
   const [cardImage, setCardImage] = useState<string>("");
   const [skobian, setSkobian] = useState(false);
   const [littleguy, setLittleguy] = useState(false);
@@ -140,32 +140,27 @@ export default function Tcg() {
               </select>
             </div>
 
-            {/* Div for HP and Retreat inputs */}
+            {/* Div for Attack and Defence inputs */}
             <div className="flex gap-4">
                 <div className="flex-1">
-                    <label htmlFor="hp" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">HP</label>
+                    <label htmlFor="attack" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Attack</label>
                     <input
-                        id="hp"
+                        id="attack"
                         type="number"
-                        value={hp}
-                        onChange={(e) => {
-                            const value = parseInt(e.target.value, 10);
-                            if (!isNaN(value) && value % 10 === 0) {
-                                setHP(value);
-                            }
-                        }}
-                        step="10"
-                        min="10"
+                        value={attack}
+                        onChange={(e) => setAttack(parseInt(e.target.value))}
+                        step="1"
+                        min="1"
                         className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
                     />
                 </div>
                 <div className="flex-1">
-                    <label htmlFor="retreat" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Retreat Cost</label>
+                    <label htmlFor="defence" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Defence</label>
                     <input
-                        id="retreat"
+                        id="defence"
                         type="number"
-                        value={retreat}
-                        onChange={(e) => setRetreat(parseInt(e.target.value, 10))}
+                        value={defence}
+                        onChange={(e) => setDefence(parseInt(e.target.value, 10))}
                         min="0"
                         className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
                     />
@@ -359,8 +354,8 @@ export default function Tcg() {
               cardImage={cardImage}
               rarity={rarity}
               category={category}
-              hp={hp}
-              retreat={retreat}
+              attack={attack}
+              defence={defence}
               imageZoom={imageZoom}
               imageX={imageX}
               imageY={imageY}
