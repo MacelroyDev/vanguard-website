@@ -192,7 +192,7 @@ export default function TradingCard({
 
     const nameStyle: CSSProperties = { // Style for the name label
         position: 'absolute',
-        top: '20px',
+        top: '26px',
         left: '40px',
         width: '200px',
         textAlign: 'left',
@@ -204,14 +204,15 @@ export default function TradingCard({
 
     const titleStyle: CSSProperties = { // Style for the title label
         position: 'absolute',
-        top: '25px',
+        top: '32px',
         left: '30px',
         width: '200px',
         textAlign: 'right',
         fontSize: '14px',
         color: 'black',
         fontFamily: 'skobisFont',
-        zIndex: 4
+        zIndex: 4,
+        height: '30px',
     };
 
     const categoryStyle: CSSProperties = { // Style for the category and rarity label

@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Fictitious Company Website & Employee Portal
 
-## Getting Started
+A satirical website commission designed to mimic the look and feel of real corporate company websites, complete with a fully functional "Employee Portal" housing various internal tools.
 
-First, run the development server:
+## About This Project
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This project was commissioned as a parody of corporate web presence, featuring an authentic-looking company website alongside an employee-only portal with genuinely useful tools.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Public Website
+- Corporate-style landing page
+- About us, services, and contact sections
+- "Authentic" buzzword-laden copy
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Employee Portal Tools
+The "internal" employee portal includes several commissioned tools:
 
-## Learn More
+- **Minecraft Create Mod Transit Map** — An interactive map visualization for Create mod railway networks, parsing train positions, signals, and track blocks
+- **Trading Card Generator** — Custom trading card creation tool
 
-To learn more about Next.js, take a look at the following resources:
+## Upcoming Changes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The following tools will be split into their own dedicated repositories:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Create Mod Transit Map** — Will become a standalone project for the Minecraft modding community
+- **Trading Card Generator** — Will be released as its own repository for others looking to generate trading cards
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Frontend
+- React
+- Next.js
+- TypeScript
+
+### Infrastructure
+- Cloudflare R2 (object storage)
+
+### Transit Map API
+- Java
+- Minecraft [Create Track Map API](https://github.com/jenchanws/create-track-map)
+- Self-hosted home server
+
