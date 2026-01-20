@@ -20,6 +20,12 @@ export interface TradingCardProps {
     title: string;
     ability: string;
     flavourText: string;
+    energyCostA: 'None' | 'Splat' | 'Rage' | 'Whimsy' | 'Mechanical' | 'Terra' | 'SplatFinal';
+    energyCostB: 'None' | 'Splat' | 'Rage' | 'Whimsy' | 'Mechanical' | 'Terra' | 'SplatFinal';
+    energyCostC: 'None' | 'Splat' | 'Rage' | 'Whimsy' | 'Mechanical' | 'Terra' | 'SplatFinal';
+    energyCostD: 'None' | 'Splat' | 'Rage' | 'Whimsy' | 'Mechanical' | 'Terra' | 'SplatFinal';
+    energyCostE: 'None' | 'Splat' | 'Rage' | 'Whimsy' | 'Mechanical' | 'Terra' | 'SplatFinal';
+    energyCostNum?: number;
 }
 
 
@@ -40,11 +46,18 @@ export default function TradingCard({
     darkner,
     title,
     ability,
-    flavourText
+    flavourText,
+    energyCostA,
+    energyCostB,
+    energyCostC,
+    energyCostD,
+    energyCostE,
+    energyCostNum
 }: TradingCardProps) {
 
     type EnergyType = TradingCardProps['energy'];
     type RarityType = TradingCardProps['rarity'];
+    type EnergyCostType = TradingCardProps['energyCostA'];
 
     // Array of energy icon pngs
     const energyImageMap: Record<EnergyType, string> = {
@@ -101,6 +114,18 @@ export default function TradingCard({
     };
     const rarityString = rarityStringMap[rarity];
 
+    // Array of energy cost colors
+    const energyCostColorMap: Record<EnergyCostType, string> = {
+        'None': 'transparent',
+        'Splat': '#6B7280',
+        'Rage': '#DC2626',
+        'Whimsy': '#EC4899',
+        'Mechanical': '#e9b26a',
+        'Terra': '#16A34A',
+        'SplatFinal': '#6B7280',
+    };
+
+
     const parseDescription = (text: string): ReactNode[] | null => {
         if (!text) return null;
 
@@ -152,6 +177,16 @@ export default function TradingCard({
             // Otherwise, return the text part as a span
             return <span key={index}>{part}</span>;
         });
+    };
+
+    const renderEnergyCostCircle = (cost: EnergyCostType, index: number) => {
+        const color = energyCostColorMap[cost];
+        
+        return (
+            <div key={index} style={energyCostCircleStyle(color)}>
+            {cost === 'SplatFinal' && energyCostNum !== undefined ? energyCostNum : ''}
+        </div>
+        );
     };
 
 
@@ -242,10 +277,10 @@ export default function TradingCard({
 
     const energyStyle: CSSProperties = { // Style for the energy icon
         position: 'absolute',
-        top: '10px', // Adjust this value
-        right: '11px', // Adjust this value
-        width: '68px', // Set a fixed width for the image
-        height: '68px', // Set a fixed height for the image
+        top: '10px',
+        right: '11px',
+        width: '68px',
+        height: '68px',
         zIndex: 4
     };
 
@@ -272,6 +307,32 @@ export default function TradingCard({
         fontFamily: 'skobisFont',
         zIndex: 4
     };
+
+    const energyCostContainerStyle: CSSProperties = {
+        position: 'absolute',
+        top: '79.5px',
+        right: '11.5px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '4px',
+        zIndex: 5
+    };
+
+    const energyCostCircleStyle = (color: string): CSSProperties => ({
+        width: '13px',
+        height: '13px',
+        borderRadius: '50%',
+        backgroundColor: color,
+        border: color === 'transparent' ? 'none' : '2px solid rgba(0,0,0,0.3)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '10px',
+        fontWeight: 'bold',
+        color: 'white',
+        fontFamily: 'skobisFont',
+        textShadow: '1px 1px 1px rgba(0,0,0,0.5)'
+    });
 
 
     return (
@@ -379,6 +440,16 @@ export default function TradingCard({
 
             <div style={descriptionStyle}>{parseDescription(description)}</div>
             <div style={flavourStyle}>{parseDescription(flavourText)}</div>
+
+
+            {/* Energy Cost Circles */}
+            <div style={energyCostContainerStyle}>
+                {renderEnergyCostCircle(energyCostA, 0)}
+                {renderEnergyCostCircle(energyCostB, 1)}
+                {renderEnergyCostCircle(energyCostC, 2)}
+                {renderEnergyCostCircle(energyCostD, 3)}
+                {renderEnergyCostCircle(energyCostE, 4)}
+            </div>
         </div>
     );
 }

@@ -8,6 +8,7 @@ import Link from 'next/link'
 
 type EnergyType = 'Splat' | 'Rage' | 'Whimsy' | 'Mechanical' | 'Terra';
 type RarityType = 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Exquisite';
+type EnergyCostType = 'None' | 'Splat' | 'Rage' | 'Whimsy' | 'Mechanical' | 'Terra' | 'SplatFinal';
 
 export default function Tcg() {
   const defaultDesc = `*ability*Example Ability / Do something when something. Line break is 31 line characters.
@@ -34,6 +35,12 @@ export default function Tcg() {
   const [title,setTitle] = useState<string>("Title");
   const [ability,setAbility] = useState<string>("Stalwart");
   const [flavourText,setFlavourText] = useState<string>(defaultFlavour);
+  const [energyCostA, setEnergyCostA] = useState<EnergyCostType>('None');
+  const [energyCostB, setEnergyCostB] = useState<EnergyCostType>('None');
+  const [energyCostC, setEnergyCostC] = useState<EnergyCostType>('None');
+  const [energyCostD, setEnergyCostD] = useState<EnergyCostType>('None');
+  const [energyCostE, setEnergyCostE] = useState<EnergyCostType>('None');
+  const [energyCostNum, setEnergyCostNum] = useState(1);
 
   // State for image sliders
   const [imageZoom, setImageZoom] = useState(1);
@@ -195,28 +202,129 @@ export default function Tcg() {
                 </div>
             </div>
 
-            {/* Div for Linebreak copy */}
+            {/* Div for energy cost */}
             <div className="flex gap-4">
+              <div>
+                <label htmlFor="energyCostA" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Energy Cost 1</label>
+                <select
+                  id="energyCostA"
+                  value={energyCostA}
+                  onChange={(e) => setEnergyCostA(e.target.value as EnergyCostType)}
+                  className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
+                >
+                  <option value="None">None</option>
+                  <option value="Splat">Splat</option>
+                  <option value="Rage">Rage</option>
+                  <option value="Whimsy">Whimsy</option>
+                  <option value="Mechanical">Mechanical</option>
+                  <option value="Terra">Terra</option>
+                  <option value="SplatFinal">Splat w/Number</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="energyCostB" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Energy Cost 2</label>
+                <select
+                  id="energyCostB"
+                  value={energyCostB}
+                  onChange={(e) => setEnergyCostB(e.target.value as EnergyCostType)}
+                  className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
+                >
+                  <option value="None">None</option>
+                  <option value="Splat">Splat</option>
+                  <option value="Rage">Rage</option>
+                  <option value="Whimsy">Whimsy</option>
+                  <option value="Mechanical">Mechanical</option>
+                  <option value="Terra">Terra</option>
+                  <option value="SplatFinal">Splat w/Number</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="energyCostC" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Energy Cost 3</label>
+                <select
+                  id="energyCostC"
+                  value={energyCostC}
+                  onChange={(e) => setEnergyCostC(e.target.value as EnergyCostType)}
+                  className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
+                >
+                  <option value="None">None</option>
+                  <option value="Splat">Splat</option>
+                  <option value="Rage">Rage</option>
+                  <option value="Whimsy">Whimsy</option>
+                  <option value="Mechanical">Mechanical</option>
+                  <option value="Terra">Terra</option>
+                  <option value="SplatFinal">Splat w/Number</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="energyCostD" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Energy Cost 4</label>
+                <select
+                  id="energyCostD"
+                  value={energyCostD}
+                  onChange={(e) => setEnergyCostD(e.target.value as EnergyCostType)}
+                  className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
+                >
+                  <option value="None">None</option>
+                  <option value="Splat">Splat</option>
+                  <option value="Rage">Rage</option>
+                  <option value="Whimsy">Whimsy</option>
+                  <option value="Mechanical">Mechanical</option>
+                  <option value="Terra">Terra</option>
+                  <option value="SplatFinal">Splat w/Number</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="energyCostE" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Energy Cost 5</label>
+                <select
+                  id="energyCostE"
+                  value={energyCostE}
+                  onChange={(e) => setEnergyCostE(e.target.value as EnergyCostType)}
+                  className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
+                >
+                  <option value="None">None</option>
+                  <option value="Splat">Splat</option>
+                  <option value="Rage">Rage</option>
+                  <option value="Whimsy">Whimsy</option>
+                  <option value="Mechanical">Mechanical</option>
+                  <option value="Terra">Terra</option>
+                  <option value="SplatFinal">Splat w/Number</option>
+                </select>
+              </div>
+            </div>            
 
-                <div className="flex-1">
-                    <label htmlFor="Linebreak" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Copy Linebreak</label>
-                    <button
-                        type="button"
-                        className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-amber-500 p-2 rounded-md font-[skobisFont] hover:bg-zinc-700 hover:border-amber-500 transition-colors"
-                        onClick={() => {
-                          navigator.clipboard.writeText(linebreak)
-                          .then(() => {
-                              console.log('Linebreak copied to clipboard!');
-                              // Optionally, you can add a user notification here
-                          })
-                          .catch(err => {
-                              console.error('Failed to copy text: ', err);
-                          });
-                        }}
-                    >
-                      Copy
-                    </button>
-                </div>
+            {/* Div for Linebreak copy and energy cost num*/}
+            <div className="flex gap-4">
+              <div className="flex-1">
+                  <label htmlFor="energyCostNum" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Energy Cost Number</label>
+                  <input
+                      id="energyCostNum"
+                      type="number"
+                      value={energyCostNum}
+                      onChange={(e) => setEnergyCostNum(parseInt(e.target.value))}
+                      step="1"
+                      min="0"
+                      className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
+                  />
+              </div>
+
+              <div className="flex-1">
+                  <label htmlFor="Linebreak" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Copy Linebreak</label>
+                  <button
+                      type="button"
+                      className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-amber-500 p-2 rounded-md font-[skobisFont] hover:bg-zinc-700 hover:border-amber-500 transition-colors"
+                      onClick={() => {
+                        navigator.clipboard.writeText(linebreak)
+                        .then(() => {
+                            console.log('Linebreak copied to clipboard!');
+                            // add a notification here
+                        })
+                        .catch(err => {
+                            console.error('Failed to copy text: ', err);
+                        });
+                      }}
+                  >
+                    Copy
+                  </button>
+              </div>
             </div>
             
             {/* Checkboxes for Skobian, Little Guy, Darkner */}
@@ -269,7 +377,7 @@ export default function Tcg() {
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors min-h-[120px]"
+                className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors min-h-[200px]"
               />
             </div>
 
@@ -392,6 +500,12 @@ export default function Tcg() {
               title={title}
               ability={ability}
               flavourText={flavourText}
+              energyCostA={energyCostA}
+              energyCostB={energyCostB}
+              energyCostC={energyCostC}
+              energyCostD={energyCostD}
+              energyCostE={energyCostE}
+              energyCostNum={energyCostNum}
             />
           </div>
         </div>
