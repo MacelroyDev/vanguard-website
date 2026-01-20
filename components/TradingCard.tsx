@@ -194,7 +194,7 @@ export default function TradingCard({
     const abilityStyle: CSSProperties = { // Style for the ability label
         position: 'absolute',
         top: '226px',
-        right: '50px',
+        left: '30px',
         width: '200px',
         textAlign: 'right',
         fontSize: '12px',
