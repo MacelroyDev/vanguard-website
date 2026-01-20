@@ -218,19 +218,8 @@ export default function Tcg() {
                     </button>
                 </div>
             </div>
-            <div>
-              <div className="flex gap-2 items-center">
-                <label htmlFor="description" className="block text-sm font-medium text-gray-300 uppercase tracking-wider">Description</label>
-                <IoMdInformationCircleOutline data-tooltip-id="desc-tooltop" className="text-amber-500 cursor-help"/>
-              </div>
-              <textarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors min-h-[120px]"
-              />
-            </div>
-
+            
+            {/* Checkboxes for Skobian, Little Guy, Darkner */}
             <div className="flex items-center gap-4 mb-4 flex-wrap">
               <div className="flex items-center gap-2">
                 <input
@@ -268,6 +257,33 @@ export default function Tcg() {
                   Is Darkner?
                 </label>
               </div>
+            </div>
+
+            {/* Description input */}
+            <div>
+              <div className="flex gap-2 items-center">
+                <label htmlFor="description" className="block text-sm font-medium text-gray-300 uppercase tracking-wider">Description</label>
+                <IoMdInformationCircleOutline data-tooltip-id="desc-tooltop" className="text-amber-500 cursor-help"/>
+              </div>
+              <textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors min-h-[120px]"
+              />
+            </div>
+
+            {/* Flavor Text input */}
+            <div>
+              <div className="flex gap-2 items-center">
+                <label htmlFor="flavourText" className="block text-sm font-medium text-gray-300 uppercase tracking-wider">Flavour Text</label>
+              </div>
+              <textarea
+                id="flavourText"
+                value={flavourText}
+                onChange={(e) => setFlavourText(e.target.value)}
+                className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors min-h-[120px]"
+              />
             </div>
 
             <div>
