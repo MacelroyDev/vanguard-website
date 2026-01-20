@@ -17,7 +17,9 @@ export interface TradingCardProps {
     skobian?: boolean;
     littleguy?: boolean;
     darkner?: boolean;
-    level: number;
+    title: string;
+    ability: string;
+    flavourText: string;
 }
 
 
@@ -36,7 +38,9 @@ export default function TradingCard({
     skobian,
     littleguy,
     darkner,
-    level,
+    title,
+    ability,
+    flavourText
 }: TradingCardProps) {
 
     type EnergyType = TradingCardProps['energy'];
@@ -153,24 +157,24 @@ export default function TradingCard({
 
     const nameStyle: CSSProperties = { // Style for the name label
         position: 'absolute',
-        top: '39px',
+        top: '20px',
         left: '40px',
         width: '200px',
         textAlign: 'left',
         fontSize: '20px',
-        color: 'white',
+        color: 'black',
         fontFamily: 'skobisFont',
         zIndex: 4
     };
 
-    const levelStyle: CSSProperties = { // Style for the level label
+    const titleStyle: CSSProperties = { // Style for the title label
         position: 'absolute',
-        top: '20px',
+        top: '25px',
         left: '30px',
         width: '200px',
-        textAlign: 'left',
+        textAlign: 'right',
         fontSize: '14px',
-        color: 'white',
+        color: 'black',
         fontFamily: 'skobisFont',
         zIndex: 4
     };
@@ -182,6 +186,18 @@ export default function TradingCard({
         width: '200px',
         textAlign: 'left',
         fontSize: '16px',
+        color: 'black',
+        fontFamily: 'skobisFont',
+        zIndex: 4
+    };
+
+    const abilityStyle: CSSProperties = { // Style for the category and rarity label
+        position: 'absolute',
+        top: '226px',
+        left: '125px',
+        width: '200px',
+        textAlign: 'left',
+        fontSize: '12px',
         color: 'black',
         fontFamily: 'skobisFont',
         zIndex: 4
@@ -199,12 +215,26 @@ export default function TradingCard({
 
     const descriptionStyle: CSSProperties = { // Style for description/attacks
         position: 'absolute',
-        top: '330px',
+        top: '300px',
         left: '25px',
         width: '270px',
         height: '140px',
         overflowY: 'auto',
         fontSize: '12px',
+        color: 'black',
+        fontFamily: 'skobisFont',
+        zIndex: 4
+    };
+
+    const flavourStyle: CSSProperties = { // Style for flavour text
+        position: 'absolute',
+        top: '445px',
+        left: '88px',
+        width: '140px',
+        height: '30px',
+        overflowY: 'clip',
+        fontSize: '6px',
+        textAlign: 'center',
         color: 'black',
         fontFamily: 'skobisFont',
         zIndex: 4
@@ -238,18 +268,6 @@ export default function TradingCard({
         width: '400px',
         textAlign: 'left',
         fontSize: '30px',
-        color: 'black',
-        fontFamily: 'skobisFont',
-        zIndex: 4
-    };
-
-    const retreatStyle: CSSProperties = { // Style for the retreat cost number
-        position: 'absolute',
-        top: '285px',
-        left: '215px',
-        width: '400px',
-        textAlign: 'left',
-        fontSize: '22px',
         color: 'black',
         fontFamily: 'skobisFont',
         zIndex: 4
@@ -335,7 +353,7 @@ export default function TradingCard({
 
             <div style={nameStyle}>{parseDescription(name)}</div>
 
-            <div style={levelStyle}>{`Level ${level}`}</div>
+            <div style={titleStyle}>{title}</div>
 
             {/* 2. Conditionally render the energy image */}
             {energySrc && (
@@ -352,12 +370,15 @@ export default function TradingCard({
                 {rarityString} {category && '-'} {category}
             </div>
 
+            <div style={abilityStyle}>{ability}</div>
+
             <div style={attackStyle}>{attack}</div>
 
             <div style={defenceStyle}>{defence}</div>
 
 
             <div style={descriptionStyle}>{parseDescription(description)}</div>
+            <div style={flavourStyle}>{parseDescription(flavourText)}</div>
         </div>
     );
 }
