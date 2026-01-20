@@ -191,12 +191,12 @@ export default function TradingCard({
         zIndex: 4
     };
 
-    const abilityStyle: CSSProperties = { // Style for the category and rarity label
+    const abilityStyle: CSSProperties = { // Style for the ability label
         position: 'absolute',
         top: '226px',
-        left: '125px',
+        right: '50px',
         width: '200px',
-        textAlign: 'left',
+        textAlign: 'right',
         fontSize: '12px',
         color: 'black',
         fontFamily: 'skobisFont',
