@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
-import { FaEye, FaEyeSlash, FaBug } from 'react-icons/fa';
+import { FaEye, FaCog, FaBug } from 'react-icons/fa';
+import { useTrackStylesOptional, generateTrackId, TrackStyle } from './TrackStyleContext';
+import TransitMapAdmin from './TransitMapAdmin';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -103,6 +105,7 @@ export interface TransitMapConfig {
 interface TransitMapProps {
   config: TransitMapConfig;
   className?: string;
+  adminMode?: boolean;
 }
 
 // Merged station - API station with optional line color from config
@@ -151,7 +154,7 @@ function screenToWorld(
 // MAIN COMPONENT
 // ============================================================================
 
-export default function TransitMap({ config, className = '' }: TransitMapProps) {
+export default function TransitMap({ config, className = '', adminMode = false }: TransitMapProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   
@@ -180,6 +183,168 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
   
   const dimension = config.dimension || 'minecraft:overworld';
   const refreshInterval = config.refreshInterval || 3000;
+
+  // ============================================================================
+  // ADMIN + HELPER FUNCTIONS
+  // ============================================================================
+
+  // Track styles from context
+  const trackStyleContext = useTrackStylesOptional();
+  const trackStyles = trackStyleContext?.styles || {};
+
+  console.log('Track styles:', trackStyles);
+  console.log('Track styles count:', Object.keys(trackStyles).length);
+
+  // Admin state
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [selectedTrackIds, setSelectedTrackIds] = useState<string[]>([]);
+  const [isShiftHeld, setIsShiftHeld] = useState(false);
+
+  // Drag selection state
+  const [isDragSelecting, setIsDragSelecting] = useState(false);
+  const [dragSelectStart, setDragSelectStart] = useState<{ x: number; y: number } | null>(null);
+  const [dragSelectEnd, setDragSelectEnd] = useState<{ x: number; y: number } | null>(null);
+
+  // Keyboard events for shift key (admin mode)
+  useEffect(() => {
+    if (!adminMode) return;
+    
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') setIsShiftHeld(true);
+    };
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') setIsShiftHeld(false);
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [adminMode]);
+
+
+  // Point to line segment distance for track selection
+  function pointToSegmentDistance(px: number, py: number, x1: number, y1: number, x2: number, y2: number): number {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const lengthSq = dx * dx + dy * dy;
+    
+    if (lengthSq === 0) return Math.sqrt((px - x1) ** 2 + (py - y1) ** 2);
+    
+    let t = ((px - x1) * dx + (py - y1) * dy) / lengthSq;
+    t = Math.max(0, Math.min(1, t));
+    
+    const closestX = x1 + t * dx;
+    const closestY = y1 + t * dy;
+    
+    return Math.sqrt((px - closestX) ** 2 + (py - closestY) ** 2);
+  }
+
+  // Find track at mouse position
+  const findTrackAtPosition = useCallback((mouseX: number, mouseY: number, width: number, height: number): string | null => {
+    const threshold = 15;
+    
+    for (const track of tracks.filter(t => t.dimension === dimension)) {
+      if (track.path.length < 2) continue;
+      
+      for (let i = 0; i < track.path.length - 1; i++) {
+        const p1 = worldToScreen(track.path[i].x, track.path[i].z, pan, zoom, width, height);
+        const p2 = worldToScreen(track.path[i + 1].x, track.path[i + 1].z, pan, zoom, width, height);
+        
+        const dist = pointToSegmentDistance(mouseX, mouseY, p1.x, p1.y, p2.x, p2.y);
+        if (dist < threshold) {
+          return generateTrackId(track.path);
+        }
+      }
+    }
+    return null;
+  }, [tracks, dimension, pan, zoom]);
+
+  // Handle track selection
+  const handleTrackSelect = useCallback((trackId: string, multiSelect: boolean) => {
+    setSelectedTrackIds(prev => {
+      if (multiSelect) {
+        return prev.includes(trackId) ? prev.filter(id => id !== trackId) : [...prev, trackId];
+      }
+      return [trackId];
+    });
+  }, []);
+
+  const handleClearSelection = useCallback(() => {
+    setSelectedTrackIds([]);
+  }, []);
+
+  // Check if a line segment intersects a rectangle
+  function lineIntersectsRect(
+    x1: number, y1: number, x2: number, y2: number,
+    rectX1: number, rectY1: number, rectX2: number, rectY2: number
+  ): boolean {
+    // Normalize rect coordinates
+    const minX = Math.min(rectX1, rectX2);
+    const maxX = Math.max(rectX1, rectX2);
+    const minY = Math.min(rectY1, rectY2);
+    const maxY = Math.max(rectY1, rectY2);
+    
+    // Check if either endpoint is inside the rectangle
+    if ((x1 >= minX && x1 <= maxX && y1 >= minY && y1 <= maxY) ||
+        (x2 >= minX && x2 <= maxX && y2 >= minY && y2 <= maxY)) {
+      return true;
+    }
+    
+    // Check if line crosses rectangle edges
+    // Left edge
+    if (lineSegmentsIntersect(x1, y1, x2, y2, minX, minY, minX, maxY)) return true;
+    // Right edge
+    if (lineSegmentsIntersect(x1, y1, x2, y2, maxX, minY, maxX, maxY)) return true;
+    // Top edge
+    if (lineSegmentsIntersect(x1, y1, x2, y2, minX, minY, maxX, minY)) return true;
+    // Bottom edge
+    if (lineSegmentsIntersect(x1, y1, x2, y2, minX, maxY, maxX, maxY)) return true;
+    
+    return false;
+  }
+
+  // Check if two line segments intersect
+  function lineSegmentsIntersect(
+    x1: number, y1: number, x2: number, y2: number,
+    x3: number, y3: number, x4: number, y4: number
+  ): boolean {
+    const denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
+    if (denom === 0) return false;
+    
+    const ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom;
+    const ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom;
+    
+    return ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1;
+  }
+
+// Find all tracks within a selection rectangle
+  const findTracksInRect = useCallback((
+    startX: number, startY: number, endX: number, endY: number,
+    width: number, height: number
+  ): string[] => {
+    const selectedIds: string[] = [];
+    
+    for (const track of tracks.filter(t => t.dimension === dimension)) {
+      if (track.path.length < 2) continue;
+      
+      // Check each segment of the track
+      for (let i = 0; i < track.path.length - 1; i++) {
+        const p1 = worldToScreen(track.path[i].x, track.path[i].z, pan, zoom, width, height);
+        const p2 = worldToScreen(track.path[i + 1].x, track.path[i + 1].z, pan, zoom, width, height);
+        
+        if (lineIntersectsRect(p1.x, p1.y, p2.x, p2.y, startX, startY, endX, endY)) {
+          selectedIds.push(generateTrackId(track.path));
+          break; // Track is selected, no need to check more segments
+        }
+      }
+    }
+    
+    return selectedIds;
+  }, [tracks, dimension, pan, zoom]);
 
 
 
@@ -360,7 +525,7 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
     }
 
     // Draw tracks
-    drawTracks(ctx, tracks, dimension, pan, zoom, width, height);
+    drawTracks(ctx, tracks, dimension, pan, zoom, width, height, trackStyles, selectedTrackIds, adminMode, showAdminPanel);
 
     // Draw stations
     mergedStations.forEach(station => {
@@ -383,8 +548,26 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
       });
     }
 
-  }, [pan, zoom, trains, tracks, mergedStations, config, dimension, showAllStations, showWaypoints, showRivers, showMapOverlay, mapImage]);
+    // Draw selection rectangle (admin mode)
+    if (isDragSelecting && dragSelectStart && dragSelectEnd) {
+      ctx.strokeStyle = '#fbbf24';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.fillStyle = 'rgba(251, 191, 36, 0.1)';
+      
+      const x = Math.min(dragSelectStart.x, dragSelectEnd.x);
+      const y = Math.min(dragSelectStart.y, dragSelectEnd.y);
+      const w = Math.abs(dragSelectEnd.x - dragSelectStart.x);
+      const h = Math.abs(dragSelectEnd.y - dragSelectStart.y);
+      
+      ctx.fillRect(x, y, w, h);
+      ctx.strokeRect(x, y, w, h);
+      ctx.setLineDash([]); // Reset dash
+    }
 
+  }, [pan, zoom, trains, tracks, mergedStations, config, dimension, showAllStations, showWaypoints, showRivers, showMapOverlay, mapImage, trackStyles, selectedTrackIds, adminMode, showAdminPanel, isDragSelecting, dragSelectStart, dragSelectEnd]);
+
+  
   // ============================================================================
   // DRAWING FUNCTIONS
   // ============================================================================
@@ -515,21 +698,113 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
     pan: { x: number; y: number },
     zoom: number,
     width: number,
-    height: number
+    height: number,
+    trackStyles: Record<string, TrackStyle>,
+    selectedTrackIds: string[],
+    adminMode: boolean,
+    showAdminPanel: boolean
   ) {
+    const filteredTracks = tracks.filter(track => track.dimension === dimension);
+
     // Draw track bed
-    ctx.strokeStyle = '#292524';
-    ctx.lineWidth = Math.max(5, 10 * zoom);
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
+    filteredTracks.forEach(track => {
+      if (track.path.length < 2) return;
+      
+      const trackId = generateTrackId(track.path);
+      const style = trackStyles[trackId];
+      const isHidden = style?.hidden;
+      const isSelected = selectedTrackIds.includes(trackId);
+      
+      ctx.strokeStyle = '#292524';
+      ctx.lineWidth = Math.max(5, 10 * zoom);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.globalAlpha = isHidden ? 0.2 : 1;
+      
+      ctx.beginPath();
+      const start = worldToScreen(track.path[0].x, track.path[0].z, pan, zoom, width, height);
+      ctx.moveTo(start.x, start.y);
+      
+      for (let i = 1; i < track.path.length; i++) {
+        const point = worldToScreen(track.path[i].x, track.path[i].z, pan, zoom, width, height);
+        ctx.lineTo(point.x, point.y);
+      }
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    });
 
-    let trackOther = false;
+    // Draw rails with custom colors
+    filteredTracks.forEach(track => {
+      if (track.path.length < 2) return;
+      
+      const trackId = generateTrackId(track.path);
+      const style = trackStyles[trackId];
+      
+      // Skip styled tracks for now - we'll draw them after
+      if (style?.color) return;
+      
+      const isHidden = style?.hidden;
+      const trackColor = '#d97706';  // default orange
+      
+      ctx.strokeStyle = trackColor;
+      ctx.lineWidth = Math.max(1, 2 * zoom);
+      ctx.globalAlpha = isHidden ? 0.15 : 1;
 
-    tracks
-      .filter(track => track.dimension === dimension)
-      .forEach(track => {
+      ctx.beginPath();
+      const start = worldToScreen(track.path[0].x, track.path[0].z, pan, zoom, width, height);
+      ctx.moveTo(start.x, start.y);
+      
+      for (let i = 1; i < track.path.length; i++) {
+        const point = worldToScreen(track.path[i].x, track.path[i].z, pan, zoom, width, height);
+        ctx.lineTo(point.x, point.y);
+      }
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    });
+
+    // THEN draw tracks WITH custom styles (on top)
+    filteredTracks.forEach(track => {
+      if (track.path.length < 2) return;
+      
+      const trackId = generateTrackId(track.path);
+      const style = trackStyles[trackId];
+      
+      // Only draw styled tracks now
+      if (!style?.color) return;
+      
+      const isHidden = style?.hidden;
+      const trackColor = style.color;
+      
+      ctx.strokeStyle = trackColor;
+      ctx.lineWidth = Math.max(1, 2 * zoom);
+      ctx.globalAlpha = isHidden ? 0.15 : 1;
+
+      ctx.beginPath();
+      const start = worldToScreen(track.path[0].x, track.path[0].z, pan, zoom, width, height);
+      ctx.moveTo(start.x, start.y);
+      
+      for (let i = 1; i < track.path.length; i++) {
+        const point = worldToScreen(track.path[i].x, track.path[i].z, pan, zoom, width, height);
+        ctx.lineTo(point.x, point.y);
+      }
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    });
+
+    // Draw selection highlights (admin mode only)
+    if (adminMode && showAdminPanel) {
+      filteredTracks.forEach(track => {
         if (track.path.length < 2) return;
         
+        const trackId = generateTrackId(track.path);
+        if (!selectedTrackIds.includes(trackId)) return;
+        
+        ctx.strokeStyle = '#fbbf24';
+        ctx.lineWidth = Math.max(6, 14 * zoom);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.globalAlpha = 0.5;
+
         ctx.beginPath();
         const start = worldToScreen(track.path[0].x, track.path[0].z, pan, zoom, width, height);
         ctx.moveTo(start.x, start.y);
@@ -539,30 +814,9 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
           ctx.lineTo(point.x, point.y);
         }
         ctx.stroke();
+        ctx.globalAlpha = 1;
       });
-
-    // Draw rails (amber)
-    ctx.strokeStyle = '#d97706';
-    ctx.lineWidth = Math.max(1, 2 * zoom);
-
-    tracks
-      .filter(track => track.dimension === dimension)
-      .forEach(track => {
-        if (track.path.length < 2) return;
-        
-        ctx.beginPath();
-        const start = worldToScreen(track.path[0].x, track.path[0].z, pan, zoom, width, height);
-        ctx.moveTo(start.x, start.y);
-        
-        for (let i = 1; i < track.path.length; i++) {
-          const point = worldToScreen(track.path[i].x, track.path[i].z, pan, zoom, width, height);
-          ctx.lineTo(point.x, point.y);
-        }
-        // These 2 lines alternate rail colors for testing how the api works
-        //ctx.strokeStyle = trackOther ? '#d97706' : '#ffffff';
-        //trackOther = !trackOther;
-        ctx.stroke();
-      });
+    }
   }
 
   function drawStation(
@@ -736,6 +990,20 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
   // ============================================================================
 
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
+    // Start drag selection in admin mode when shift is held or admin panel is open
+    if (adminMode && showAdminPanel) {
+      setIsDragSelecting(true);
+      setDragSelectStart({ x: mouseX, y: mouseY });
+      setDragSelectEnd({ x: mouseX, y: mouseY });
+    }
+    
     setIsDragging(true);
     setDragStart({ x: e.clientX, y: e.clientY });
     setPanStart({ ...pan });
@@ -752,6 +1020,12 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
     const worldPos = screenToWorld(mouseX, mouseY, pan, zoom, rect.width, rect.height);
     setMouseWorldPos({ x: Math.round(worldPos.x), z: Math.round(worldPos.z) });
 
+    // Update drag selection box
+    if (isDragSelecting && dragSelectStart) {
+      setDragSelectEnd({ x: mouseX, y: mouseY });
+      return; // Don't pan while drag selecting
+    }
+
     if (isDragging) {
       const dx = e.clientX - dragStart.x;
       const dy = e.clientY - dragStart.y;
@@ -761,7 +1035,67 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
     }
   };
 
-  const handleMouseUp = () => setIsDragging(false);
+  const handleMouseUp = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
+    // Handle drag selection completion
+    if (isDragSelecting && dragSelectStart && dragSelectEnd) {
+      const dragDistance = Math.sqrt(
+        Math.pow(dragSelectEnd.x - dragSelectStart.x, 2) + 
+        Math.pow(dragSelectEnd.y - dragSelectStart.y, 2)
+      );
+      
+      // If dragged more than 10 pixels, treat as box selection
+      if (dragDistance > 10) {
+        const newSelectedIds = findTracksInRect(
+          dragSelectStart.x, dragSelectStart.y,
+          dragSelectEnd.x, dragSelectEnd.y,
+          rect.width, rect.height
+        );
+        
+        if (isShiftHeld) {
+          // Add to existing selection
+          setSelectedTrackIds(prev => [...new Set([...prev, ...newSelectedIds])]);
+        } else {
+          // Replace selection
+          setSelectedTrackIds(newSelectedIds);
+        }
+      } else {
+        // Small drag = single click, try to select one track
+        const trackId = findTrackAtPosition(mouseX, mouseY, rect.width, rect.height);
+        if (trackId) {
+          handleTrackSelect(trackId, isShiftHeld);
+        } else if (!isShiftHeld) {
+          handleClearSelection();
+        }
+      }
+      
+      setIsDragSelecting(false);
+      setDragSelectStart(null);
+      setDragSelectEnd(null);
+      setIsDragging(false);
+      return;
+    }
+    
+    const wasDragging = Math.abs(e.clientX - dragStart.x) > 5 || Math.abs(e.clientY - dragStart.y) > 5;
+    
+    // If admin mode and it was a click (not drag), try to select a track
+    if (adminMode && showAdminPanel && !wasDragging) {
+      const trackId = findTrackAtPosition(mouseX, mouseY, rect.width, rect.height);
+      if (trackId) {
+        handleTrackSelect(trackId, isShiftHeld);
+      } else if (!isShiftHeld) {
+        handleClearSelection();
+      }
+    }
+    
+    setIsDragging(false);
+  };
 
   const handleWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
     e.preventDefault();
@@ -911,7 +1245,7 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
     <div className={`relative bg-zinc-950 ${className}`} ref={containerRef}>
       <canvas
         ref={canvasRef}
-        className="w-full h-full cursor-grab active:cursor-grabbing"
+        className={`w-full h-full ${adminMode && showAdminPanel ? 'cursor-crosshair' : 'cursor-grab active:cursor-grabbing'}`}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -932,6 +1266,13 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
           {hoveredItem.details && (
             <div className="text-zinc-400 text-xs mt-0.5">{hoveredItem.details}</div>
           )}
+        </div>
+      )}
+
+      {/* Admin Mode Indicator */}
+      {adminMode && showAdminPanel && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-amber-600/90 text-white px-4 py-2 rounded-lg text-sm font-medium backdrop-blur-sm z-20">
+          🛠 Admin Mode — Click to select tracks, Shift+Click for multi-select
         </div>
       )}
 
@@ -1012,6 +1353,29 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
         </div>
       )}
 
+      {/* Control Buttons */}
+      <div className="absolute top-4 right-4 flex gap-2">
+        {adminMode && (
+          <button
+            onClick={() => setShowAdminPanel(!showAdminPanel)}
+            className={`p-2.5 rounded-lg border transition-all ${
+              showAdminPanel 
+                ? 'bg-amber-500 border-amber-500 text-zinc-900' 
+                : 'bg-zinc-900/90 border-zinc-800 text-zinc-500 hover:border-amber-500/50 hover:text-amber-500'
+            }`}
+            title="Toggle admin panel"
+          >
+            <FaCog size={14} />
+          </button>
+        )}
+        <button
+          onClick={() => setShowDebug(!showDebug)}
+          // ... existing button code
+        >
+          <FaBug size={14} />
+        </button>
+      </div>
+
       {/* Settings Button */}
       <div className="absolute top-4 right-4">
         <button
@@ -1067,6 +1431,20 @@ export default function TransitMap({ config, className = '' }: TransitMapProps) 
           ⌂
         </button>
       </div>
+
+      {/* Admin Panel */}
+      {adminMode && trackStyleContext && (
+        <TransitMapAdmin
+          isOpen={showAdminPanel}
+          onClose={() => setShowAdminPanel(false)}
+          tracks={tracks}
+          lines={config.lines}
+          dimension={dimension}
+          selectedTrackIds={selectedTrackIds}
+          onTrackSelect={handleTrackSelect}
+          onClearSelection={handleClearSelection}
+        />
+      )}
     </div>
   );
 }
