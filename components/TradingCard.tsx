@@ -217,14 +217,15 @@ export default function TradingCard({
 
     const categoryStyle: CSSProperties = { // Style for the category and rarity label
         position: 'absolute',
-        top: '255px',
+        top: '250px',
         left: '115px',
         width: '200px',
         textAlign: 'left',
         fontSize: '16px',
         color: 'black',
         fontFamily: 'skobisFont',
-        zIndex: 4
+        zIndex: 4,
+        lineHeight: '18px'
     };
 
     const abilityStyle: CSSProperties = { // Style for the ability label
@@ -429,7 +430,7 @@ export default function TradingCard({
             )}
 
             <div style={categoryStyle}>
-                {rarityString} {category && '-'} {category}
+                {rarityString} <br/> {category}
             </div>
 
             <div style={abilityStyle}>{ability}</div>
