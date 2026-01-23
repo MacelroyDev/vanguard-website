@@ -719,7 +719,7 @@ export default function TransitMap({ config, className = '', adminMode = false }
       ctx.lineWidth = Math.max(5, 10 * zoom);
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.globalAlpha = isHidden ? 0.2 : 1;
+      ctx.globalAlpha = 1;
       
       ctx.beginPath();
       const start = worldToScreen(track.path[0].x, track.path[0].z, pan, zoom, width, height);
@@ -746,9 +746,9 @@ export default function TransitMap({ config, className = '', adminMode = false }
       const isHidden = style?.hidden;
       const trackColor = '#d97706';  // default orange
       
-      ctx.strokeStyle = trackColor;
+      ctx.strokeStyle = isHidden ? '#36302f' : trackColor;
       ctx.lineWidth = Math.max(1, 2 * zoom);
-      ctx.globalAlpha = isHidden ? 0.15 : 1;
+      ctx.globalAlpha = 1;
 
       ctx.beginPath();
       const start = worldToScreen(track.path[0].x, track.path[0].z, pan, zoom, width, height);
@@ -1370,22 +1370,12 @@ export default function TransitMap({ config, className = '', adminMode = false }
         )}
         <button
           onClick={() => setShowDebug(!showDebug)}
-          // ... existing button code
-        >
-          <FaBug size={14} />
-        </button>
-      </div>
-
-      {/* Settings Button */}
-      <div className="absolute top-4 right-4">
-        <button
-          onClick={() => setShowDebug(!showDebug)}
           className={`p-2.5 rounded-lg border transition-all ${
             showDebug 
               ? 'bg-amber-500 border-amber-500 text-zinc-900' 
               : 'bg-zinc-900/90 border-zinc-800 text-zinc-500 hover:border-amber-500/50 hover:text-amber-500'
           }`}
-          title="Toggle settings"
+          title="Toggle debug panel"
         >
           <FaBug size={14} />
         </button>

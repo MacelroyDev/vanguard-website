@@ -45,7 +45,7 @@ export default function TransitNetwork() {
         <main className="bg-zinc-900 min-h-screen">
             <TrackStyleProvider 
                 storageKey="my-transit-styles"
-                apiEndpoint="/api/crn/track-styles"
+                apiEndpoint="/api/assets/track-styles"
             >
                 {/* Header Banner */}
                 <section className="relative bg-zinc-800 border-b border-zinc-700 py-16 overflow-hidden">
