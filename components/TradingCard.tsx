@@ -215,13 +215,26 @@ export default function TradingCard({
         height: '30px',
     };
 
-    const categoryStyle: CSSProperties = { // Style for the category and rarity label
+    const rarityStyle: CSSProperties = { // Style for the rarity label
         position: 'absolute',
         top: '250px',
+        left: '120px',
+        width: '200px',
+        textAlign: 'left',
+        fontSize: '12px',
+        color: 'black',
+        fontFamily: 'skobisFont',
+        zIndex: 4,
+        lineHeight: '18px'
+    };
+
+    const categoryStyle: CSSProperties = { // Style for the category label
+        position: 'absolute',
+        top: '265px',
         left: '115px',
         width: '200px',
         textAlign: 'left',
-        fontSize: '16px',
+        fontSize: '18px',
         color: 'black',
         fontFamily: 'skobisFont',
         zIndex: 4,
@@ -429,8 +442,12 @@ export default function TradingCard({
                 </div>
             )}
 
+            <div style={rarityStyle}>
+                {rarityString}
+            </div>
+
             <div style={categoryStyle}>
-                {rarityString} <br/> {category}
+                {category}
             </div>
 
             <div style={abilityStyle}>{ability}</div>
