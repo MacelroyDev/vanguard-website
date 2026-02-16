@@ -404,83 +404,10 @@ export default function Tcg() {
                 className="mt-1 block w-full text-gray-300 file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-amber-500 file:text-zinc-900 file:font-semibold file:uppercase file:tracking-wider hover:file:bg-amber-400 file:cursor-pointer file:transition-colors"
               />
             </div>
-
-
-            {/* Zoom and pan inputs */}
-            <div className="mb-4">
-                <div className="flex items-center gap-2">
-                    <label className="block whitespace-nowrap min-w-[120px] text-gray-300 text-sm">Zoom: {imageZoom.toFixed(2)}</label>
-                    <input
-                        type="range"
-                        min="0.5"
-                        max="5"
-                        step="0.1"
-                        value={imageZoom}
-                        onChange={(e) => setImageZoom(parseFloat(e.target.value))}
-                        className="w-64 accent-amber-500"
-                    />
-                    <button
-                        type="button"
-                        onClick={resetZoom}
-                        className="px-3 py-1 text-sm bg-zinc-700 hover:bg-zinc-600 text-gray-300 rounded transition-colors"
-                    >
-                        Reset
-                    </button>
-                </div>
-            </div>
-            <div className="mb-4">
-                <div className="flex items-center gap-2">
-                    <label className="block whitespace-nowrap min-w-[120px] text-gray-300 text-sm">Pan X: {imageX}px</label>
-                    <input
-                        type="range"
-                        min="-100"
-                        max="100"
-                        step="1"
-                        value={imageX}
-                        onChange={(e) => setImageX(parseInt(e.target.value))}
-                        className="w-64 accent-amber-500"
-                    />
-                    <button
-                        type="button"
-                        onClick={resetX}
-                        className="px-3 py-1 text-sm bg-zinc-700 hover:bg-zinc-600 text-gray-300 rounded transition-colors"
-                    >
-                        Reset
-                    </button>
-                </div>
-            </div>
-            <div className="mb-4">
-                <div className="flex items-center gap-2">
-                    <label className="block whitespace-nowrap min-w-[120px] text-gray-300 text-sm">Pan Y: {imageY}px</label>
-                    <input
-                        type="range"
-                        min="-100"
-                        max="100"
-                        step="1"
-                        value={imageY}
-                        onChange={(e) => setImageY(parseInt(e.target.value))}
-                        className="w-64 accent-amber-500"
-                    />
-                    <button
-                        type="button"
-                        onClick={resetY}
-                        className="px-3 py-1 text-sm bg-zinc-700 hover:bg-zinc-600 text-gray-300 rounded transition-colors"
-                    >
-                        Reset
-                    </button>
-                </div>
-            </div>
           </form>
-          <button
-            type="button"
-            onClick={handleDownload}
-            className="mt-6 inline-flex items-center px-6 py-3 bg-amber-500 hover:bg-amber-600 text-zinc-900 font-semibold uppercase tracking-wider transition-colors duration-200"
-          >
-            Download Card
-          </button>
         </div>
 
-        <div className="w-1/2 flex justify-center items-center">
+        <div className="w-1/2 flex flex-col justify-center items-center">
           <div ref={cardRef} className="w-[320px] h-[480px]">
             <TradingCard
               name={cardName}
@@ -507,6 +434,74 @@ export default function Tcg() {
               energyCostE={energyCostE}
               energyCostNum={energyCostNum}
             />
+          </div>
+
+          {/* Image upload, zoom/pan, and download — below the card preview */}
+          <div className="mt-8 w-full max-w-md flex flex-col gap-4">
+            <div>
+              <label htmlFor="cardImage" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Card Image</label>
+              <input
+                id="cardImage"
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="mt-1 block w-full text-gray-300 file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-amber-500 file:text-zinc-900 file:font-semibold file:uppercase file:tracking-wider hover:file:bg-amber-400 file:cursor-pointer file:transition-colors"
+              />
+            </div>
+
+            <div>
+              <div className="flex items-center gap-2">
+                <label className="block whitespace-nowrap min-w-[120px] text-gray-300 text-sm">Zoom: {imageZoom.toFixed(2)}</label>
+                <input
+                  type="range" min="0.5" max="5" step="0.1"
+                  value={imageZoom}
+                  onChange={(e) => setImageZoom(parseFloat(e.target.value))}
+                  className="flex-1 accent-amber-500"
+                />
+                <button type="button" onClick={resetZoom}
+                  className="px-3 py-1 text-sm bg-zinc-700 hover:bg-zinc-600 text-gray-300 rounded transition-colors">
+                  Reset
+                </button>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <label className="block whitespace-nowrap min-w-[120px] text-gray-300 text-sm">Pan X: {imageX}px</label>
+                <input
+                  type="range" min="-100" max="100" step="1"
+                  value={imageX}
+                  onChange={(e) => setImageX(parseInt(e.target.value))}
+                  className="flex-1 accent-amber-500"
+                />
+                <button type="button" onClick={resetX}
+                  className="px-3 py-1 text-sm bg-zinc-700 hover:bg-zinc-600 text-gray-300 rounded transition-colors">
+                  Reset
+                </button>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <label className="block whitespace-nowrap min-w-[120px] text-gray-300 text-sm">Pan Y: {imageY}px</label>
+                <input
+                  type="range" min="-100" max="100" step="1"
+                  value={imageY}
+                  onChange={(e) => setImageY(parseInt(e.target.value))}
+                  className="flex-1 accent-amber-500"
+                />
+                <button type="button" onClick={resetY}
+                  className="px-3 py-1 text-sm bg-zinc-700 hover:bg-zinc-600 text-gray-300 rounded transition-colors">
+                  Reset
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleDownload}
+              className="mt-2 inline-flex items-center justify-center px-6 py-3 bg-amber-500 hover:bg-amber-600 text-zinc-900 font-semibold uppercase tracking-wider transition-colors duration-200"
+            >
+              Download Card
+            </button>
           </div>
         </div>
       </div>

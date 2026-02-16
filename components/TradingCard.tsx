@@ -260,6 +260,7 @@ export default function TradingCard({
         width: '260px',
         height: '180px',
         overflow: 'hidden',
+        objectFit: 'contain',
         zIndex: 1
     };
 
@@ -358,7 +359,7 @@ export default function TradingCard({
                         src={cardImage}
                         alt={name}
                         style={{
-                            ...imageContainerStyle,
+                            //...imageContainerStyle, // REMOVED BECUASE I GUESS IT WASN'T WORKING FOR SOME REASON
                             transform: `scale(${imageZoom}) translate(${imageX}px, ${imageY}px)`,
                             transformOrigin: '50% 50%',
                         }}
