@@ -1,6 +1,7 @@
 "use client"
 import { useState, useRef, ChangeEvent } from 'react';
 import TradingCard from '../../components/TradingCard';
+import { exportCardAsJson, importCardFromJson, CardData } from '../../components/exportJson';
 import html2canvas from 'html2canvas';
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { IoMdInformationCircleOutline } from "react-icons/io";
@@ -79,6 +80,73 @@ export default function Tcg() {
       });
     }
   };
+
+  // --- Export button handler ---
+const handleExportJson = () => {
+  exportCardAsJson(
+    {
+      name: cardName,
+      description,
+      energy: energyType,
+      cardImage,
+      rarity,
+      category,
+      attack,
+      defence,
+      imageZoom,
+      imageX,
+      imageY,
+      skobian,
+      littleguy,
+      darkner,
+      title,
+      ability,
+      flavourText,
+      energyCostA,
+      energyCostB,
+      energyCostC,
+      energyCostD,
+      energyCostE,
+      energyCostNum,
+    },
+    cardName
+  );
+};
+
+// --- Import handler ---
+const handleImportJson = (event: ChangeEvent<HTMLInputElement>) => {
+  if (!event.target.files?.[0]) return;
+
+  importCardFromJson(
+    event.target.files[0],
+    (data) => {
+      setCardName(data.name);
+      setDescription(data.description);
+      setEnergyType(data.energy);
+      setCardImage(data.cardImage ?? '');
+      setRarity(data.rarity);
+      setCategory(data.category ?? '');
+      setAttack(data.attack);
+      setDefence(data.defence);
+      setImageZoom(data.imageZoom);
+      setImageX(data.imageX);
+      setImageY(data.imageY);
+      setSkobian(data.skobian ?? false);
+      setLittleguy(data.littleguy ?? false);
+      setDarkner(data.darkner ?? false);
+      setTitle(data.title);
+      setAbility(data.ability);
+      setFlavourText(data.flavourText);
+      setEnergyCostA(data.energyCostA);
+      setEnergyCostB(data.energyCostB);
+      setEnergyCostC(data.energyCostC);
+      setEnergyCostD(data.energyCostD);
+      setEnergyCostE(data.energyCostE);
+      setEnergyCostNum(data.energyCostNum ?? 1);
+    },
+    (err) => alert(err) // or replace with a toast/notification
+  );
+};
 
   // Reset functions for each slider
   const resetZoom = () => setImageZoom(1);
@@ -501,6 +569,28 @@ export default function Tcg() {
               className="mt-2 inline-flex items-center justify-center px-6 py-3 bg-amber-500 hover:bg-amber-600 text-zinc-900 font-semibold uppercase tracking-wider transition-colors duration-200"
             >
               Download Card
+            </button>
+            {/* Import JSON */}
+            <div>
+              <label htmlFor="importJson" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">
+                Import Card (.json)
+              </label>
+              <input
+                id="importJson"
+                type="file"
+                accept=".json"
+                onChange={handleImportJson}
+                className="mt-1 block w-full text-gray-300 file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-zinc-700 file:text-gray-300 file:font-semibold file:uppercase file:tracking-wider hover:file:bg-zinc-600 file:cursor-pointer file:transition-colors"
+              />
+            </div>
+
+            {/* Export JSON */}
+            <button
+              type="button"
+              onClick={handleExportJson}
+              className="mt-2 inline-flex items-center justify-center px-6 py-3 bg-zinc-700 hover:bg-zinc-600 text-gray-300 font-semibold uppercase tracking-wider transition-colors duration-200"
+            >
+              Export Card as JSON
             </button>
           </div>
         </div>
