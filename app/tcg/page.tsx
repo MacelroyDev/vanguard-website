@@ -608,6 +608,8 @@ const handleImportJson = (event: ChangeEvent<HTMLInputElement>) => {
           <li className='ml-8'>*whimsy*</li>
           <li className='ml-8'>*mechanical*</li>
           <li className='ml-8'>*terra*</li>
+          <li className='ml-8'>*ability*</li>
+          <li className='ml-8'>*tapped*</li>
         </ul>
       </ReactTooltip>
     </main>

@@ -1,22 +1,21 @@
 "use client"
 import { useState, useRef, ChangeEvent } from 'react';
-import TradingCard from '../../../components/SupporterCard';
-import { exportCardAsJson, importCardFromJson, CardData } from '../../../components/exportJson';
+import SupporterCard from '../../../components/SupporterCard';
+import { exportCardAsJson, importCardFromJson } from '../../../components/exportJson';
 import html2canvas from 'html2canvas';
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import Link from 'next/link'
 
-type EnergyType = 'Splat' | 'Rage' | 'Whimsy' | 'Mechanical' | 'Terra';
+type SupportType = 'Gizmo' | 'Thingamajig' | 'Erections' | 'Bits';
 type RarityType = 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Exquisite';
 type EnergyCostType = 'None' | 'Splat' | 'Rage' | 'Whimsy' | 'Mechanical' | 'Terra' | 'SplatFinal';
 
-export default function Tcg() {
+export default function SupporterPage() {
   const defaultDesc = `*ability*Example Ability / Do something when something. Line break is 31 line characters.
   ───────────────────────────────
-  [*splat**splat* Example Attack / 20] Discard 1 *splat* aura from your opponent\'s active critter.
+  Use this card to do something cool.
   `;
-  // The backslash is so the apostrophe doesnt close the string
 
   const defaultFlavour = `Flavor text is descriptive writing in games that adds story, lore, and atmosphere but doesn't change the game's rules or mechanics.`;
 
@@ -24,18 +23,16 @@ export default function Tcg() {
 
   const [cardName, setCardName] = useState('Name');
   const [description, setDescription] = useState(defaultDesc);
-  const [energyType, setEnergyType] = useState<EnergyType>('Splat');
+  const [supportType, setSupportType] = useState<SupportType>('Gizmo');
   const [rarity, setRarity] = useState<RarityType>('Common');
-  const [category, setCategory] = useState('Denizen');
-  const [attack, setAttack] = useState(1);
-  const [defence, setDefence] = useState(2);
+  const [category, setCategory] = useState('Item');
   const [cardImage, setCardImage] = useState<string>("");
   const [skobian, setSkobian] = useState(false);
   const [littleguy, setLittleguy] = useState(false);
   const [darkner, setDarkner] = useState(false);
-  const [title,setTitle] = useState<string>("Title");
-  const [ability,setAbility] = useState<string>("Stalwart");
-  const [flavourText,setFlavourText] = useState<string>(defaultFlavour);
+  const [title, setTitle] = useState<string>("Title");
+  const [ability, setAbility] = useState<string>("Stalwart");
+  const [flavourText, setFlavourText] = useState<string>(defaultFlavour);
   const [energyCostA, setEnergyCostA] = useState<EnergyCostType>('None');
   const [energyCostB, setEnergyCostB] = useState<EnergyCostType>('None');
   const [energyCostC, setEnergyCostC] = useState<EnergyCostType>('None');
@@ -43,7 +40,6 @@ export default function Tcg() {
   const [energyCostE, setEnergyCostE] = useState<EnergyCostType>('None');
   const [energyCostNum, setEnergyCostNum] = useState(1);
 
-  // State for image sliders
   const [imageZoom, setImageZoom] = useState(1);
   const [imageX, setImageX] = useState(0);
   const [imageY, setImageY] = useState(0);
@@ -54,9 +50,7 @@ export default function Tcg() {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setCardImage(reader.result as string);
-      };
+      reader.onloadend = () => setCardImage(reader.result as string);
       reader.readAsDataURL(file);
     }
   };
@@ -64,12 +58,11 @@ export default function Tcg() {
   const handleDownload = () => {
     if (cardRef.current) {
       const cardElement = cardRef.current;
-
       html2canvas(cardElement, {
         width: cardElement.offsetWidth,
         height: cardElement.offsetHeight,
-        scale: 2, // Use a high scale for better quality
-        useCORS: true, // This is crucial for images loaded from different origins (e.g., user uploads)
+        scale: 2,
+        useCORS: true,
       }).then(canvas => {
         const link = document.createElement('a');
         link.href = canvas.toDataURL('image/png');
@@ -81,74 +74,68 @@ export default function Tcg() {
     }
   };
 
-  // --- Export button handler ---
-const handleExportJson = () => {
-  exportCardAsJson(
-    {
-      name: cardName,
-      description,
-      energy: energyType,
-      cardImage,
-      rarity,
-      category,
-      attack,
-      defence,
-      imageZoom,
-      imageX,
-      imageY,
-      skobian,
-      littleguy,
-      darkner,
-      title,
-      ability,
-      flavourText,
-      energyCostA,
-      energyCostB,
-      energyCostC,
-      energyCostD,
-      energyCostE,
-      energyCostNum,
-    },
-    cardName
-  );
-};
+  const handleExportJson = () => {
+    exportCardAsJson(
+      {
+        name: cardName,
+        description,
+        energy: supportType as any,
+        cardImage,
+        rarity,
+        category,
+        attack: 0,
+        defence: 0,
+        imageZoom,
+        imageX,
+        imageY,
+        skobian,
+        littleguy,
+        darkner,
+        title,
+        ability,
+        flavourText,
+        energyCostA,
+        energyCostB,
+        energyCostC,
+        energyCostD,
+        energyCostE,
+        energyCostNum,
+      },
+      cardName
+    );
+  };
 
-// --- Import handler ---
-const handleImportJson = (event: ChangeEvent<HTMLInputElement>) => {
-  if (!event.target.files?.[0]) return;
+  const handleImportJson = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files?.[0]) return;
+    importCardFromJson(
+      event.target.files[0],
+      (data) => {
+        setCardName(data.name);
+        setDescription(data.description);
+        setSupportType(data.energy as unknown as SupportType);
+        setCardImage(data.cardImage ?? '');
+        setRarity(data.rarity);
+        setCategory(data.category ?? '');
+        setImageZoom(data.imageZoom);
+        setImageX(data.imageX);
+        setImageY(data.imageY);
+        setSkobian(data.skobian ?? false);
+        setLittleguy(data.littleguy ?? false);
+        setDarkner(data.darkner ?? false);
+        setTitle(data.title);
+        setAbility(data.ability);
+        setFlavourText(data.flavourText);
+        setEnergyCostA(data.energyCostA);
+        setEnergyCostB(data.energyCostB);
+        setEnergyCostC(data.energyCostC);
+        setEnergyCostD(data.energyCostD);
+        setEnergyCostE(data.energyCostE);
+        setEnergyCostNum(data.energyCostNum ?? 1);
+      },
+      (err) => alert(err)
+    );
+  };
 
-  importCardFromJson(
-    event.target.files[0],
-    (data) => {
-      setCardName(data.name);
-      setDescription(data.description);
-      setEnergyType(data.energy);
-      setCardImage(data.cardImage ?? '');
-      setRarity(data.rarity);
-      setCategory(data.category ?? '');
-      setAttack(data.attack);
-      setDefence(data.defence);
-      setImageZoom(data.imageZoom);
-      setImageX(data.imageX);
-      setImageY(data.imageY);
-      setSkobian(data.skobian ?? false);
-      setLittleguy(data.littleguy ?? false);
-      setDarkner(data.darkner ?? false);
-      setTitle(data.title);
-      setAbility(data.ability);
-      setFlavourText(data.flavourText);
-      setEnergyCostA(data.energyCostA);
-      setEnergyCostB(data.energyCostB);
-      setEnergyCostC(data.energyCostC);
-      setEnergyCostD(data.energyCostD);
-      setEnergyCostE(data.energyCostE);
-      setEnergyCostNum(data.energyCostNum ?? 1);
-    },
-    (err) => alert(err) // or replace with a toast/notification
-  );
-};
-
-  // Reset functions for each slider
   const resetZoom = () => setImageZoom(1);
   const resetX = () => setImageX(0);
   const resetY = () => setImageY(0);
@@ -157,11 +144,11 @@ const handleImportJson = (event: ChangeEvent<HTMLInputElement>) => {
     <main className="bg-zinc-900 min-h-screen">
       <div className="flex p-8 gap-8 max-w-7xl mx-auto">
         <div className="w-7/16">
-          <h2 className="text-amber-500 text-3xl font-bold uppercase tracking-tight mt-5">Bodob Skobis TCG Card Editor</h2>
-          <Link 
-            type="button" 
+          <h2 className="text-amber-500 text-3xl font-bold uppercase tracking-tight mt-5">Bodob Skobis TCG Supporter Card Editor</h2>
+          <Link
+            type="button"
             className='inline-flex items-center px-4 py-2 border-2 border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-zinc-900 font-semibold uppercase tracking-wider transition-colors duration-200 mt-5 mb-10'
-            href={{pathname:'../tcg'}}
+            href={{ pathname: '../tcg' }}
           >
             Switch back to main card
           </Link>
@@ -204,70 +191,42 @@ const handleImportJson = (event: ChangeEvent<HTMLInputElement>) => {
             </div>
 
             <div>
-              <label htmlFor="energyType" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Energy Type</label>
+              <label htmlFor="supportType" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Support Type</label>
               <select
-                id="energyType"
-                value={energyType}
-                onChange={(e) => setEnergyType(e.target.value as EnergyType)}
+                id="supportType"
+                value={supportType}
+                onChange={(e) => setSupportType(e.target.value as SupportType)}
                 className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
               >
-                <option value="Splat">Splat</option>
-                <option value="Rage">Rage</option>
-                <option value="Whimsy">Whimsy</option>
-                <option value="Mechanical">Mechanical</option>
-                <option value="Terra">Terra</option>
+                <option value="Gizmo">Gizmo</option>
+                <option value="Thingamajig">Thingamajig</option>
+                <option value="Erections">Erections</option>
+                <option value="Bits">Bits</option>
               </select>
-            </div>
-
-            {/* Div for Attack and Defence inputs */}
-            <div className="flex gap-4">
-                <div className="flex-1">
-                    <label htmlFor="attack" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Attack</label>
-                    <input
-                        id="attack"
-                        type="number"
-                        value={attack}
-                        onChange={(e) => setAttack(parseInt(e.target.value))}
-                        step="1"
-                        min="1"
-                        className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
-                    />
-                </div>
-                <div className="flex-1">
-                    <label htmlFor="defence" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Defence</label>
-                    <input
-                        id="defence"
-                        type="number"
-                        value={defence}
-                        onChange={(e) => setDefence(parseInt(e.target.value, 10))}
-                        min="0"
-                        className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
-                    />
-                </div>
             </div>
 
             {/* Div for title and ability inputs */}
             <div className="flex gap-4">
-                <div className="flex-1">
-                    <label htmlFor="title" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Title</label>
-                    <input
-                      id="title"
-                      value={title}
-                      type="text"
-                      onChange={(e) => setTitle(e.target.value)}
-                      className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
-                    />
-                </div>
-                <div className="flex-1">
-                    <label htmlFor="ability" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Ability</label>
-                    <input
-                      id="ability"
-                      value={ability}
-                      type="text"
-                      onChange={(e) => setAbility(e.target.value)}
-                      className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
-                    />
-                </div>
+              <div className="flex-1">
+                <label htmlFor="title" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Title</label>
+                <input
+                  id="title"
+                  value={title}
+                  type="text"
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
+                />
+              </div>
+              <div className="flex-1">
+                <label htmlFor="ability" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Ability</label>
+                <input
+                  id="ability"
+                  value={ability}
+                  type="text"
+                  onChange={(e) => setAbility(e.target.value)}
+                  className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
+                />
+              </div>
             </div>
 
             {/* Div for energy cost */}
@@ -357,44 +316,38 @@ const handleImportJson = (event: ChangeEvent<HTMLInputElement>) => {
                   <option value="SplatFinal">Splat w/Number</option>
                 </select>
               </div>
-            </div>            
+            </div>
 
-            {/* Div for Linebreak copy and energy cost num*/}
+            {/* Div for Linebreak copy and energy cost num */}
             <div className="flex gap-4">
               <div className="flex-1">
-                  <label htmlFor="energyCostNum" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Energy Cost Number</label>
-                  <input
-                      id="energyCostNum"
-                      type="number"
-                      value={energyCostNum}
-                      onChange={(e) => setEnergyCostNum(parseInt(e.target.value))}
-                      step="1"
-                      min="0"
-                      className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
-                  />
+                <label htmlFor="energyCostNum" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Energy Cost Number</label>
+                <input
+                  id="energyCostNum"
+                  type="number"
+                  value={energyCostNum}
+                  onChange={(e) => setEnergyCostNum(parseInt(e.target.value))}
+                  step="1"
+                  min="0"
+                  className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md font-[skobisFont] focus:border-amber-500 focus:outline-none transition-colors"
+                />
               </div>
-
               <div className="flex-1">
-                  <label htmlFor="Linebreak" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Copy Linebreak</label>
-                  <button
-                      type="button"
-                      className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-amber-500 p-2 rounded-md font-[skobisFont] hover:bg-zinc-700 hover:border-amber-500 transition-colors"
-                      onClick={() => {
-                        navigator.clipboard.writeText(linebreak)
-                        .then(() => {
-                            console.log('Linebreak copied to clipboard!');
-                            // add a notification here
-                        })
-                        .catch(err => {
-                            console.error('Failed to copy text: ', err);
-                        });
-                      }}
-                  >
-                    Copy
-                  </button>
+                <label htmlFor="Linebreak" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Copy Linebreak</label>
+                <button
+                  type="button"
+                  className="mt-1 block w-full bg-zinc-800 border border-zinc-700 text-amber-500 p-2 rounded-md font-[skobisFont] hover:bg-zinc-700 hover:border-amber-500 transition-colors"
+                  onClick={() => {
+                    navigator.clipboard.writeText(linebreak)
+                      .then(() => console.log('Linebreak copied to clipboard!'))
+                      .catch(err => console.error('Failed to copy text: ', err));
+                  }}
+                >
+                  Copy
+                </button>
               </div>
             </div>
-            
+
             {/* Checkboxes for Skobian, Little Guy, Darkner */}
             <div className="flex items-center gap-4 mb-4 flex-wrap">
               <div className="flex items-center gap-2">
@@ -405,9 +358,7 @@ const handleImportJson = (event: ChangeEvent<HTMLInputElement>) => {
                   onChange={(e) => setSkobian(e.target.checked)}
                   className="h-4 w-4 accent-amber-500 bg-zinc-800 border-zinc-700 rounded"
                 />
-                <label htmlFor="skobian-checkbox" className="text-sm font-medium text-gray-300">
-                  Is Skobian?
-                </label>
+                <label htmlFor="skobian-checkbox" className="text-sm font-medium text-gray-300">Is Skobian?</label>
               </div>
               <div className="flex items-center gap-2">
                 <input
@@ -417,9 +368,7 @@ const handleImportJson = (event: ChangeEvent<HTMLInputElement>) => {
                   onChange={(e) => setLittleguy(e.target.checked)}
                   className="h-4 w-4 accent-amber-500 bg-zinc-800 border-zinc-700 rounded"
                 />
-                <label htmlFor="littleguy-checkbox" className="text-sm font-medium text-gray-300">
-                  Is Little Guy?
-                </label>
+                <label htmlFor="littleguy-checkbox" className="text-sm font-medium text-gray-300">Is Little Guy?</label>
               </div>
               <div className="flex items-center gap-2">
                 <input
@@ -429,9 +378,7 @@ const handleImportJson = (event: ChangeEvent<HTMLInputElement>) => {
                   onChange={(e) => setDarkner(e.target.checked)}
                   className="h-4 w-4 accent-amber-500 bg-zinc-800 border-zinc-700 rounded"
                 />
-                <label htmlFor="darkner-checkbox" className="text-sm font-medium text-gray-300">
-                  Is Darkner?
-                </label>
+                <label htmlFor="darkner-checkbox" className="text-sm font-medium text-gray-300">Is Darkner?</label>
               </div>
             </div>
 
@@ -439,7 +386,7 @@ const handleImportJson = (event: ChangeEvent<HTMLInputElement>) => {
             <div>
               <div className="flex gap-2 items-center">
                 <label htmlFor="description" className="block text-sm font-medium text-gray-300 uppercase tracking-wider">Description</label>
-                <IoMdInformationCircleOutline data-tooltip-id="desc-tooltop" className="text-amber-500 cursor-help"/>
+                <IoMdInformationCircleOutline data-tooltip-id="desc-tooltip" className="text-amber-500 cursor-help" />
               </div>
               <textarea
                 id="description"
@@ -477,15 +424,13 @@ const handleImportJson = (event: ChangeEvent<HTMLInputElement>) => {
 
         <div className="w-1/2 flex flex-col justify-center items-center">
           <div ref={cardRef} className="w-[320px] h-[480px]">
-            <TradingCard
+            <SupporterCard
               name={cardName}
               description={description}
-              energy={energyType}
+              supportType={supportType}
               cardImage={cardImage}
               rarity={rarity}
               category={category}
-              attack={attack}
-              defence={defence}
               imageZoom={imageZoom}
               imageX={imageX}
               imageY={imageY}
@@ -507,9 +452,9 @@ const handleImportJson = (event: ChangeEvent<HTMLInputElement>) => {
           {/* Image upload, zoom/pan, and download — below the card preview */}
           <div className="mt-8 w-full max-w-md flex flex-col gap-4">
             <div>
-              <label htmlFor="cardImage" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Card Image</label>
+              <label htmlFor="cardImageRight" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">Card Image</label>
               <input
-                id="cardImage"
+                id="cardImageRight"
                 type="file"
                 accept="image/*"
                 onChange={handleImageUpload}
@@ -570,6 +515,7 @@ const handleImportJson = (event: ChangeEvent<HTMLInputElement>) => {
             >
               Download Card
             </button>
+
             {/* Import JSON */}
             <div>
               <label htmlFor="importJson" className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-1">
@@ -595,19 +541,19 @@ const handleImportJson = (event: ChangeEvent<HTMLInputElement>) => {
           </div>
         </div>
       </div>
-      <ReactTooltip id="desc-tooltop" place="right" className="!bg-zinc-800 !text-gray-300">
+      <ReactTooltip id="desc-tooltip" place="right" className="!bg-zinc-800 !text-gray-300">
         <p className='max-w-sm'>
-          By surrounding the name of an energy type with * * you can add icons to the description box.
+          By surrounding a keyword with * * you can add icons to the description box.
         </p>
-        <p className='max-w-sm mt-2'>
-          Examples:
-        </p>
+        <p className='max-w-sm mt-2'>Examples:</p>
         <ul className='max-w-sm list-disc'>
           <li className='ml-8'>*splat*</li>
           <li className='ml-8'>*rage*</li>
           <li className='ml-8'>*whimsy*</li>
           <li className='ml-8'>*mechanical*</li>
           <li className='ml-8'>*terra*</li>
+          <li className='ml-8'>*ability*</li>
+          <li className='ml-8'>*tapped*</li>
         </ul>
       </ReactTooltip>
     </main>
