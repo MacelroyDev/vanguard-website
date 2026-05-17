@@ -164,12 +164,12 @@ export default function SupporterCard({
         color: 'black', fontFamily: 'skobisFont', zIndex: 4, height: '30px',
     };
     const rarityStyle: CSSProperties = {
-        position: 'absolute', top: '250px', left: '120px',
+        position: 'absolute', top: '250px', left: '40px',
         width: '200px', textAlign: 'left', fontSize: '12px',
         color: 'black', fontFamily: 'skobisFont', zIndex: 4, lineHeight: '18px',
     };
     const categoryStyle: CSSProperties = {
-        position: 'absolute', top: '265px', left: '115px',
+        position: 'absolute', top: '265px', left: '35px',
         width: '200px', textAlign: 'left', fontSize: '18px',
         color: 'black', fontFamily: 'skobisFont', zIndex: 4, lineHeight: '18px',
     };
@@ -217,13 +217,6 @@ export default function SupporterCard({
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 2 }}
             />
 
-            {raritySrc && (
-                <img
-                    src={raritySrc}
-                    alt="Rarity Bar"
-                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 3 }}
-                />
-            )}
 
             {skobian && (
                 <img src="/images/tcg/skobian.png" alt="Skobian Tag"
