@@ -4,7 +4,7 @@ import React, { CSSProperties, ReactNode } from 'react';
 export interface SupporterCardProps {
     name: string;
     description: string;
-    supportType: 'Gizmo' | 'Thingamajig' | 'Erections' | 'Bits';
+    supportType: 'Gizmo' | 'Thingamajig' | 'Erection' | 'Bit';
     cardImage: string;
     rarity: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Exquisite';
     category?: string;
@@ -57,8 +57,8 @@ export default function SupporterCard({
     const supportIconMap: Record<SupportType, string> = {
         'Gizmo':       '/images/tcg/energy/border/splat_energy_border.png',
         'Thingamajig': '/images/tcg/energy/border/rage_energy_border.png',
-        'Erections':   '/images/tcg/energy/border/whimsy_energy_border.png',
-        'Bits':        '/images/tcg/energy/border/mechanical_energy_border.png',
+        'Erection':   '/images/tcg/energy/border/whimsy_energy_border.png',
+        'Bit':        '/images/tcg/energy/border/mechanical_energy_border.png',
     };
     const iconSrc = supportIconMap[supportType];
 

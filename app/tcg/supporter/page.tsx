@@ -7,7 +7,7 @@ import { Tooltip as ReactTooltip } from "react-tooltip";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import Link from 'next/link'
 
-type SupportType = 'Gizmo' | 'Thingamajig' | 'Erections' | 'Bits';
+type SupportType = 'Gizmo' | 'Thingamajig' | 'Erection' | 'Bit';
 type RarityType = 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Exquisite';
 type EnergyCostType = 'None' | 'Splat' | 'Rage' | 'Whimsy' | 'Mechanical' | 'Terra' | 'SplatFinal';
 
