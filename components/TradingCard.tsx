@@ -80,6 +80,7 @@ export default function TradingCard({
         '*none*': '/images/tcg/energy/border/no_energy_border.png',
         '*v*': '/images/tcg/vanguard-badge.png',
         '*ability*': '/images/tcg/ability.png',
+        '*tapped*': '/images/tcg/tapped_icon.png',
     };
 
     // Array of coloured card templates

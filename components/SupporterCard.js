@@ -1,243 +1,238 @@
 "use client"
 import React from 'react';
-//import Image from 'next/image';
 
-export default function SupporterCard({ name, description, energy, cardImage, rarity, category, hp, retreat, imageX, imageY, imageZoom, skobian }) {
-
-    // Array of tool icons
-    const toolIconMap = {
-        'Supporter': '/images/tcg/supporter_icon.png',
-        'Gizmo': '/images/tcg/gizmo_icon.png',
-        'Thingamajig': '/images/tcg/thing_icon.png',
-        'Erection': '/images/tcg/erection_icon.png',
+export default function SupporterCard({
+    name,
+    description,
+    supportType,
+    cardImage,
+    rarity,
+    category,
+    imageX,
+    imageY,
+    imageZoom,
+    skobian,
+    littleguy,
+    darkner,
+    title,
+    ability,
+    flavourText,
+    energyCostA,
+    energyCostB,
+    energyCostC,
+    energyCostD,
+    energyCostE,
+    energyCostNum
+}) {
+    // Support type icon map (temporarily using energy border icons)
+    const supportIconMap = {
+        'Gizmo':       '/images/tcg/energy/border/splat_energy_border.png',
+        'Thingamajig': '/images/tcg/energy/border/rage_energy_border.png',
+        'Erections':   '/images/tcg/energy/border/whimsy_energy_border.png',
+        'Bits':        '/images/tcg/energy/border/mechanical_energy_border.png',
     };
+    const iconSrc = supportIconMap[supportType];
 
-    const energySrc = toolIconMap[category];
+    // Always use the support template
+    const templateSrc = '/images/tcg/v2-templates/template_support.png';
 
-    // Array of coloured card templates
-    const templateMap = {
-        'Supporter': '/images/tcg/new-templates/new-supporter-templates/supporter_template.png',
-        'Gizmo': '/images/tcg/new-templates/new-supporter-templates/gizmo_template.png',
-        'Thingamajig': '/images/tcg/new-templates/new-supporter-templates/thing_template.png',
-        'Erection': '/images/tcg/new-templates/new-supporter-templates/erect_template.png',
-    };
-
-    // Array of energy text icons
-    const keywordIconMap = {
-        '*splat*': '/images/tcg/energy/border/splat_energy_border.png',
-        '*rage*': '/images/tcg/energy/border/rage_energy_border.png',
-        '*whimsy*': '/images/tcg/energy/border/whimsy_energy_border.png',
-        '*mechanical*': '/images/tcg/energy/border/mechanical_energy_border.png',
-        '*terra*': '/images/tcg/energy/border/terra_energy_border.png',
-        '*none*': '/images/tcg/energy/border/no_energy_border.png',
-        '*v*': '/images/tcg/vanguard-badge.png',
-    };
-
-    // Get the card template based on the energy prop
-    const templateSrc = templateMap[category]
-
-    // Array of rarity card colours
     const rarityMap = {
-        'Common': '/images/tcg/rarity/CardC.png',
-        'Rare': '/images/tcg/rarity/CardR.png',
-        'Epic': '/images/tcg/rarity/CardE.png',
+        'Common':    '/images/tcg/rarity/CardC.png',
+        'Rare':      '/images/tcg/rarity/CardR.png',
+        'Epic':      '/images/tcg/rarity/CardE.png',
         'Legendary': '/images/tcg/rarity/CardL.png',
         'Exquisite': '/images/tcg/rarity/CardEx.png',
     };
-    // Get the card template based on the energy prop
     const raritySrc = rarityMap[rarity];
 
-    const ruleArray = {
-        'Supporter': 'You can only play 1 Supporter card per turn.',
-        'Gizmo': 'You can play multiple Gizmo cards per turn.',
-        'Thingamajig': 'You can only attach 1 Thingamajig card per Critter unless otherwise stated.',
-        'Erection': 'You can only play 1 Erection card per turn.',
-    }
-    const ruleSrc = ruleArray[category];
+    const rarityStringMap = {
+        'Common':    'Common Support',
+        'Rare':      'Rare Support',
+        'Epic':      'Epic Support',
+        'Legendary': 'Legendary Support',
+        'Exquisite': 'Exquisite Support',
+    };
+    const rarityString = rarityStringMap[rarity];
+
+    const energyCostColorMap = {
+        'None':       'transparent',
+        'Splat':      '#6B7280',
+        'Rage':       '#DC2626',
+        'Whimsy':     '#EC4899',
+        'Mechanical': '#e9b26a',
+        'Terra':      '#16A34A',
+        'SplatFinal': '#6B7280',
+    };
+
+    const keywordIconMap = {
+        '*splat*':      '/images/tcg/energy/border/splat_energy_border.png',
+        '*rage*':       '/images/tcg/energy/border/rage_energy_border.png',
+        '*whimsy*':     '/images/tcg/energy/border/whimsy_energy_border.png',
+        '*mechanical*': '/images/tcg/energy/border/mechanical_energy_border.png',
+        '*terra*':      '/images/tcg/energy/border/terra_energy_border.png',
+        '*none*':       '/images/tcg/energy/border/no_energy_border.png',
+        '*v*':          '/images/tcg/vanguard-badge.png',
+        '*ability*':    '/images/tcg/ability.png',
+        '*tapped*':     '/images/tcg/tapped_icon.png',
+    };
 
     const parseDescription = (text) => {
         if (!text) return null;
-
-        // Split the text by both the energy keywords and newlines
         const escapedKeywords = Object.keys(keywordIconMap)
             .map(key => key.replace(/\*/g, '\\*'))
             .join('|');
-        
-        // Use a regex that captures both keywords and newline characters
         const regex = new RegExp(`(${escapedKeywords}|\\n)`, 'g');
         const parts = text.split(regex);
 
         return parts.map((part, index) => {
-            // Check if the part is a newline character
-            if (part === '\n') {
-            return <br key={index} />;
-            }
-
-            // Check if the part is an energy icon keyword
-            const iconSrc = keywordIconMap[part];
+            if (part === '\n') return <br key={index} />;
+            const src = keywordIconMap[part];
             let iconSize = '14px';
-
-            if (iconSrc == '/images/tcg/vanguard-badge.png'){
-                iconSize = '24px';
+            if (src === '/images/tcg/vanguard-badge.png') iconSize = '24px';
+            if (src === '/images/tcg/ability.png') {
+                const iconWidth = `${parseInt(iconSize) * 4}px`;
+                return <img key={index} src={src} alt={part.replace(/\*/g, '')} style={{ width: iconWidth, height: iconSize, display: 'inline-block', verticalAlign: 'middle' }} />;
+            } else if (src) {
+                return <img key={index} src={src} alt={part.replace(/\*/g, '')} style={{ width: iconSize, height: iconSize, display: 'inline-block', verticalAlign: 'middle' }} />;
             }
-            if (iconSrc) {
-            return (
-                <img
-                key={index}
-                src={iconSrc}
-                alt={part.replace(/\*/g, '')}
-                style={{ width: iconSize, height: iconSize, display: 'inline-block', verticalAlign: 'middle' }}
-                />
-            );
-            }
-            
-            // Otherwise, return the text part as a span
             return <span key={index}>{part}</span>;
         });
     };
 
+    const renderEnergyCostCircle = (cost, index) => {
+        const color = energyCostColorMap[cost];
+        return (
+            <div key={index} style={energyCostCircleStyle(color)}>
+                {cost === 'SplatFinal' && energyCostNum !== undefined ? energyCostNum : ''}
+            </div>
+        );
+    };
 
-    const nameStyle = { // Style for the name label
-        position: 'absolute',
-        top: '39px',
-        left: '40px',
-        width: '200px',
-        textAlign: 'left',
-        fontSize: '20px',
+    const energyCostCircleStyle = (color) => ({
+        width: '13px',
+        height: '13px',
+        borderRadius: '50%',
+        backgroundColor: color,
+        border: color === 'transparent' ? 'none' : '2px solid rgba(0,0,0,0.3)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '10px',
+        fontWeight: 'bold',
         color: 'white',
         fontFamily: 'skobisFont',
-        zIndex: 4
-    };
+        textShadow: '1px 1px 1px rgba(0,0,0,0.5)',
+    });
 
-    const categoryStyle = { // Style for the category and rarity label
-        position: 'absolute',
-        top: '248px',
-        left: '30px',
-        width: '260px',
-        textAlign: 'left',
-        fontSize: '20px',
-        color: 'black',
-        fontFamily: 'skobisFont',
-        zIndex: 4
+    const nameStyle = {
+        position: 'absolute', top: '22px', left: '40px',
+        width: '200px', textAlign: 'left', fontSize: '20px',
+        color: 'black', fontFamily: 'skobisFont', zIndex: 4,
     };
-
-    const imageContainerStyle = { // Style for framed image
-        position: 'absolute',
-        top: '65px',
-        left: '32px',
-        width: '260px',
-        height: '180px',
-        overflow: 'hidden',
-        zIndex: 1
+    const titleStyle = {
+        position: 'absolute', top: '28px', left: '30px',
+        width: '200px', textAlign: 'right', fontSize: '14px',
+        color: 'black', fontFamily: 'skobisFont', zIndex: 4, height: '30px',
     };
-
-    const descriptionStyle = { // Style for description/attacks
-        position: 'absolute',
-        top: '330px',
-        left: '25px',
-        width: '270px',
-        height: '140px',
-        overflowY: 'auto',
-        fontSize: '12px',
-        fontFamily: 'skobisFont',
-        zIndex: 4
+    const rarityStyle = {
+        position: 'absolute', top: '250px', left: '120px',
+        width: '200px', textAlign: 'left', fontSize: '12px',
+        color: 'black', fontFamily: 'skobisFont', zIndex: 4, lineHeight: '18px',
     };
-
-    const energyStyle = { // Style for the energy icon
-        position: 'absolute',
-        top: '22.5px', // Adjust this value
-        right: '13.5px', // Adjust this value
-        width: '60px', // Set a fixed width for the image
-        height: '60px', // Set a fixed height for the image
-        zIndex: 4
+    const categoryStyle = {
+        position: 'absolute', top: '265px', left: '115px',
+        width: '200px', textAlign: 'left', fontSize: '18px',
+        color: 'black', fontFamily: 'skobisFont', zIndex: 4, lineHeight: '18px',
     };
-
-    const ruleLabelStyle = { // Style for the hp label
-        position: 'absolute',
-        top: '282px',
-        left: '25px',
-        width: '110px',
-        textAlign: 'left',
-        fontSize: '8px',
-        color: 'black',
-        fontFamily: 'skobisFont',
-        zIndex: 4
+    const abilityStyle = {
+        position: 'absolute', top: '226px', left: '30px',
+        width: '200px', textAlign: 'right', fontSize: '12px',
+        color: 'black', fontFamily: 'skobisFont', zIndex: 4,
+    };
+    const descriptionStyle = {
+        position: 'absolute', top: '300px', left: '25px',
+        width: '270px', height: '140px', overflowY: 'auto',
+        fontSize: '12px', color: 'black', fontFamily: 'skobisFont', zIndex: 4,
+    };
+    const flavourStyle = {
+        position: 'absolute', top: '445px', left: '88px',
+        width: '140px', height: '30px', overflowY: 'clip',
+        fontSize: '6px', textAlign: 'center',
+        color: 'black', fontFamily: 'skobisFont', zIndex: 4,
+    };
+    const iconStyle = {
+        position: 'absolute', top: '10px', right: '11px',
+        width: '68px', height: '68px', zIndex: 4,
+    };
+    const energyCostContainerStyle = {
+        position: 'absolute', top: '79.5px', right: '11.5px',
+        display: 'flex', flexDirection: 'column', gap: '4px', zIndex: 5,
     };
 
     return (
-        <div className="relative w-[320px] h-[480px]"> {/* 2:3 Ratio for cards */}
-
+        <div className="relative w-[320px] h-[480px]">
             {cardImage && (
                 <img
                     src={cardImage}
                     alt={name}
                     style={{
-                        imageContainerStyle,
                         transform: `scale(${imageZoom}) translate(${imageX}px, ${imageY}px)`,
                         transformOrigin: '50% 50%',
                     }}
                 />
             )}
 
-
-            {/* Background PNG template */}
             <img
                 src={templateSrc}
-                alt="Trading Card Template"
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    zIndex: 2
-                }}
+                alt="Support Card Template"
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 2 }}
             />
 
-            {/* Rarity Bar PNG template */}
-            <img
-                src={raritySrc}
-                alt="Trading Card Rarity Bar"
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    zIndex: 3
-                }}
-            />
+            {raritySrc && (
+                <img
+                    src={raritySrc}
+                    alt="Rarity Bar"
+                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 3 }}
+                />
+            )}
 
-
-
-            {/* --- Absolutely positioned card elements --- */}
-
+            {skobian && (
+                <img src="/images/tcg/skobian.png" alt="Skobian Tag"
+                    style={{ position: 'absolute', top: '190px', left: '194px', width: '100px', zIndex: 3 }} />
+            )}
+            {littleguy && (
+                <img src="/images/tcg/little-guy.png" alt="Little Guy Tag"
+                    style={{ position: 'absolute', top: '190px', left: '194px', width: '100px', zIndex: 3 }} />
+            )}
+            {darkner && (
+                <img src="/images/tcg/darkner.png" alt="Darkner Tag"
+                    style={{ position: 'absolute', top: '190px', left: '194px', width: '100px', zIndex: 3 }} />
+            )}
 
             <div style={nameStyle}>{parseDescription(name)}</div>
+            <div style={titleStyle}>{title}</div>
 
-            {/* 2. Conditionally render the energy image */}
-            {energySrc && (
-                <div style={energyStyle}>
-                    <img
-                        src={energySrc}
-                        alt={`${energy} Energy`}
-                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                    />
+            {iconSrc && (
+                <div style={iconStyle}>
+                    <img src={iconSrc} alt={`${supportType} icon`}
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                 </div>
             )}
 
-            <div style={categoryStyle}>
-                {rarity} {category}
-            </div>
-
-            <div style={ruleLabelStyle}>
-                {ruleSrc}
-            </div>
-
+            <div style={rarityStyle}>{rarityString}</div>
+            <div style={categoryStyle}>{category}</div>
+            <div style={abilityStyle}>{ability}</div>
 
             <div style={descriptionStyle}>{parseDescription(description)}</div>
+            <div style={flavourStyle}>{parseDescription(flavourText)}</div>
+
+            <div style={energyCostContainerStyle}>
+                {renderEnergyCostCircle(energyCostA, 0)}
+                {renderEnergyCostCircle(energyCostB, 1)}
+                {renderEnergyCostCircle(energyCostC, 2)}
+                {renderEnergyCostCircle(energyCostD, 3)}
+                {renderEnergyCostCircle(energyCostE, 4)}
+            </div>
         </div>
     );
 }
